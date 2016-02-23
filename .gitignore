@@ -14,7 +14,55 @@
 # Executables
 *.exe
 
+# eclipse/DDT
+.project
+
 # DUB
 .dub
 docs.json
 __dummy.html
+dub.selections.json
+
+# waiting to be done:
+source/sodium/crypto_aead_aes256gcm.h
+source/sodium/crypto_aead_chacha20poly1305.h
+source/sodium/crypto_auth.h
+source/sodium/crypto_auth_hmacsha256.h
+source/sodium/crypto_auth_hmacsha512.h
+source/sodium/crypto_auth_hmacsha512256.h
+source/sodium/crypto_box.h
+source/sodium/crypto_box_curve25519xsalsa20poly1305.h
+source/sodium/crypto_core_hsalsa20.h
+source/sodium/crypto_core_salsa20.h
+source/sodium/crypto_core_salsa2012.h
+source/sodium/crypto_core_salsa208.h
+source/sodium/crypto_generichash.h
+source/sodium/crypto_generichash_blake2b.h
+source/sodium/crypto_onetimeauth.h
+source/sodium/crypto_onetimeauth_poly1305.h
+source/sodium/crypto_pwhash_scryptsalsa208sha256.h
+source/sodium/crypto_scalarmult.h
+source/sodium/crypto_scalarmult_curve25519.h
+source/sodium/crypto_secretbox.h
+source/sodium/crypto_secretbox_xsalsa20poly1305.h
+source/sodium/crypto_shorthash.h
+source/sodium/crypto_shorthash_siphash24.h
+source/sodium/crypto_sign.h
+source/sodium/crypto_sign_ed25519.h
+source/sodium/crypto_sign_edwards25519sha512batch.h
+source/sodium/crypto_stream.h
+source/sodium/crypto_stream_aes128ctr.h
+source/sodium/crypto_stream_chacha20.h
+source/sodium/crypto_stream_salsa20.h
+source/sodium/crypto_stream_salsa2012.h
+source/sodium/crypto_stream_salsa208.h
+source/sodium/crypto_stream_xsalsa20.h
+source/sodium/crypto_verify_16.h
+source/sodium/crypto_verify_32.h
+source/sodium/crypto_verify_64.h
+
+# not necessary to be done:
+source/sodium/export.h
+# source/sodium/sodium.h was converted to source/sodium/package.d
+source/sodium/sodium.h
+

@@ -1,0 +1,17 @@
+{
+	"name" : "sodium",
+	"description" : "A binding to libsodium",
+	"authors" : ["Carsten Blüggel"],
+	"homepage" : "https://github.com/carblue/sodium",
+	"copyright" : "Copyright © 2016, Carsten Blüggel",
+	"license" : "LGPL-2.1",
+	"dependencies" : {
+	},
+	"libs" : ["sodium"],
+	"configurations" : [
+		{
+			"name": "library",
+			"targetType": "sourceLibrary"
+		}
+	]
+}
