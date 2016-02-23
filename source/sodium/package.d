@@ -1,8 +1,14 @@
-// D import file generated from 'package.d' renamed to 'package.d' (method [only for original == header file] results in very compact code and obviates to overhaul comments now)
-
+// D import file generated from 'package.d'
 module sodium;
-
 public import sodium.core;
+public import sodium.crypto_aead_aes256gcm;
+public import sodium.crypto_aead_chacha20poly1305;
+public import sodium.crypto_auth;
+public import sodium.crypto_auth_hmacsha256;
+public import sodium.crypto_auth_hmacsha512;
+public import sodium.crypto_auth_hmacsha512256;
+public import sodium.crypto_box;
+public import sodium.crypto_box_curve25519xsalsa20poly1305;
 public import sodium.crypto_hash;
 public import sodium.crypto_hash_sha256;
 public import sodium.crypto_hash_sha512;
