@@ -1,4 +1,4 @@
-// D import file generated from 'package.d'
+// D import file generated from 'sodium/package.d' i.e. sodium.h
 module sodium;
 public import sodium.core;
 public import sodium.crypto_aead_aes256gcm;
@@ -9,6 +9,12 @@ public import sodium.crypto_auth_hmacsha512;
 public import sodium.crypto_auth_hmacsha512256;
 public import sodium.crypto_box;
 public import sodium.crypto_box_curve25519xsalsa20poly1305;
+public import sodium.crypto_core_hsalsa20;
+public import sodium.crypto_core_salsa20;
+public import sodium.crypto_core_salsa2012;
+public import sodium.crypto_core_salsa208;
+public import sodium.crypto_generichash;
+public import sodium.crypto_generichash_blake2b;
 public import sodium.crypto_hash;
 public import sodium.crypto_hash_sha256;
 public import sodium.crypto_hash_sha512;

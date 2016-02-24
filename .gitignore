@@ -24,12 +24,6 @@ __dummy.html
 dub.selections.json
 
 # waiting to be done:
-source/sodium/crypto_core_hsalsa20.h
-source/sodium/crypto_core_salsa20.h
-source/sodium/crypto_core_salsa2012.h
-source/sodium/crypto_core_salsa208.h
-source/sodium/crypto_generichash.h
-source/sodium/crypto_generichash_blake2b.h
 source/sodium/crypto_onetimeauth.h
 source/sodium/crypto_onetimeauth_poly1305.h
 source/sodium/crypto_pwhash_scryptsalsa208sha256.h
