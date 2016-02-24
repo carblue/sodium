@@ -24,9 +24,6 @@ __dummy.html
 dub.selections.json
 
 # waiting to be done:
-source/sodium/crypto_onetimeauth.h
-source/sodium/crypto_onetimeauth_poly1305.h
-source/sodium/crypto_pwhash_scryptsalsa208sha256.h
 source/sodium/crypto_scalarmult.h
 source/sodium/crypto_scalarmult_curve25519.h
 source/sodium/crypto_secretbox.h
@@ -43,9 +40,6 @@ source/sodium/crypto_stream_salsa20.h
 source/sodium/crypto_stream_salsa2012.h
 source/sodium/crypto_stream_salsa208.h
 source/sodium/crypto_stream_xsalsa20.h
-source/sodium/crypto_verify_16.h
-source/sodium/crypto_verify_32.h
-source/sodium/crypto_verify_64.h
 
 # not necessary to be done:
 source/sodium/export.h
