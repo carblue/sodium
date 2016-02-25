@@ -24,11 +24,6 @@ __dummy.html
 dub.selections.json
 
 # waiting to be done:
-source/sodium/crypto_shorthash.h
-source/sodium/crypto_shorthash_siphash24.h
-source/sodium/crypto_sign.h
-source/sodium/crypto_sign_ed25519.h
-source/sodium/crypto_sign_edwards25519sha512batch.h
 source/sodium/crypto_stream.h
 source/sodium/crypto_stream_aes128ctr.h
 source/sodium/crypto_stream_chacha20.h
@@ -36,6 +31,7 @@ source/sodium/crypto_stream_salsa20.h
 source/sodium/crypto_stream_salsa2012.h
 source/sodium/crypto_stream_salsa208.h
 source/sodium/crypto_stream_xsalsa20.h
+/example
 
 # not necessary to be done:
 source/sodium/export.h
