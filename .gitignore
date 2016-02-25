@@ -24,10 +24,6 @@ __dummy.html
 dub.selections.json
 
 # waiting to be done:
-source/sodium/crypto_scalarmult.h
-source/sodium/crypto_scalarmult_curve25519.h
-source/sodium/crypto_secretbox.h
-source/sodium/crypto_secretbox_xsalsa20poly1305.h
 source/sodium/crypto_shorthash.h
 source/sodium/crypto_shorthash_siphash24.h
 source/sodium/crypto_sign.h
