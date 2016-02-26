@@ -13,8 +13,13 @@ extern (C)
 		void function(const(void*) buf, const size_t size) buf;
 		int function() close;
 	}
+	
+	/** The randombytes_buf() function fills size bytes starting at buf with an unpredictable sequence of bytes. */
 	void randombytes_buf(const(void*) buf, const size_t size);
+	
+	/** The randombytes_random() function returns an unpredictable value between uint.min and uint.max (included). */
 	uint randombytes_random();
+	
 	uint randombytes_uniform(const uint upper_bound);
 	void randombytes_stir();
 	int randombytes_close();

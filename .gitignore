@@ -16,6 +16,7 @@
 
 # eclipse/DDT
 .project
+.settings
 
 # DUB
 .dub
@@ -23,16 +24,8 @@ docs.json
 __dummy.html
 dub.selections.json
 
-# waiting to be done:
-source/sodium/crypto_stream.h
-source/sodium/crypto_stream_salsa20.h
-source/sodium/crypto_stream_salsa2012.h
-source/sodium/crypto_stream_salsa208.h
-source/sodium/crypto_stream_xsalsa20.h
-/example
-
 # not necessary to be done:
 source/sodium/export.h
-# source/sodium/sodium.h was converted to source/sodium/package.d
+# now is source/sodium/package.d:
 source/sodium/sodium.h
 
