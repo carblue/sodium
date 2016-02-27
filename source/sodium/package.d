@@ -42,6 +42,7 @@ public import sodium.crypto_verify_16;
 public import sodium.crypto_verify_32;
 public import sodium.crypto_verify_64;
 public import sodium.randombytes;
+version(__native_client__)  public import sodium.randombytes_nativeclient;
 public import sodium.randombytes_salsa20_random;
 public import sodium.randombytes_sysrandom;
 public import sodium.runtime;

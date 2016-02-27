@@ -1,9 +1,6 @@
-#!/usr/bin/rdmd -I../../source/
-import std.stdio : writeln;
+#!/usr/bin/rdmd @cmdfile
+import std.stdio;
 import sodium;
-//import sodium.core : sodium_init;
-//import sodium.randombytes : randombytes_buf;
-
 pragma(lib, "sodium");
 
 int main()
@@ -12,6 +9,7 @@ int main()
 	if (sodium_init == -1) {
 		return 1;
 	}
+	//sodium_init; // An error, if warnings are enabled! The compiler warns about unused function return value and bails out
 
 	// Manual sodium, chapter "Generating random data":
 	ubyte[8] buf;
