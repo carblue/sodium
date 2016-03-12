@@ -1,57 +1,115 @@
-// D import file generated from 'utils.d' renamed to 'utils.d' (method [only for original == header file] results in very compact code and obviates to overhaul comments now)
-
 module sodium.utils;
 
-extern (C) 
-{
-	/** The sodium_memzero() function tries to effectively zero len bytes starting at pnt, even if optimizations are being applied to the code. */
-	void sodium_memzero(const(void*) pnt, const size_t len);
-	
-	/**
-	 * When a comparison involves secret data (e.g. key, authentication tag), is it critical to use a
-	 * constant-time comparison function in order to mitigate side-channel attacks.
-	 * The sodium_memcmp() function can be used for this purpose.
-	 *
-	 * WARNING: sodium_memcmp() must be used to verify if two secret keys are equal, in constant time.
-	 * This function is not designed for lexicographical comparisons.
-	 *
-	 * @returns 0 if the keys are equal, and -1 if they differ.
-	 */
-	int sodium_memcmp(const(void*) b1_, const(void*) b2_, size_t len);
-	
-	/**
-	 * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
-	 * It is suitable for lexicographical comparisons, or to compare nonces
-	 * and counters stored in little-endian format.
-	 * However, it is slower than sodium_memcmp().
-	 */
-	int sodium_compare(const(ubyte)* b1_, const(ubyte)* b2_, size_t len);
-	
-	/**
-	 * This function returns 1 if the nlen bytes vector pointed by n contains only zeros.
-	 * It returns 0 if non-zero bits are found.
-	 * Its execution time is constant for a given length.
-	 */
-	int sodium_is_zero(const(ubyte)* n, const size_t nlen);
-	
-	/**
-	 * The sodium_increment() function takes a pointer to an arbitrary-long unsigned number, and increments it.
-	 * It runs in constant-time for a given length, and considers the number to be encoded in little-endian format.
-	 * sodium_increment()  can be used to increment nonces in constant time.
-	 */
-	void sodium_increment(ubyte* n, const size_t nlen);
+extern (C) :
 
-	void sodium_add(ubyte* a, const(ubyte)* b, const size_t len);
-	char* sodium_bin2hex(const(char*) hex, const size_t hex_maxlen, const(ubyte*) bin, const size_t bin_len);
-	int sodium_hex2bin(const(ubyte)* bin, const size_t bin_maxlen, const(char*) hex, const size_t hex_len, const(char*) ignore, const(size_t*) bin_len, const(char**) hex_end);
+/**
+ * Zeroing memory.
+ * After use, sensitive data should be overwritten, but   memset()  and hand-written code can be
+ * silently stripped out by an optimizing compiler or by the linker.
+ * The   sodium_memzero()  function tries to effectively zero   len  bytes starting at   pnt  , even if
+ * optimizations are being applied to the code. */
+void sodium_memzero(const(void*) pnt, const size_t len);
+
+/**
+ * Constant-time test for equality.
+ * When a comparison involves secret data (e.g. key, authentication tag), is it critical to use a
+ * constant-time comparison function in order to mitigate side-channel attacks.
+ * The   sodium_memcmp()   function can be used for this purpose.<br>
+ * The function returns   0   if the   len  bytes pointed to by   b1_   match the   len   bytes pointed
+ * to by   b2_  . Otherwise, it returns   -1 .<br>
+ * WARNING: sodium_memcmp() must be used to verify if two secret keys are equal, in constant time.<br>
+ * This function is not designed for lexicographical comparisons and is not a generic replacement
+ * for   memcmp().
+ */
+int sodium_memcmp(const(void*) b1_, const(void*) b2_, size_t len);
+
+/**
+ * Comparing large numbers.
+ * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
+ * It is suitable for lexicographical comparisons, or to compare nonces
+ * and counters stored in little-endian format.
+ * However, it is slower than sodium_memcmp().
+ */
+int sodium_compare(const(ubyte)* b1_, const(ubyte)* b2_, size_t len);
 	
-	/**
-	 * The sodium_mlock() function locks at least len bytes of memory starting at addr.
-	 * This can help avoid swapping sensitive data to disk.
-	 * On systems where it is supported, sodium_mlock() also wraps madvise() and advises the
-	 * kernel not to include the locked memory in core dumps.
-	 */
-	int sodium_mlock(const(void*) addr, const size_t len);
+/**
+ * Testing for all zeros.
+ * This function returns   1  if the   nlen   bytes vector pointed by   n   contains only zeros.
+ * It returns   0  if non-zero bits are found.<br>
+ * Its execution time is constant for a given length.<br>
+ * This function was introduced in libsodium 1.0.7. */
+int sodium_is_zero(const(ubyte)* n, const size_t nlen);
+	
+/**
+ * Incrementing large numbers.
+ * The   sodium_increment()  function takes a pointer to an arbitrary-long unsigned number, and
+ * increments it.
+ * It runs in constant-time for a given length, and considers the number to be encoded in little-
+ * endian format.
+ * sodium_increment()  can be used to increment nonces in constant time.
+ * This function was introduced in libsodium 1.0.4. */
+void sodium_increment(ubyte* n, const size_t nlen);
+
+/**
+ * Adding large numbers
+ * The   sodium_add()  function accepts two pointers to unsigned numbers encoded in little-
+ * endian format,   a   and   b , both of size   len  bytes.
+ * It computes   (a + b) mod 2^(8*len)  in constant time for a given length, and overwrites   a 
+ * with the result.
+ * This function was introduced in libsodium 1.0.7. */
+void sodium_add(ubyte* a, const(ubyte)* b, const size_t len);
+
+/**
+ * Hexadecimal encoding.
+ * The   sodium_bin2hex()  function converts   bin_len   bytes stored at   bin  into a hexadecimal
+ * string.
+ * The string is stored into   hex  and includes a nul byte (  \0  ) terminator.
+ * hex_maxlen  is the maximum number of bytes that the function is allowed to write starting at
+ * hex  . It should be at least   bin_len * 2 + 1  .
+ * The function returns   hex  on success, or   null  on overflow. It evaluates in constant time for
+ * a given size. */
+char* sodium_bin2hex(const(char*) hex, const size_t hex_maxlen, const(ubyte*) bin, const size_t bin_len);
+
+
+/**
+ * Hexadecimal decoding.
+ * The   sodium_hex2bin()  function parses a hexadecimal string   hex  and converts it to a byte
+ * sequence.
+ * hex   does not have to be nul terminated, as the number of characters to parse is supplied
+ * via the   hex_len   parameter.
+ * ignore  is a string of characters to skip. For example, the string   ": "   allows columns and
+ * spaces to be present at any locations in the hexadecimal string. These characters will just
+ * be ignored. As a result,   "69:FC" ,   "69 FC"  ,   "69 : FC"  and   "69FC"  will be valid inputs,
+ * and will produce the same output.
+ * ignore  can be set to   null   in order to disallow any non-hexadecimal character.
+ * bin_maxlen  is the maximum number of bytes to put into   bin .
+ * The parser stops when a non-hexadecimal, non-ignored character is found or when
+ * bin_maxlen  bytes have been written.
+ * The function returns   -1  if more than   bin_maxlen   bytes would be required to store the
+ * parsed string. It returns   0  on success and sets   hex_end  , if it is not   null , to a pointer to
+ * the character following the last parsed character.
+ * It evaluates in constant time for a given length and format. */
+int sodium_hex2bin(const(ubyte)* bin, const size_t bin_maxlen, const(char*) hex, const size_t hex_len, const(char*) ignore, const(size_t*) bin_len, const(char**) hex_end);
+
+/**
+ * Locking memory
+ * The   sodium_mlock()   function locks at least   len  bytes of memory starting at   addr.
+ * This can help avoid swapping sensitive data to disk.
+ * In addition, it is recommended to totally disable swap partitions on machines processing
+ * sensitive data, or, as a second choice, use encrypted swap partitions.
+ * For similar reasons, on Unix systems, one should also disable core dumps when running
+ * crypto code outside a development environment. This can be achieved using a shell built-in
+ * such as   ulimit   or programatically using   setrlimit(RLIMIT_CORE, &(struct rlimit) {0, 0})  .
+ * On operating systems where this feature is implemented, kernel crash dumps should also be
+ * disabled (e.g. https://help.ubuntu.com/lts/serverguide/kernel-crash-dump.html).
+ * sodium_mlock()   wraps   mlock()  and   VirtualLock()  . Note: Many systems place limits on
+ * the amount of memory that may be locked by a process. Care should be taken to raise those
+ * limits (e.g. Unix ulimits) where neccessary.   sodium_lock()   will return   -1   when any limit is
+ * reached.
+ * On systems where it is supported, sodium_mlock() also wraps madvise() and advises the
+ * kernel not to include the locked memory in core dumps.
+ */
+int sodium_mlock(const(void*) addr, const size_t len);
 	
 	/**
 	 * The sodium_munlock() function should be called after locked memory is not being used any
@@ -153,4 +211,4 @@ extern (C)
 	 * sodium_mprotect_readonly() or sodium_mprotect_noaccess().
 	 */
 	int sodium_mprotect_readwrite(void* ptr);
-}
+
