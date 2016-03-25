@@ -2,7 +2,7 @@
 
 module sodium.crypto_pwhash_scryptsalsa208sha256;
 
-extern (C) 
+extern (C)
 {
 	enum crypto_pwhash_scryptsalsa208sha256_SALTBYTES = 32u;
 	size_t crypto_pwhash_scryptsalsa208sha256_saltbytes();
@@ -19,7 +19,7 @@ extern (C)
 	enum crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_SENSITIVE = 1073741824LU;
 	size_t crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive();
 	int crypto_pwhash_scryptsalsa208sha256(const(ubyte*) out_, ulong outlen, const(char*) passwd, ulong passwdlen, const(ubyte*) salt, ulong opslimit, size_t memlimit);
-	int crypto_pwhash_scryptsalsa208sha256_str(char[crypto_pwhash_scryptsalsa208sha256_STRBYTES] out_, const(char*) passwd, ulong passwdlen, ulong opslimit, size_t memlimit);
-	int crypto_pwhash_scryptsalsa208sha256_str_verify(const(char)[crypto_pwhash_scryptsalsa208sha256_STRBYTES] str, const(char*) passwd, ulong passwdlen);
+	int crypto_pwhash_scryptsalsa208sha256_str(ref char[crypto_pwhash_scryptsalsa208sha256_STRBYTES] out_, const(char*) passwd, ulong passwdlen, ulong opslimit, size_t memlimit);
+	int crypto_pwhash_scryptsalsa208sha256_str_verify(ref const(char)[crypto_pwhash_scryptsalsa208sha256_STRBYTES] str, const(char*) passwd, ulong passwdlen);
 	int crypto_pwhash_scryptsalsa208sha256_ll(const(ubyte)* passwd, size_t passwdlen, const(ubyte)* salt, size_t saltlen, ulong N, uint r, uint p, ubyte* buf, size_t buflen);
 }
