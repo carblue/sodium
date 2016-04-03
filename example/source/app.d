@@ -1,5 +1,6 @@
 #!/usr/bin/rdmd @cmdfile
-import std.stdio;
+import core.stdc.stdlib : EXIT_SUCCESS, EXIT_FAILURE;
+import std.stdio : writefln, writeln;
 import sodium;
 pragma(lib, "sodium");
 
@@ -8,7 +9,7 @@ int main()
 	// Manual sodium, chapter "Usage":
 	//synchronized { // if sodium_init could be executed by multiple threads simultaneously
 	if (sodium_init == -1) {
-		return 1;
+		return EXIT_FAILURE;
 	}
 	//}
 	//sodium_init; // An error, if warnings are enabled! The compiler (DMD since 2.066.0) warns about unused/discarded function return value and bails out
@@ -19,9 +20,9 @@ int main()
 		randombytes_buf(buf.ptr, buf.sizeof);
 	writefln("Unpredictable sequence of %s bytes: %s", buf.sizeof, buf);
 
-/*
-	// Secret-key	authentication example, page 27
-	immutable(ubyte)[4] MESSAGE = cast(immutable(ubyte)[4]) "test";
+/* * /
+	// Secret-key authentication example, page 31
+	auto MESSAGE = cast(immutable(ubyte)[4]) "test";
 
 	ubyte[crypto_auth_KEYBYTES] key;
 	ubyte[crypto_auth_BYTES]    mac;
@@ -31,6 +32,6 @@ int main()
 
 	if (crypto_auth_verify(mac.ptr, MESSAGE.ptr, MESSAGE.sizeof, key.ptr) != 0)
 		writeln("The massage has been forged!");
-*/
-	return 0;
+/ * */
+	return EXIT_SUCCESS;
 }
