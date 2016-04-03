@@ -17,11 +17,8 @@ module sodium.crypto_sign_edwards25519sha512batch;
 extern (C) 
 {
 	enum crypto_sign_edwards25519sha512batch_BYTES = 64u;
-	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") size_t crypto_sign_edwards25519sha512batch_bytes();
 	enum crypto_sign_edwards25519sha512batch_PUBLICKEYBYTES = 32u;
-	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") size_t crypto_sign_edwards25519sha512batch_publickeybytes();
 	enum crypto_sign_edwards25519sha512batch_SECRETKEYBYTES = 32u + 32u;
-	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") size_t crypto_sign_edwards25519sha512batch_secretkeybytes();
 	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") int crypto_sign_edwards25519sha512batch(ubyte* sm, ulong* smlen_p, const(ubyte)* m, ulong mlen, const(ubyte)* sk);
 	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") int crypto_sign_edwards25519sha512batch_open(ubyte* m, ulong* mlen_p, const(ubyte)* sm, ulong smlen, const(ubyte)* pk);
 	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") int crypto_sign_edwards25519sha512batch_keypair(ubyte* pk, ubyte* sk);

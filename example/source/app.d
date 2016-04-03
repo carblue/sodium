@@ -15,7 +15,7 @@ int main()
 
 	// Manual sodium, chapter "Generating random data":
 	ubyte[8] buf;
-	if (buf.sizeof <= 256) // limit linux guarantees by default, using getrandom(); figure can be higher with added True Random Number Generator
+	if (buf.sizeof <= 256) // limit, that linux guarantees by default, using getrandom(); figure can be higher with added True Random Number Generator
 		randombytes_buf(buf.ptr, buf.sizeof);
 	writefln("Unpredictable sequence of %s bytes: %s", buf.sizeof, buf);
 

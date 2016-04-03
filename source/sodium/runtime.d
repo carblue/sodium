@@ -10,6 +10,7 @@ extern (C)
 	int sodium_runtime_has_ssse3();
 	int sodium_runtime_has_sse41();
 	int sodium_runtime_has_avx();
+	int sodium_runtime_has_avx2();
 	int sodium_runtime_has_pclmul();
 	int sodium_runtime_has_aesni();
 	int _sodium_runtime_get_cpu_features();

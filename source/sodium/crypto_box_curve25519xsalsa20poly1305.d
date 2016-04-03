@@ -14,12 +14,12 @@ extern (C)
 	size_t crypto_box_curve25519xsalsa20poly1305_beforenmbytes();
 	enum crypto_box_curve25519xsalsa20poly1305_NONCEBYTES = 24u;
 	size_t crypto_box_curve25519xsalsa20poly1305_noncebytes();
-	enum crypto_box_curve25519xsalsa20poly1305_ZEROBYTES = 32u;
-	size_t crypto_box_curve25519xsalsa20poly1305_zerobytes();
+	enum crypto_box_curve25519xsalsa20poly1305_MACBYTES = 16u;
+	size_t crypto_box_curve25519xsalsa20poly1305_macbytes();
 	enum crypto_box_curve25519xsalsa20poly1305_BOXZEROBYTES = 16u;
 	size_t crypto_box_curve25519xsalsa20poly1305_boxzerobytes();
-	enum crypto_box_curve25519xsalsa20poly1305_MACBYTES = crypto_box_curve25519xsalsa20poly1305_ZEROBYTES - crypto_box_curve25519xsalsa20poly1305_BOXZEROBYTES;
-	size_t crypto_box_curve25519xsalsa20poly1305_macbytes();
+	enum crypto_box_curve25519xsalsa20poly1305_ZEROBYTES = crypto_box_curve25519xsalsa20poly1305_BOXZEROBYTES + crypto_box_curve25519xsalsa20poly1305_MACBYTES;
+	size_t crypto_box_curve25519xsalsa20poly1305_zerobytes();
 	int crypto_box_curve25519xsalsa20poly1305(ubyte* c, const(ubyte)* m, ulong mlen, const(ubyte)* n, const(ubyte)* pk, const(ubyte)* sk);
 	int crypto_box_curve25519xsalsa20poly1305_open(ubyte* m, const(ubyte)* c, ulong clen, const(ubyte)* n, const(ubyte)* pk, const(ubyte)* sk);
 	int crypto_box_curve25519xsalsa20poly1305_seed_keypair(ubyte* pk, ubyte* sk, const(ubyte)* seed);

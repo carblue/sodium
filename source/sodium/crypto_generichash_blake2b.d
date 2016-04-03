@@ -32,6 +32,7 @@ extern (C)
 	size_t crypto_generichash_blake2b_saltbytes();
 	enum crypto_generichash_blake2b_PERSONALBYTES = 16u;
 	size_t crypto_generichash_blake2b_personalbytes();
+	size_t crypto_generichash_blake2b_statebytes();
 	int crypto_generichash_blake2b(ubyte* out_, size_t outlen, const(ubyte)* in_, ulong inlen, const(ubyte)* key, size_t keylen);
 	int crypto_generichash_blake2b_salt_personal(ubyte* out_, size_t outlen, const(ubyte)* in_, ulong inlen, const(ubyte)* key, size_t keylen, const(ubyte)* salt, const(ubyte)* personal);
 	int crypto_generichash_blake2b_init(crypto_generichash_blake2b_state* state, const(ubyte)* key, const size_t keylen, const size_t outlen);
