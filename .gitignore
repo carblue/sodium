@@ -9,7 +9,7 @@
 
 # Compiled Static libraries
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
@@ -24,8 +24,12 @@ docs.json
 __dummy.html
 dub.selections.json
 
-# not necessary to be done:
+# not necessary to be done or later:
+lib/windows-x86-dmd/libsodium-8.def
+#lib/windows-x86_64-dmd/sodium.lib
+lib/windows-x86_64-dmd/vcruntime140_dll
+
 source/sodium/export.h
 # now is source/sodium/package.d:
 source/sodium/sodium.h
-
+README_old.md

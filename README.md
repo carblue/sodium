@@ -1,7 +1,7 @@
 # sodium
 
 
-D language: A ("Deimos"-) binding to libsodium, current version 1.0.9, released on 2 Apr 2016 [https://github.com/jedisct1/libsodium]
+D language: A ("Deimos"-) binding to libsodium, current version 1.0.10, released on 5. Apr 2016 [https://github.com/jedisct1/libsodium]
 
 The binding code is complete; every now and then I'll add some doxygen comments / function attributes, as I use, become acquainted with sodium's functions.
 
@@ -15,3 +15,10 @@ Finally, when testing on Windows is done too, D-versioning will "jump on the ban
 
 or
 - setup a DUB project, dub.json: ... "dependencies": { "sodium": "~>0.0.5" }
+
+# Quote Edward Snowden:
+Encryption works. Properly implemented strong crypto systems are one of the few things that you can rely on. Unfortunately, endpoint security is so terrifically weak that NSA can frequently find ways around it.
+
+http://www.theguardian.com/world/2013/sep/05/nsa-how-to-remain-secure-surveillance
+
+http://www.theguardian.com/commentisfree/2013/sep/05/government-betrayed-internet-nsa-spying

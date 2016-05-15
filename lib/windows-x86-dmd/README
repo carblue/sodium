@@ -1,0 +1,14 @@
+This folder has to be populated with file libsodium.lib (import library, generated from libsodium-18.dll file):
+
+libsodium-18.dll to be downloaded from (adapt link to new version; prefer dependency on MSVCRT.DLL only!):
+
+https://download.libsodium.org/libsodium/releases/libsodium-1.0.10-mingw.tar.gz
+
+folder ...\libsodium-1.0.10-mingw\libsodium-win32\bin
+
+libsodium.lib to be generated from .dll with Digital Mars tool : implib
+http://www.digitalmars.com/ctg/implib.html
+
+implib /s libsodium.lib libsodium-18.dll
+
+there is a dependency to: libgcc_s_dw2-1.dll
