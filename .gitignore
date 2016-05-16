@@ -7,7 +7,7 @@
 *.dylib
 *.dll
 
-# Compiled Static libraries
+# Compiled Static libraries or MS Windows import libraries
 *.a
 #*.lib
 

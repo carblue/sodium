@@ -23,14 +23,12 @@
 		"lib/windows-x86-dmd/libsodium.lib"
 	],
 	"copyFiles-windows-x86": [
-		"lib/windows-x86-dmd/libsodium-18.dll",
-		"lib/windows-x86-dmd/libgcc_s_dw2-1.dll"
+		"lib/windows-x86-dmd/libsodium.dll"
 	],
 	"sourceFiles-windows-x86_64": [
 		"lib/windows-x86_64-dmd/libsodium.lib"
 	],
 	"copyFiles-windows-x86_64": [
-		"lib/windows-x86_64-dmd/libsodium.dll",
-		"lib/windows-x86_64-dmd/vcruntime140_dll"
+		"lib/windows-x86_64-dmd/libsodium.dll"
 	]
 }

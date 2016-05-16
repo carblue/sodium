@@ -1,4 +1,4 @@
-This folder has to be populated with file libsodium.lib (import library for libsodium.dll):
+This folder has to be populated with file libsodium.lib (import library (COFF format) for libsodium.dll):
 
 libsodium.lib and libsodium.dll file from:
 https://download.libsodium.org/libsodium/releases/libsodium-1.0.10-msvc.zip

@@ -7,6 +7,11 @@ The binding code is complete; every now and then I'll add some doxygen comments 
 
 Finally, when testing on Windows is done too, D-versioning will "jump on the bandwagon" [== libsodium C-source release version].
 
+# MS Windows users: Attention <br>
+Trade security against convenience. If You vote for security, discard the executable .lib import library files included in subfolders of folder /lib <br>
+README files tell where/how to get/generate them
+Win32: Requires Digital Mars implib tool to generate import library (.lib, OMF format)
+Win64: Requires Microsoft linker executable
 
 # Example
 ( expected output: Unpredictable sequence of 8 bytes: [?, ?, ?, ?, ?, ?, ?, ?] )
@@ -15,10 +20,3 @@ Finally, when testing on Windows is done too, D-versioning will "jump on the ban
 
 or
 - setup a DUB project, dub.json: ... "dependencies": { "sodium": "~>0.0.5" }
-
-# Quote Edward Snowden:
-Encryption works. Properly implemented strong crypto systems are one of the few things that you can rely on. Unfortunately, endpoint security is so terrifically weak that NSA can frequently find ways around it.
-
-http://www.theguardian.com/world/2013/sep/05/nsa-how-to-remain-secure-surveillance
-
-http://www.theguardian.com/commentisfree/2013/sep/05/government-betrayed-internet-nsa-spying
