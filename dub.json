@@ -1,28 +1,33 @@
 {
-	"description": "A binding to libsodium",
-	"version": "0.0.6",
-	"name": "sodium",
-	"copyright": "Copyright © 2016, Carsten Blüggel",
-	"homepage": "https://github.com/carblue/sodium",
 	"authors": [
 		"Carsten Blüggel"
 	],
 	"configurations": [
-	],
-	"license": "ISC license",
-	"targetType": "library",
-	"targetPath": "lib",
-	"sourcePaths": [
-		"source/"
+		{
+			"name": "library",
+			"targetType": "sourceLibrary"
+		}
 	],
 	"importPaths": [
 		"source/"
 	],
-	"libs-posix": ["sodium"],
-	"sourceFiles-windows-x86": [
+	"name": "sodium",
+	"version": "0.0.7",
+	"license": "ISC license",
+	"copyright": "Copyright © 2016, Carsten Blüggel",
+	"description": "Deimos-like binding to libsodium",
+	"sourceFiles-windows-x86-dmd": [
 		"lib/windows-x86-dmd/libsodium.lib"
 	],
+	"homepage": "https://github.com/carblue/sodium",
+	"targetPath": "lib",
 	"sourceFiles-windows-x86_64": [
-		"lib/windows-x86_64-dmd/libsodium.lib"
+		"lib/windows-x86_64/libsodium.lib"
+	],
+	"libs-posix": [
+		"sodium"
+	],
+	"sourcePaths": [
+		"source/"
 	]
 }

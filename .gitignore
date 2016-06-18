@@ -7,7 +7,7 @@
 *.dylib
 *.dll
 
-# Compiled Static libraries or MS Windows import libraries
+# Compiled static libraries or MS Windows import libraries
 *.a
 #*.lib
 
@@ -24,5 +24,6 @@ docs.json
 __dummy.html
 dub.selections.json
 
+.directory
 # not necessary to be done or later:
-README_old.md
+private/

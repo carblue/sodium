@@ -20,7 +20,7 @@ int main()
 		randombytes_buf(buf.ptr, buf.sizeof);
 	writefln("Unpredictable sequence of %s bytes: %s", buf.sizeof, buf);
 
-/* */
+
 	// Secret-key authentication example
 	auto MESSAGE = cast(immutable(ubyte)[4]) "test";
 
@@ -64,6 +64,6 @@ int main()
 		if (crypto_auth_verify(mac.ptr, MESSAGE.ptr, MESSAGE.sizeof, key.ptr) != 0)
 			writeln("The message has been forged!");
 	}
-/* */
+
 	return EXIT_SUCCESS;
 }

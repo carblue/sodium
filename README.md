@@ -1,22 +1,14 @@
 # sodium
 
 
-D language: A ("Deimos"-) binding to libsodium, current version 1.0.10, released on 5. Apr 2016 [https://github.com/jedisct1/libsodium]
+D language: Deimos-like binding to libsodium, current C-source version 1.0.10, released on 5. Apr 2016 [https://github.com/jedisct1/libsodium]
 
-The binding code is complete; every now and then I'll add some doxygen comments / function attributes, as I use, become acquainted with sodium's functions.
+Example, using rdmd:
+cd example/source && ./app.d
 
-Finally, when testing on Windows is done too, D-versioning will "jump on the bandwagon" [== libsodium C-source release version].
+Expected output (numbers within brackets differing of course):
 
-# MS Windows users: Attention <br>
-Trade security against convenience. If You vote for security, discard the executable .lib import library files included in subfolders of folder /lib <br>
-README files tell where/how to get/generate them
-Win32: Requires Digital Mars implib tool to generate import library (.lib, OMF format)
-Win64: Requires Microsoft linker executable
+Unpredictable sequence of 8 bytes: [52, 225, 21, 245, 74, 66, 192, 247]
+crypto_aead_aes256gcm_is_available
+ciphertext: [76, 18, 112, 219, 144, 230, 206, 219, 40, 255, 78, 43, 172, 49, 129, 175, 4, 235, 81, 224]
 
-# Example
-( expected output: Unpredictable sequence of 8 bytes: [?, ?, ?, ?, ?, ?, ?, ?] )
-- make shure, You have rdmd installed for this example and access right of app.d includes 'executable'
-- change directory to example/source and run app.d
-
-or
-- setup a DUB project, dub.json: ... "dependencies": { "sodium": "~>0.0.5" }
