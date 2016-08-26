@@ -2,9 +2,9 @@
 
 module sodium.version_;
 
-immutable(char*) SODIUM_VERSION_STRING = "1.0.10";
+immutable(char*) SODIUM_VERSION_STRING = "1.0.11";
 enum SODIUM_LIBRARY_VERSION_MAJOR = 9;
-enum SODIUM_LIBRARY_VERSION_MINOR = 2;
+enum SODIUM_LIBRARY_VERSION_MINOR = 3;
 
 extern (C) 
 {
