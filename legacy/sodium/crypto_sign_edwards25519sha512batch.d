@@ -1,4 +1,10 @@
-// D import file generated from 'crypto_sign_edwards25519sha512batch.d' renamed to 'crypto_sign_edwards25519sha512batch.d' (method [only for original == header file] results in very compact code and obviates to overhaul comments now)
+/*
+Written in the D programming language.
+For git maintenance (ensure at least one congruent line with originating C header):
+#define crypto_sign_edwards25519sha512batch_H
+*/
+
+module sodium.crypto_sign_edwards25519sha512batch;
 
 /*
  * WARNING: This construction was a prototype, which should not be used
@@ -12,14 +18,28 @@
  */
 
 
-module sodium.crypto_sign_edwards25519sha512batch;
+extern(C) pure @nogc :
 
-extern (C) 
-{
-	enum crypto_sign_edwards25519sha512batch_BYTES = 64u;
-	enum crypto_sign_edwards25519sha512batch_PUBLICKEYBYTES = 32u;
-	enum crypto_sign_edwards25519sha512batch_SECRETKEYBYTES = 32u + 32u;
-	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") int crypto_sign_edwards25519sha512batch(ubyte* sm, ulong* smlen_p, const(ubyte)* m, ulong mlen, const(ubyte)* sk);
-	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") int crypto_sign_edwards25519sha512batch_open(ubyte* m, ulong* mlen_p, const(ubyte)* sm, ulong smlen, const(ubyte)* pk);
-	deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") int crypto_sign_edwards25519sha512batch_keypair(ubyte* pk, ubyte* sk);
-}
+
+enum crypto_sign_edwards25519sha512batch_BYTES = 64U;
+enum crypto_sign_edwards25519sha512batch_PUBLICKEYBYTES = 32U;
+enum crypto_sign_edwards25519sha512batch_SECRETKEYBYTES = (32U + 32U);
+
+
+deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") :
+
+
+int crypto_sign_edwards25519sha512batch(ubyte* sm,
+                                        ulong* smlen_p,
+                                        const(ubyte)* m,
+                                        ulong mlen,
+                                        const(ubyte)* sk) @system;
+
+int crypto_sign_edwards25519sha512batch_open(ubyte* m,
+                                             ulong* mlen_p,
+                                             const(ubyte)* sm,
+                                             ulong smlen,
+                                             const(ubyte)* pk) @system;
+
+int crypto_sign_edwards25519sha512batch_keypair(ubyte* pk,
+                                                ubyte* sk) @system;

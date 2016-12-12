@@ -1,3 +1,9 @@
+/*
+Written in the D programming language.
+For git maintenance (ensure at least one congruent line with originating C header):
+#define crypto_aead_aes256gcm_H
+*/
+
 module sodium.crypto_aead_aes256gcm;
 
 
@@ -44,7 +50,7 @@ int crypto_aead_aes256gcm_decrypt(ubyte* m,
                                   const(ubyte)* ad,
                                   ulong adlen,
                                   const(ubyte)* npub,
-                                  const(ubyte)* k) nothrow @system;
+                                  const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result))
 
 int crypto_aead_aes256gcm_encrypt_detached(ubyte* c,
                                            ubyte* mac,
@@ -65,7 +71,7 @@ int crypto_aead_aes256gcm_decrypt_detached(ubyte *m,
                                            const(ubyte)* ad,
                                            ulong adlen,
                                            const(ubyte)* npub,
-                                           const(ubyte)* k) nothrow @system;
+                                           const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result))
 
 /* -- Precomputation interface -- */
 
@@ -90,7 +96,7 @@ int crypto_aead_aes256gcm_decrypt_afternm(ubyte* m,
                                           const(ubyte)* ad,
                                           ulong adlen,
                                           const(ubyte)* npub,
-                                          const(crypto_aead_aes256gcm_state)* ctx_) nothrow @system;
+                                          const(crypto_aead_aes256gcm_state)* ctx_) nothrow @system; // __attribute__ ((warn_unused_result))
 
 int crypto_aead_aes256gcm_encrypt_detached_afternm(ubyte* c,
                                                    ubyte* mac,
@@ -111,4 +117,4 @@ int crypto_aead_aes256gcm_decrypt_detached_afternm(ubyte* m,
                                                    const(ubyte)* ad,
                                                    ulong adlen,
                                                    const(ubyte)* npub,
-                                                   const(crypto_aead_aes256gcm_state)* ctx_) nothrow @system;
+                                                   const(crypto_aead_aes256gcm_state)* ctx_) nothrow @system; // __attribute__ ((warn_unused_result))

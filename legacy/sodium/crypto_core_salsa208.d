@@ -1,16 +1,30 @@
-// D import file generated from 'crypto_core_salsa208.d' renamed to 'crypto_core_salsa208.d' (method [only for original == header file] results in very compact code and obviates to overhaul comments now)
+/*
+Written in the D programming language.
+For git maintenance (ensure at least one congruent line with originating C header):
+#define crypto_core_salsa208_H
+*/
 
 module sodium.crypto_core_salsa208;
 
-extern (C) 
-{
-	enum crypto_core_salsa208_OUTPUTBYTES = 64u;
-	size_t crypto_core_salsa208_outputbytes();
-	enum crypto_core_salsa208_INPUTBYTES = 16u;
-	size_t crypto_core_salsa208_inputbytes();
-	enum crypto_core_salsa208_KEYBYTES = 32u;
-	size_t crypto_core_salsa208_keybytes();
-	enum crypto_core_salsa208_CONSTBYTES = 16u;
-	size_t crypto_core_salsa208_constbytes();
-	int crypto_core_salsa208(ubyte* out_, const(ubyte)* in_, const(ubyte)* k, const(ubyte)* c);
-}
+
+extern(C) pure @nogc :
+
+
+enum crypto_core_salsa208_OUTPUTBYTES = 64U;
+
+size_t crypto_core_salsa208_outputbytes() @trusted;
+
+enum crypto_core_salsa208_INPUTBYTES = 16U;
+
+size_t crypto_core_salsa208_inputbytes() @trusted;
+
+enum crypto_core_salsa208_KEYBYTES = 32U;
+
+size_t crypto_core_salsa208_keybytes() @trusted;
+
+enum crypto_core_salsa208_CONSTBYTES = 16U;
+
+size_t crypto_core_salsa208_constbytes() @trusted;
+
+int crypto_core_salsa208(ubyte* out_, const(ubyte)* in_,
+                         const(ubyte)* k, const(ubyte)* c) @system;

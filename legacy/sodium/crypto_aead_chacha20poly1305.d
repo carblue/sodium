@@ -1,3 +1,9 @@
+/*
+Written in the D programming language.
+For git maintenance (ensure at least one congruent line with originating C header):
+#define crypto_aead_chacha20poly1305_H
+*/
+
 module sodium.crypto_aead_chacha20poly1305;
 
 
@@ -40,7 +46,7 @@ int crypto_aead_chacha20poly1305_ietf_decrypt(ubyte* m,
                                               const(ubyte)* ad,
                                               ulong adlen,
                                               const(ubyte)* npub,
-                                              const(ubyte)* k) nothrow @system;
+                                              const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result))
 
 int crypto_aead_chacha20poly1305_ietf_encrypt_detached(ubyte* c,
                                                        ubyte* mac,
@@ -61,7 +67,7 @@ int crypto_aead_chacha20poly1305_ietf_decrypt_detached(ubyte* m,
                                                        const(ubyte)* ad,
                                                        ulong adlen,
                                                        const(ubyte)* npub,
-                                                       const(ubyte)* k) nothrow @system;
+                                                       const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result))
 
 /* -- Original ChaCha20-Poly1305 construction with a 64-bit nonce and a 64-bit internal counter -- */
 
@@ -99,7 +105,7 @@ int crypto_aead_chacha20poly1305_decrypt(ubyte* m,
                                          const(ubyte)* ad,
                                          ulong adlen,
                                          const(ubyte)* npub,
-                                         const(ubyte)* k) nothrow @system;
+                                         const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result))
 
 int crypto_aead_chacha20poly1305_encrypt_detached(ubyte* c,
                                                   ubyte* mac,
@@ -120,7 +126,7 @@ int crypto_aead_chacha20poly1305_decrypt_detached(ubyte* m,
                                                   const(ubyte)* ad,
                                                   ulong adlen,
                                                   const(ubyte)* npub,
-                                                  const(ubyte)* k) nothrow @system;
+                                                  const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result))
 
 /* Aliases */
 

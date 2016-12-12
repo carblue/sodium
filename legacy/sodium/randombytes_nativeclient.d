@@ -1,10 +1,16 @@
+/*
+Written in the D programming language.
+For git maintenance (ensure at least one congruent line with originating C header):
+#define randombytes_nativeclient_H
+*/
+
 module sodium.randombytes_nativeclient;
 
 version (__native_client__)
 {
-	import sodium.randombytes : randombytes_implementation;
+  import sodium.randombytes : randombytes_implementation;
 
-	extern(C) extern __gshared randombytes_implementation  randombytes_nativeclient_implementation;
+  extern(C) extern __gshared randombytes_implementation randombytes_nativeclient_implementation;
 }
 
 /*
@@ -16,8 +22,8 @@ version (__native_client__)
   The documented procedure for 'Compilation on Unix-like systems' resulted in a default being randombytes_sysrandom_implementation for me and no
   randombytes_nativeclient_implementation available in the binary.
 
-  Either way, if Your default implemetations is randombytes_nativeclient_implementation and You want to access
+  Either way, if Your binary's default implemetations is randombytes_nativeclient_implementation and You want to access
   the data struct randombytes_implementation randombytes_nativeclient_implementation,
-  then define the dlang version identifier  __native_client__ in Your D language build,
-  otherwise don't do it.
+  then define the dlang version identifier  __native_client__ for the D language build (in this package's dub.json) as well,
+  otherwise don't do it. A match is required !
 */
