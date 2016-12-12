@@ -1,53 +1,53 @@
-// D import file generated from 'package.d' renamed to 'package.d' (method [only for original == header file] results in very compact code and obviates to overhaul comments now)
-
 module sodium;
 
-public import sodium.core;
-public import sodium.crypto_aead_aes256gcm;
-public import sodium.crypto_aead_chacha20poly1305;
-public import sodium.crypto_auth;
-public import sodium.crypto_auth_hmacsha256;
-public import sodium.crypto_auth_hmacsha512;
-public import sodium.crypto_auth_hmacsha512256;
-public import sodium.crypto_box;
-public import sodium.crypto_box_curve25519xsalsa20poly1305;
-public import sodium.crypto_core_hsalsa20;
-public import sodium.crypto_core_hchacha20;
-public import sodium.crypto_core_salsa20;
-public import sodium.crypto_core_salsa2012;
-public import sodium.crypto_core_salsa208;
-public import sodium.crypto_generichash;
-public import sodium.crypto_generichash_blake2b;
-public import sodium.crypto_hash;
-public import sodium.crypto_hash_sha256;
-public import sodium.crypto_hash_sha512;
-public import sodium.crypto_onetimeauth;
-public import sodium.crypto_onetimeauth_poly1305;
-public import sodium.crypto_pwhash;
-public import sodium.crypto_pwhash_argon2i;
-public import sodium.crypto_pwhash_scryptsalsa208sha256;
-public import sodium.crypto_scalarmult;
-public import sodium.crypto_scalarmult_curve25519;
-public import sodium.crypto_secretbox;
-public import sodium.crypto_secretbox_xsalsa20poly1305;
-public import sodium.crypto_shorthash;
-public import sodium.crypto_shorthash_siphash24;
-public import sodium.crypto_sign;
-public import sodium.crypto_sign_ed25519;
-public import sodium.crypto_stream;
-public import sodium.crypto_stream_aes128ctr;
-public import sodium.crypto_stream_chacha20;
-public import sodium.crypto_stream_salsa20;
-public import sodium.crypto_stream_salsa2012;
-public import sodium.crypto_stream_salsa208;
-public import sodium.crypto_stream_xsalsa20;
-public import sodium.crypto_verify_16;
-public import sodium.crypto_verify_32;
-public import sodium.crypto_verify_64;
-public import sodium.randombytes;
-version(__native_client__)  public import sodium.randombytes_nativeclient;
-public import sodium.randombytes_salsa20_random;
-public import sodium.randombytes_sysrandom;
-public import sodium.runtime;
-public import sodium.utils;
-public import sodium.version_;
+public :
+
+import sodium.core; /* unittest, max @trusted */
+import sodium.crypto_aead_aes256gcm;
+import sodium.crypto_aead_chacha20poly1305;
+import sodium.crypto_auth;
+import sodium.crypto_auth_hmacsha256;
+import sodium.crypto_auth_hmacsha512;
+import sodium.crypto_auth_hmacsha512256;
+import sodium.crypto_box; // imports sodium.crypto_box_curve25519xsalsa20poly1305
+//import sodium.crypto_box_curve25519xsalsa20poly1305;
+import sodium.crypto_core_hsalsa20;
+import sodium.crypto_core_hchacha20;
+import sodium.crypto_core_salsa20;
+import sodium.crypto_core_salsa2012;
+import sodium.crypto_core_salsa208;
+import sodium.crypto_generichash; // imports sodium.crypto_generichash_blake2b
+//import sodium.crypto_generichash_blake2b;
+import sodium.crypto_hash; // imports sodium.crypto_hash_sha512
+import sodium.crypto_hash_sha256;
+//import sodium.crypto_hash_sha512;
+import sodium.crypto_onetimeauth; // imports sodium.crypto_onetimeauth_poly1305
+//import sodium.crypto_onetimeauth_poly1305;
+import sodium.crypto_pwhash; // imports sodium.crypto_pwhash_argon2i
+//import sodium.crypto_pwhash_argon2i;
+import sodium.crypto_pwhash_scryptsalsa208sha256;
+import sodium.crypto_scalarmult; // imports sodium.crypto_scalarmult_curve25519 /* unittest, max @trusted */
+//import sodium.crypto_scalarmult_curve25519; /* unittest, max @trusted */
+import sodium.crypto_secretbox; // imports sodium.crypto_secretbox_xsalsa20poly1305
+//import sodium.crypto_secretbox_xsalsa20poly1305;
+import sodium.crypto_shorthash;
+import sodium.crypto_shorthash_siphash24;
+import sodium.crypto_sign;
+import sodium.crypto_sign_ed25519;
+import sodium.crypto_stream; // imports sodium.crypto_stream_xsalsa20 /* unittest, max @trusted */
+import sodium.crypto_stream_aes128ctr;
+import sodium.crypto_stream_chacha20;
+import sodium.crypto_stream_salsa20;
+import sodium.crypto_stream_salsa2012;
+import sodium.crypto_stream_salsa208;
+//import sodium.crypto_stream_xsalsa20; /* unittest, max @trusted */
+import sodium.crypto_verify_16; /* unittest, max @trusted */
+import sodium.crypto_verify_32; /* unittest, max @trusted */
+import sodium.crypto_verify_64; /* unittest, max @trusted */
+import sodium.randombytes; /* unittest, max @trusted */
+version(__native_client__)  import sodium.randombytes_nativeclient; /* unittest not required */
+import sodium.randombytes_salsa20_random;  /* unittest not required */
+import sodium.randombytes_sysrandom;  /* unittest not required */
+import sodium.runtime;  /* unittest, max @trusted */
+import sodium.utils;    /* unittest ??, max @trusted */
+import sodium.version_; /* unittest, max @trusted */

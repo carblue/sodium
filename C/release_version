@@ -1,4 +1,20 @@
-version 1.0.11   released on 31 Jul 2016, https://download.libsodium.org/libsodium/releases/libsodium-1.0.11.tar.gz
+version 1.0.11   released on 31 Jul 2016, origin: https://download.libsodium.org/libsodium/releases/libsodium-1.0.11.tar.gz
+
+Steps to get the headers on linux:
+$ ./configure
+take those from libsodium-<version>/src/libsodium/include
+
+(when comparatively installing an Ubuntu/debian libsodium-dev package, the directory sodium/private/ and file sodium/randombytes_nativeclient.h
+don't exist !
+Therefore:
+sodium/private/ is considered to be no part of the (public) API and got excluded.
+sodium/randombytes_nativeclient.h has to be dealt with specifically.
+)
+
+Translating to D will:
+render the (pure preprocessor directives) file sodium/export.h to be empty, thus excluded.
+sodium.h will be package.d within directory sodium
+
 
 excerpt of changelog:
 

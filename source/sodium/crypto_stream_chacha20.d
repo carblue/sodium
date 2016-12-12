@@ -24,5 +24,6 @@ extern (C)
 	int crypto_stream_chacha20_ietf(ubyte* c, ulong clen, const(ubyte)* n, const(ubyte)* k);
 	int crypto_stream_chacha20_ietf_xor(ubyte* c, const(ubyte)* m, ulong mlen, const(ubyte)* n, const(ubyte)* k);
 	int crypto_stream_chacha20_ietf_xor_ic(ubyte* c, const(ubyte)* m, ulong mlen, const(ubyte)* n, uint ic, const(ubyte)* k);
-	int _crypto_stream_chacha20_pick_best_implementation();
+
+//  int _crypto_stream_chacha20_pick_best_implementation();
 }
