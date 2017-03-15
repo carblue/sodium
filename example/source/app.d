@@ -1,7 +1,7 @@
 #!/usr/bin/rdmd @cmdfile
 import core.stdc.stdlib : EXIT_SUCCESS, EXIT_FAILURE;
 import std.stdio : writefln, writeln;
-import sodium;
+import deimos.sodium;
 
 int main()
 {
