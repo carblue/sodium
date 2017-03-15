@@ -1,0 +1,14 @@
+{
+	"name": "deimos",
+	"optional": true,
+	"default": true,
+	"targetType": "sourceLibrary",
+	"importPaths": ["."],
+	"sourceFiles-windows-x86-dmd": [
+		"../lib/windows-x86-dmd/libsodium.lib"
+	],
+	"sourceFiles-windows-x86_64": [
+		"../lib/windows-x86_64/libsodium.lib"
+	],
+	"libs-posix": ["sodium"]
+}

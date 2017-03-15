@@ -1,12 +1,12 @@
-This folder has to be populated with file libsodium.lib (import library (OMF format), generated from libsodium.dll file):
+This folder has to be populated with file libsodium.lib (import library OMF format for -m32 or COFF for -m32mscoff; or static lib):
 
-libsodium.dll to be downloaded from (adapt link to new version):
+libsodium.dll (or static lib) to be downloaded from (adapt link to new version):
 
-https://download.libsodium.org/libsodium/releases/libsodium-1.0.10-msvc.zip
+https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip
 
-folder .../libsodium-1.0.10-msvc/Win32/Release/v140/dynamic
+folder e.g. .../libsodium-1.0.12-msvc/Win32/Release/v140/dynamic
 
-libsodium.lib to be generated from libsodium.dll with Digital Mars tool : implib
+E.g. manually generate OMF import library libsodium.lib from libsodium.dll with Digital Mars tool : implib
 which is part of Basic Utilities, downloadable from:
 http://ftp.digitalmars.com/bup.zip
 http://www.digitalmars.com/ctg/implib.html
@@ -14,3 +14,6 @@ http://www.digitalmars.com/ctg/implib.html
 implib /s libsodium.lib libsodium.dll
 
 There will be a dependency on msvcrt.dll and vcruntime140.dll, among others
+
+Alternatively:
+https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-mingw.tar.gz

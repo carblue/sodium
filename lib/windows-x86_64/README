@@ -1,8 +1,10 @@
-This folder has to be populated with file libsodium.lib (import library (COFF format) for libsodium.dll):
+This folder has to be populated with file libsodium.lib (COFF format) (import library or static lib):
 
-libsodium.lib and libsodium.dll file from:
-https://download.libsodium.org/libsodium/releases/libsodium-1.0.10-msvc.zip
+https://download.libsodium.org/libsodium/releases/
 
-folder ...\libsodium-1.0.10-msvc\x64\Release\v140\dynamic
+libsodium.lib and libsodium.dll file from e.g.:
+https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip
+
+folder ...\libsodium-1.0.12-msvc\x64\Release\v140\dynamic
 
 there is a dependency on  vcruntime140.dll too
