@@ -1,5 +1,4 @@
 {
-	"version": "0.1.0",
 	"name": "sodium",
 	"description": "Deimos binding to libsodium",
 	"license": "ISC license",
