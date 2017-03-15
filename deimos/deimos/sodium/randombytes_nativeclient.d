@@ -6,8 +6,7 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.randombytes_nativeclient;
 
-version (__native_client__)
-{
+version (__native_client__) {
   import deimos.sodium.randombytes : randombytes_implementation;
 
   extern(C) extern __gshared randombytes_implementation randombytes_nativeclient_implementation;

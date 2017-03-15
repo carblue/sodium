@@ -41,4 +41,4 @@ int crypto_stream_xor(ubyte* c, const(ubyte)* m,
                       ulong mlen, const(ubyte)* n,
                       const(ubyte)* k) @system;
 
-void crypto_stream_keygen(ref ubyte[crypto_stream_KEYBYTES] k) @system;
+void crypto_stream_keygen(ref ubyte[crypto_stream_KEYBYTES] k) nothrow @system;

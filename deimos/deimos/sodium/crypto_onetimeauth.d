@@ -45,4 +45,4 @@ int crypto_onetimeauth_update(crypto_onetimeauth_state* state,
 int crypto_onetimeauth_final(crypto_onetimeauth_state* state,
                              ubyte* out_) @system;
 
-void crypto_onetimeauth_keygen(ref ubyte[crypto_onetimeauth_KEYBYTES] k) @system;
+void crypto_onetimeauth_keygen(ref ubyte[crypto_onetimeauth_KEYBYTES] k) nothrow @system;

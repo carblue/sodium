@@ -44,4 +44,4 @@ int crypto_onetimeauth_poly1305_update(crypto_onetimeauth_poly1305_state* state,
 int crypto_onetimeauth_poly1305_final(crypto_onetimeauth_poly1305_state* state,
                                       ubyte* out_) @system;
 
-void crypto_onetimeauth_poly1305_keygen(ref ubyte[crypto_onetimeauth_poly1305_KEYBYTES] k) @system;
+void crypto_onetimeauth_poly1305_keygen(ref ubyte[crypto_onetimeauth_poly1305_KEYBYTES] k) nothrow @system;

@@ -64,7 +64,7 @@ int crypto_stream_chacha20_ietf_xor_ic(ubyte* c, const(ubyte)* m,
                                        const(ubyte)* n, uint ic,
                                        const(ubyte)* k) @system;
 
-void crypto_stream_chacha20_ietf_keygen(ref ubyte[crypto_stream_chacha20_ietf_KEYBYTES] k) @system;
+void crypto_stream_chacha20_ietf_keygen(ref ubyte[crypto_stream_chacha20_ietf_KEYBYTES] k) nothrow @system;
 
 /* Aliases */
 

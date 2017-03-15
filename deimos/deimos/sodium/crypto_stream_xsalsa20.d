@@ -38,4 +38,4 @@ int crypto_stream_xsalsa20_xor_ic(ubyte* c, const(ubyte)* m,
                                   const(ubyte)* n, ulong ic,
                                   const(ubyte)* k) @system;
 
-void crypto_stream_xsalsa20_keygen(ref ubyte[crypto_stream_xsalsa20_KEYBYTES] k) @system;
+void crypto_stream_xsalsa20_keygen(ref ubyte[crypto_stream_xsalsa20_KEYBYTES] k) nothrow @system;

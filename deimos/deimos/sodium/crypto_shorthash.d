@@ -28,4 +28,4 @@ const(char)* crypto_shorthash_primitive() @system;
 int crypto_shorthash(ubyte* out_, const(ubyte)* in_,
                      ulong inlen, const(ubyte)* k) @system;
 
-void crypto_shorthash_keygen(ref ubyte[crypto_shorthash_KEYBYTES] k) @system;
+void crypto_shorthash_keygen(ref ubyte[crypto_shorthash_KEYBYTES] k) nothrow @system;

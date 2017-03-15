@@ -33,4 +33,4 @@ int crypto_stream_salsa2012_xor(ubyte* c, const(ubyte)* m,
                                 ulong mlen, const(ubyte)* n,
                                 const(ubyte)* k) @system;
 
-void crypto_stream_salsa2012_keygen(ref ubyte[crypto_stream_salsa2012_KEYBYTES] k) @system;
+void crypto_stream_salsa2012_keygen(ref ubyte[crypto_stream_salsa2012_KEYBYTES] k) nothrow @system;
