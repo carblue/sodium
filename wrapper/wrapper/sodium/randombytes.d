@@ -149,8 +149,14 @@ unittest
 	writefln("Unpredictable sequence of %s bytes: %s", buf.length, buf);
 
   import std.range : array, take, enumerate, iota;
-//  foreach (i,element; randombytes_range().take(8).enumerate(1))
-//    writefln("%s: %02X", i, element);
+  foreach (i,element; randombytes_range().take(8).enumerate(1))
+    writefln("%s: %02X", i, element);
+  writeln;
+  int cnt;
+  foreach (element; randombytes_range().take(8)) {
+    ++cnt;
+    writefln("%s: %02X", cnt, element);
+  }
   ubyte[] populated_from_infinite_range = array(randombytes_range().take(8));
 //  writefln("0x %(%02X %)", populated_from_infinite_range);
 
@@ -158,14 +164,14 @@ unittest
 	immutable ubyte[randombytes_SEEDBYTES] seed = array(iota(ubyte(0), randombytes_SEEDBYTES))[];
 	randombytes_buf_deterministic(buf.ptr, buf.length, seed);
 
-version(none)
+debug(TRAVIS_TEST)
 {
 /*
-  This block runs successfully but is disabled for security reason:
+  This block runs successfully but is disabled in regular builds as it does dubious actions; only for a test run by travis/code coverage):
   The documentation says about function randombytes_set_implementation:
   "This function should only be called once, before sodium_init()."
-  As we are calling after sodium_init():
-  Thus for testing during development, version(none) may be changed to version(all) temporarily, but not for a build like dmd ... -unittest -release
+  As we are calling after sodium_init() and twice:
+  Thus for testing during development, debug(TRAVIS_TEST) may be 'activated' temporarily.
  */
   extern(C) const(char)* dummy_implementation_name()
   {
@@ -233,6 +239,7 @@ unittest
 {
   import std.stdio : writeln;
   import std.algorithm.searching : any, all;
+  import std.range : iota, array;
 
   writeln("unittest block 2 from sodium.randombytes.d");
 
@@ -274,4 +281,8 @@ unittest
   randombytes(buf);
   assert( any(buf));
   randombytes(null);
+
+//randombytes_buf_deterministic
+	immutable ubyte[randombytes_SEEDBYTES] seed = array(iota(ubyte(0), randombytes_SEEDBYTES))[];
+	randombytes_buf_deterministic(buf, seed);
 }

@@ -17,5 +17,5 @@ install:
 
 script:
   - dub test sodium:deimos
-  - dub test sodium:wrapper -b unittest-cov
+  - dub test sodium:wrapper --debug=TRAVIS_TEST -b unittest-cov
   - ./doveralls
