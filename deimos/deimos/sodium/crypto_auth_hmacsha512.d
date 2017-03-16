@@ -50,4 +50,4 @@ int crypto_auth_hmacsha512_update(crypto_auth_hmacsha512_state* state,
 int crypto_auth_hmacsha512_final(crypto_auth_hmacsha512_state* state,
                                  ubyte* out_) @system;
 
-void crypto_auth_hmacsha512_keygen(ref ubyte[crypto_auth_hmacsha512_KEYBYTES] k) nothrow @system;
+void crypto_auth_hmacsha512_keygen(ref ubyte[crypto_auth_hmacsha512_KEYBYTES] k) nothrow @trusted;

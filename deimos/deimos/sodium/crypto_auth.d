@@ -31,4 +31,4 @@ int crypto_auth(ubyte* out_, const(ubyte)* in_,
 int crypto_auth_verify(const(ubyte)* h, const(ubyte)* in_,
                        ulong inlen, const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result));
 
-void crypto_auth_keygen(ref ubyte [crypto_auth_KEYBYTES] k) nothrow @system;
+void crypto_auth_keygen(ref ubyte[crypto_auth_KEYBYTES] k) nothrow @trusted;

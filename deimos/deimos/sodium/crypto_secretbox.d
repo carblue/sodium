@@ -53,7 +53,7 @@ int crypto_secretbox_open_detached(ubyte* m,
                                    const(ubyte)* n,
                                    const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result));
 
-void crypto_secretbox_keygen(ref ubyte[crypto_secretbox_KEYBYTES] k) nothrow @system;
+void crypto_secretbox_keygen(ref ubyte[crypto_secretbox_KEYBYTES] k) nothrow @trusted;
 
 /* -- NaCl compatibility interface ; Requires padding -- */
 

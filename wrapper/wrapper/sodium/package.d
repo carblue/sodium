@@ -8,27 +8,34 @@ import wrapper.sodium.version_; /* unittest + code */
 
 //import wrapper.sodium.core;   /* unittest + code */ No public import any more: it get's imported privately in all other modules to ensure running it's shared static this() first
 
-/+
 import wrapper.sodium.crypto_aead_aes256gcm;         /* unittest + code  */
-import wrapper.sodium.crypto_aead_chacha20poly1305;  /* mere redirection */
+import wrapper.sodium.crypto_aead_chacha20poly1305;  /* currently mere redirection; TODO v1.0.12 */
+import wrapper.sodium.crypto_aead_xchacha20poly1305; /* currently mere redirection; TODO v1.0.12 */
+
 import wrapper.sodium.crypto_auth;                   /* unittest + code  */
 import wrapper.sodium.crypto_auth_hmacsha256;        /* unittest + code  */
 import wrapper.sodium.crypto_auth_hmacsha512;        /* unittest + code  */
 import wrapper.sodium.crypto_auth_hmacsha512256;     /* unittest + code  */
-import wrapper.sodium.crypto_box;                    /* unittest + code  */
-import wrapper.sodium.crypto_box_curve25519xsalsa20poly1305; /* mere redirection */
 
-import wrapper.sodium.crypto_core_hsalsa20;          /* mere redirection */
-import wrapper.sodium.crypto_core_hchacha20;         /* mere redirection */
-import wrapper.sodium.crypto_core_salsa20;           /* mere redirection */
-import wrapper.sodium.crypto_core_salsa2012;         /* mere redirection */
-import wrapper.sodium.crypto_core_salsa208;          /* mere redirection */
-+/
+import wrapper.sodium.crypto_box;                    /* unittest + code  */
+import wrapper.sodium.crypto_box_curve25519xsalsa20poly1305; /* currently mere redirection; TODO */
+
+import wrapper.sodium.crypto_core_hsalsa20;          /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_core_hchacha20;         /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_core_salsa20;           /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_core_salsa2012;         /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_core_salsa208;          /* currently mere redirection; TODO */
+
 import wrapper.sodium.crypto_generichash;            /* unittest + code  */
 import wrapper.sodium.crypto_generichash_blake2b;    /* unittest not required; mere redirection */
 import wrapper.sodium.crypto_hash;                   /* unittest + code  */
 import wrapper.sodium.crypto_hash_sha256;            /* unittest + code  */
 import wrapper.sodium.crypto_hash_sha512;            /* unittest + code  */
+/+
+import wrapper.sodium.crypto_kdf;
+import wrapper.sodium.crypto_kdf_blake2b;
+import wrapper.sodium.crypto_kx;
++/
 import wrapper.sodium.crypto_onetimeauth;            /* currently mere redirection; TODO */
 import wrapper.sodium.crypto_onetimeauth_poly1305;   /* currently mere redirection; TODO */
 
@@ -38,21 +45,19 @@ import wrapper.sodium.crypto_pwhash_scryptsalsa208sha256;  /* currently mere red
 
 import wrapper.sodium.crypto_scalarmult;             /* unittest + code  */
 import wrapper.sodium.crypto_scalarmult_curve25519;  /* unittest not required; mere redirection */
-/+
-import wrapper.sodium.crypto_secretbox;                  // no_compile  // FERTIG
-import wrapper.sodium.crypto_secretbox_xsalsa20poly1305; // no_compile  // FERTIG
-+/
+
+import wrapper.sodium.crypto_secretbox;                   /* unittest + code  */
+import wrapper.sodium.crypto_secretbox_xsalsa20poly1305;  /* currently mere redirection; TODO v1.0.12 */
+
 import wrapper.sodium.crypto_shorthash;              /* unittest + code  */
 import wrapper.sodium.crypto_shorthash_siphash24;    /* unittest */
+import wrapper.sodium.crypto_sign;                   /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_sign_ed25519;           /* currently mere redirection; TODO */
+//import wrapper.sodium.crypto_sign_edwards25519sha512batch; /* currently mere redirection; TODO */
 /+
-import wrapper.sodium.crypto_sign;         // no_compile  // FERTIG
-import wrapper.sodium.crypto_sign_ed25519; // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream; /* unittest */  // FERTIG  compile
-import wrapper.sodium.crypto_stream_aes128ctr; // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream_chacha20;  // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream_salsa20;   // no_compile  // FERTIG
-import wrapper.sodium.crypto_stream_salsa2012; // no_compile  // FERTIG
-import wrapper.sodium.crypto_stream_salsa208;  // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream_xsalsa20; /* unittest */  // FERTIG  compile only for unittest
 +/
 import wrapper.sodium.crypto_verify_16;  /* unittest + code */
@@ -68,3 +73,15 @@ import wrapper.sodium.randombytes_salsa20_random;  /* unittest not required; mer
 import wrapper.sodium.randombytes_sysrandom;       /* unittest not required; mere redirection */
 import wrapper.sodium.runtime;      /* unittest */
 import wrapper.sodium.utils;        /* unittest + code */
+
+version(SODIUM_LIBRARY_MINIMAL) {}
+else {
+	import wrapper.sodium.crypto_box_curve25519xchacha20poly1305;  /* currently mere redirection; TODO v1.0.12 */
+	import wrapper.sodium.crypto_secretbox_xchacha20poly1305;      /* currently mere redirection; TODO v1.0.12 */
+/+
+	import wrapper.sodium.crypto_stream_aes128ctr; // no_compile  // FERTIG
+	import wrapper.sodium.crypto_stream_salsa2012; // no_compile  // FERTIG
+	import wrapper.sodium.crypto_stream_salsa208;  // no_compile  // FERTIG
+	import wrapper.sodium.crypto_stream_xchacha20;
++/
+}

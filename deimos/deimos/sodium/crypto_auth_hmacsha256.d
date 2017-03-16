@@ -50,4 +50,4 @@ int crypto_auth_hmacsha256_update(crypto_auth_hmacsha256_state* state,
 int crypto_auth_hmacsha256_final(crypto_auth_hmacsha256_state* state,
                                  ubyte* out_) @system;
 
-void crypto_auth_hmacsha256_keygen(ref ubyte[crypto_auth_hmacsha256_KEYBYTES] k) nothrow @system;
+void crypto_auth_hmacsha256_keygen(ref ubyte[crypto_auth_hmacsha256_KEYBYTES] k) nothrow @trusted;
