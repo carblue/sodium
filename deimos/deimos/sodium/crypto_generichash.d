@@ -65,4 +65,4 @@ int crypto_generichash_update(crypto_generichash_state* state,
 int crypto_generichash_final(crypto_generichash_state* state,
                              ubyte* out_, const size_t outlen) @system;
 
-void crypto_generichash_keygen(ref ubyte[crypto_generichash_KEYBYTES] k) nothrow @system;
+void crypto_generichash_keygen(ref ubyte[crypto_generichash_KEYBYTES] k) nothrow @trusted;

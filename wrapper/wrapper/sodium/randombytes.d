@@ -99,7 +99,7 @@ struct RandomBytes_Range
     }
     return result;
   }
-
+/+
   int opApply(int delegate(size_t, ubyte) operations) {
     int result = 0;
     size_t counter;
@@ -111,7 +111,7 @@ struct RandomBytes_Range
     }
     return result;
   }
-
++/
 }
 
 RandomBytes_Range randombytes_range() nothrow @nogc @safe
@@ -153,8 +153,9 @@ unittest
     writefln("%s: %02X", i, element);
   writeln;
   int cnt;
-  foreach (element; randombytes_range().take(8)) {
-    ++cnt;
+  foreach (element; randombytes_range()) {
+    if (++cnt > 8)
+	    break;
     writefln("%s: %02X", cnt, element);
   }
   ubyte[] populated_from_infinite_range = array(randombytes_range().take(8));

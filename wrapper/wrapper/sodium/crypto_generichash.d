@@ -20,11 +20,12 @@ import  deimos.sodium.crypto_generichash : crypto_generichash_BYTES_MIN,
                                            crypto_generichash_PRIMITIVE,
 //                                           crypto_generichash_primitive,
                                            crypto_generichash_state,
-                                           crypto_generichash_statebytes;
+                                           crypto_generichash_statebytes,
 //                                           crypto_generichash,
 //                                           crypto_generichash_init,
 //                                           crypto_generichash_update,
 //                                           crypto_generichash_final;
+                                           crypto_generichash_keygen;
 
 
 import std.exception : enforce;
@@ -196,4 +197,7 @@ unittest
 
   hash_output = cast(immutable(ubyte)[]) x"bd4ec735d9b885a60e0a2b1f8e61842795126a77db60e4fa962290f29e63fde7"; // a hash calculated in a run of block 1 for same key and input
   assert(equal(hash[], hash_output));
+
+  ubyte[crypto_generichash_KEYBYTES] k;
+  crypto_generichash_keygen(k);
 }
