@@ -1,6 +1,7 @@
 **Build state**
 
 [![Build Status](https://travis-ci.org/carblue/sodium.svg?branch=master)](https://travis-ci.org/carblue/sodium)
+[![Coverage Status](https://coveralls.io/repos/github/carblue/sodium/badge.svg?branch=master)](https://coveralls.io/github/carblue/sodium?branch=master)
 
 # sodium
 
