@@ -1,6 +1,6 @@
 {
 	"name": "sodium",
-	"description": "Deimos binding to libsodium",
+	"description": "Deimos binding to libsodium xor wrapper",
 	"license": "ISC license",
 	"homepage": "https://github.com/carblue/sodium",
 	"copyright": "Copyright © 2017-, Carsten Blüggel",

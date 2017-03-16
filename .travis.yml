@@ -11,11 +11,11 @@ before_install:
   - sudo ldconfig
   - popd
 
-#install:
-#  - wget -O doveralls "https://github.com/ColdenCullen/doveralls/releases/download/v1.3.1/doveralls_linux_travis"
-#  - chmod +x doveralls
+install:
+  - wget -O doveralls "https://github.com/ColdenCullen/doveralls/releases/download/v1.3.1/doveralls_linux_travis"
+  - chmod +x doveralls
 
 script:
   - dub test sodium:deimos
-#  - dub test sodium:wrapper -b unittest-cov
-#  - ./doveralls
+  - dub test sodium:wrapper -b unittest-cov
+  - ./doveralls

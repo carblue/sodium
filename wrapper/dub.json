@@ -1,0 +1,26 @@
+{
+	"name": "wrapper",
+	"targetType": "library",
+	"optional": true,
+	"default": false,
+	"importPaths": ["../wrapper", "../deimos"],
+	"sourcePaths": ["wrapper"],
+	"excludedSourceFiles": [],
+	"sourceFiles-windows-x86-dmd": [
+		"../lib/windows-x86-dmd/libsodium.lib"
+	],
+	"sourceFiles-windows-x86_64": [
+		"../lib/windows-x86_64/libsodium.lib"
+	],
+	"libs-posix": ["sodium"],
+	"configurations": [
+		{
+			"name": "library",
+			"versions": []
+		},
+		{
+			"name": "unittest",
+			"versions": []
+		}
+	]
+}
