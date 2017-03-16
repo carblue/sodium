@@ -31,11 +31,11 @@ import wrapper.sodium.crypto_generichash_blake2b;    /* unittest not required; m
 import wrapper.sodium.crypto_hash;                   /* unittest + code  */
 import wrapper.sodium.crypto_hash_sha256;            /* unittest + code  */
 import wrapper.sodium.crypto_hash_sha512;            /* unittest + code  */
-/+
-import wrapper.sodium.crypto_kdf;
-import wrapper.sodium.crypto_kdf_blake2b;
-import wrapper.sodium.crypto_kx;
-+/
+
+import wrapper.sodium.crypto_kdf;                    /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_kdf_blake2b;            /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_kx;                     /* currently mere redirection; TODO */
+
 import wrapper.sodium.crypto_onetimeauth;            /* currently mere redirection; TODO */
 import wrapper.sodium.crypto_onetimeauth_poly1305;   /* currently mere redirection; TODO */
 
@@ -54,12 +54,12 @@ import wrapper.sodium.crypto_shorthash_siphash24;    /* unittest */
 import wrapper.sodium.crypto_sign;                   /* currently mere redirection; TODO */
 import wrapper.sodium.crypto_sign_ed25519;           /* currently mere redirection; TODO */
 //import wrapper.sodium.crypto_sign_edwards25519sha512batch; /* currently mere redirection; TODO */
-/+
-import wrapper.sodium.crypto_stream; /* unittest */  // FERTIG  compile
+
+import wrapper.sodium.crypto_stream;           /* unittest + code  */
 import wrapper.sodium.crypto_stream_chacha20;  // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream_salsa20;   // no_compile  // FERTIG
-import wrapper.sodium.crypto_stream_xsalsa20; /* unittest */  // FERTIG  compile only for unittest
-+/
+import wrapper.sodium.crypto_stream_xsalsa20;  /* unittest */
+
 import wrapper.sodium.crypto_verify_16;  /* unittest + code */
 import wrapper.sodium.crypto_verify_32;  /* unittest + code */
 import wrapper.sodium.crypto_verify_64;  /* unittest + code */
@@ -78,10 +78,9 @@ version(SODIUM_LIBRARY_MINIMAL) {}
 else {
 	import wrapper.sodium.crypto_box_curve25519xchacha20poly1305;  /* currently mere redirection; TODO v1.0.12 */
 	import wrapper.sodium.crypto_secretbox_xchacha20poly1305;      /* currently mere redirection; TODO v1.0.12 */
-/+
-	import wrapper.sodium.crypto_stream_aes128ctr; // no_compile  // FERTIG
-	import wrapper.sodium.crypto_stream_salsa2012; // no_compile  // FERTIG
-	import wrapper.sodium.crypto_stream_salsa208;  // no_compile  // FERTIG
+
+	import wrapper.sodium.crypto_stream_aes128ctr;  /* currently mere redirection; TODO v1.0.12 */
+	import wrapper.sodium.crypto_stream_salsa2012;  /* currently mere redirection; TODO v1.0.12 */
+	import wrapper.sodium.crypto_stream_salsa208;   /* currently mere redirection; TODO v1.0.12 */
 	import wrapper.sodium.crypto_stream_xchacha20;
-+/
 }
