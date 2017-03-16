@@ -26,23 +26,25 @@ import wrapper.sodium.crypto_core_salsa208;          /* mere redirection */
 +/
 import wrapper.sodium.crypto_generichash;            /* unittest + code  */
 import wrapper.sodium.crypto_generichash_blake2b;    /* unittest not required; mere redirection */
-/+
 import wrapper.sodium.crypto_hash;                   /* unittest + code  */
 import wrapper.sodium.crypto_hash_sha256;            /* unittest + code  */
 import wrapper.sodium.crypto_hash_sha512;            /* unittest + code  */
-import wrapper.sodium.crypto_onetimeauth;            /* mere redirection */
-import wrapper.sodium.crypto_onetimeauth_poly1305;   /* mere redirection */
-import wrapper.sodium.crypto_pwhash;                       // no_compile  // FERTIG
-import wrapper.sodium.crypto_pwhash_argon2i;               // no_compile  // FERTIG
-import wrapper.sodium.crypto_pwhash_scryptsalsa208sha256;  // no_compile  // FERTIG
-+/
+import wrapper.sodium.crypto_onetimeauth;            /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_onetimeauth_poly1305;   /* currently mere redirection; TODO */
+
+import wrapper.sodium.crypto_pwhash;                       /* unittest + code; TODO v1.0.12 */
+import wrapper.sodium.crypto_pwhash_argon2i;               /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_pwhash_scryptsalsa208sha256;  /* currently mere redirection; TODO */
+
 import wrapper.sodium.crypto_scalarmult;             /* unittest + code  */
 import wrapper.sodium.crypto_scalarmult_curve25519;  /* unittest not required; mere redirection */
 /+
 import wrapper.sodium.crypto_secretbox;                  // no_compile  // FERTIG
 import wrapper.sodium.crypto_secretbox_xsalsa20poly1305; // no_compile  // FERTIG
-import wrapper.sodium.crypto_shorthash;           /* unittest */  // FERTIG  compile
-import wrapper.sodium.crypto_shorthash_siphash24; /* unittest */  // FERTIG  compile only for unittest
++/
+import wrapper.sodium.crypto_shorthash;              /* unittest + code  */
+import wrapper.sodium.crypto_shorthash_siphash24;    /* unittest */
+/+
 import wrapper.sodium.crypto_sign;         // no_compile  // FERTIG
 import wrapper.sodium.crypto_sign_ed25519; // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream; /* unittest */  // FERTIG  compile

@@ -49,8 +49,7 @@ void sharedkey_hashed(scope ubyte[] our_sharedkey, in ubyte[crypto_scalarmult_SC
   /* I derive a shared key from my secret key and the other's public key */
   /* shared key = hash(q || client_publickey || server_publickey) */
   ubyte[crypto_scalarmult_BYTES]  our_scalarmult_q; // = new ubyte[crypto_scalarmult_BYTES];
-  enforce( crypto_scalarmult(our_scalarmult_q, my_secretkey, other_publickey)
-    ,"sharedkey_hashed: Error result from calling crypto_scalarmult");
+  enforce( crypto_scalarmult(our_scalarmult_q, my_secretkey, other_publickey), "sharedkey_hashed: Error result from calling crypto_scalarmult");
   /+ are there security concerns to pass our_scalarmult_q through RAM/cache ?
   import wrapper.sodium.utils : sodium_memzero;
   ubyte[][] MESSAGE_multi = [

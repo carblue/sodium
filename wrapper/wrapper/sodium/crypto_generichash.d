@@ -45,8 +45,7 @@ void crypto_generichash_multi(scope ubyte[] out_, in ubyte[][] in_multi, in ubyt
 {
   enforce(out_.length >= crypto_generichash_BYTES_MIN && out_.length <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   if (key.length)
-    enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX,
-      "wrong length of key: Must be either 0 or 16<=length<=64");
+    enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX, "wrong length of key: Must be either 0 or 16<=length<=64");
   crypto_generichash_state state;
   crypto_generichash_init(state, key, out_.length);
   foreach (arr; in_multi)
@@ -64,8 +63,7 @@ int crypto_generichash(scope ubyte[] out_, in ubyte[] in_, in ubyte[] key = null
   static import deimos.sodium.crypto_generichash;
   enforce(out_.length >= crypto_generichash_BYTES_MIN && out_.length <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   if (key.length)
-    enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX,
-      "wrong length of key: Must be either 0 or 16<=length<=64");
+    enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX, "wrong length of key: Must be either 0 or 16<=length<=64");
   return deimos.sodium.crypto_generichash.crypto_generichash(out_.ptr, out_.length, in_.ptr, in_.length, key.ptr, key.length);
 }
 
