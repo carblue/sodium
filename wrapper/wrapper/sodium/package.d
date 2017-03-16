@@ -1,10 +1,12 @@
+// Written in the D programming language.
+
 module wrapper.sodium;
 
 public :
 
-import wrapper.sodium.version_; /* unittest + code READY*/
+import wrapper.sodium.version_; /* unittest + code */
 
-//import wrapper.sodium.core;                        /* unittest + code */
+//import wrapper.sodium.core;   /* unittest + code */ No public import any more: it get's imported privately in all other modules to ensure running it's shared static this() first
 
 /+
 import wrapper.sodium.crypto_aead_aes256gcm;         /* unittest + code  */
@@ -46,13 +48,17 @@ import wrapper.sodium.crypto_stream_salsa20;   // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream_salsa2012; // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream_salsa208;  // no_compile  // FERTIG
 import wrapper.sodium.crypto_stream_xsalsa20; /* unittest */  // FERTIG  compile only for unittest
-import wrapper.sodium.crypto_verify_16; /* unittest */  // FERTIG  compile
-import wrapper.sodium.crypto_verify_32; /* unittest */  // FERTIG  compile
-import wrapper.sodium.crypto_verify_64; /* unittest */  // FERTIG  compile
-import wrapper.sodium.randombytes; /* unittest */  // FERTIG  compile
-version(__native_client__)  import wrapper.sodium.randombytes_nativeclient; /* unittest not required */  // FERTIG  no_compile
-import wrapper.sodium.randombytes_salsa20_random;  /* unittest not required */  // FERTIG  no_compile
-import wrapper.sodium.randombytes_sysrandom;  /* unittest not required */  // FERTIG  no_compile
-import wrapper.sodium.runtime;  /* unittest */  // FERTIG  compile only for unittest
-import wrapper.sodium.utils;    /* unittest */  // FERTIG  compile
 +/
+import wrapper.sodium.crypto_verify_16;  /* unittest + code */
+import wrapper.sodium.crypto_verify_32;  /* unittest + code */
+import wrapper.sodium.crypto_verify_64;  /* unittest + code */
+
+/* WARNING: randombytes_set_implementation is not available from 'wrapper' and shouldn't be used through 'deimos' either, except You know what You are doing */
+import wrapper.sodium.randombytes;  /* unittest + code */
+version(__native_client__)
+import wrapper.sodium.randombytes_nativeclient;    /* unittest not required; mere redirection */
+
+import wrapper.sodium.randombytes_salsa20_random;  /* unittest not required; mere redirection */
+import wrapper.sodium.randombytes_sysrandom;       /* unittest not required; mere redirection */
+import wrapper.sodium.runtime;      /* unittest */
+import wrapper.sodium.utils;        /* unittest + code */

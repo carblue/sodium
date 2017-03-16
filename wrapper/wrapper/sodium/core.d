@@ -1,8 +1,4 @@
-/*
-Written in the D programming language.
-For git maintenance (ensure at least one congruent line with originating C header):
-#define sodium_core_H
-*/
+// Written in the D programming language.
 
 module wrapper.sodium.core;
 

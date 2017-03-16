@@ -12,6 +12,8 @@ Some restructuring (subPackages)/changing importPath and sourcePath was done for
 subPackage deimos.<br>
 Thus code that already used versions<0.1.0 needs to replace 'import sodium...' by 'import deimos.sodium...'.
 
+Usage of 'wrapper' is probably not possible, if function randombytes_set_implementation shall be used (or maybe (I did't test that) there is a way to use it before this runs: wrapper.sodium.core:shared static this()).
+
 Example, using rdmd:<br>
 	cd example/source  &&  chmod 775 app.d  &&  ./app.d
 

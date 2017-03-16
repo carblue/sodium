@@ -1,9 +1,10 @@
+// Written in the D programming language.
+
 module wrapper.sodium.version_;
 
 import wrapper.sodium.core; // assure sodium got initialized
 
-public
-import  deimos.sodium.version_ : SODIUM_VERSION_STRING, SODIUM_LIBRARY_VERSION_MAJOR, SODIUM_LIBRARY_VERSION_MINOR,
+public import  deimos.sodium.version_ : SODIUM_VERSION_STRING, SODIUM_LIBRARY_VERSION_MAJOR, SODIUM_LIBRARY_VERSION_MINOR,
                                  sodium_library_version_major, sodium_library_version_minor, sodium_library_minimal; /* , sodium_version_string */
 // in order to use sodium_version_string() from deimos, it must be statically imported explicitely.
 

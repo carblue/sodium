@@ -24,7 +24,7 @@ nothrow @nogc :
 /* my understanding of the pure attribute in D is, that the following functions are impure; all depend on hidden global mutable state */
 
 
-enum randombytes_SEEDBYTES = 32U;
+enum ubyte randombytes_SEEDBYTES = 32U;
 
 size_t randombytes_seedbytes() @trusted;
 
