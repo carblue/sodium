@@ -47,7 +47,7 @@ int randombytes_set_implementation(randombytes_implementation* impl) @system;
 /**
  * With attribute pure, function randombytes_implementation_name() is allowed to be called only
  * after the last call to randombytes_set_implementation (and this only before sodium_init() is called),
- * otherwise this function is strongly impure because the return value migth change !
+ * otherwise this function is strongly impure because the return value might change !
  * In the wrapper interface, function randombytes_set_implementation() is not allowed to be called at all !
  */
 const(char)* randombytes_implementation_name() pure @system;

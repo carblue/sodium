@@ -65,14 +65,14 @@ import wrapper.sodium.crypto_verify_32;  /* unittest + code */
 import wrapper.sodium.crypto_verify_64;  /* unittest + code */
 
 /* WARNING: randombytes_set_implementation is not available from 'wrapper' and shouldn't be used through 'deimos' either, except You know what You are doing */
-import wrapper.sodium.randombytes;  /* unittest + code */
+import wrapper.sodium.randombytes;                 /* unittest + code */
 version(__native_client__)
 import wrapper.sodium.randombytes_nativeclient;    /* unittest not required; mere redirection */
 
 import wrapper.sodium.randombytes_salsa20_random;  /* unittest not required; mere redirection */
 import wrapper.sodium.randombytes_sysrandom;       /* unittest not required; mere redirection */
-import wrapper.sodium.runtime;      /* unittest */
-import wrapper.sodium.utils;        /* unittest + code */
+import wrapper.sodium.runtime;                     /* unittest */
+import wrapper.sodium.utils;                       /* unittest + code */
 
 version(SODIUM_LIBRARY_MINIMAL) {}
 else {

@@ -245,4 +245,10 @@ unittest {
   assertThrown(crypto_box_seal_open(decrypted[0..$-1], ciphertext_sealed, bob_publickey, bob_secretkey));
   assert(crypto_box_seal_open(decrypted, ciphertext_sealed, bob_publickey, bob_secretkey));
   assert(decrypted == message);
+
+  ubyte[crypto_box_PUBLICKEYBYTES] pkey = void;
+  ubyte[crypto_box_SECRETKEYBYTES] skey = void;
+  ubyte[crypto_box_SEEDBYTES]      seed = void;
+  randombytes(seed);
+  assert(crypto_box_seed_keypair(pkey, skey, seed));
 }

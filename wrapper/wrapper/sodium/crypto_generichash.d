@@ -81,7 +81,7 @@ bool crypto_generichash_init(out crypto_generichash_state state,
 
 alias crypto_generichash_update = deimos.sodium.crypto_generichash.crypto_generichash_update;
 
-pragma(inline, true)
+//pragma(inline, true)
 bool crypto_generichash_update(ref crypto_generichash_state state,
                                in ubyte[] in_) pure @nogc @trusted
 {
@@ -179,8 +179,12 @@ unittest
   auto MESSAGE = representation("Arbitrary data to hash");
   crypto_generichash(hash, MESSAGE);
 
-  auto hash_output = cast(immutable(ubyte)[]) x"3dc7925e13e4c5f0f8756af2cc71d5624b58833bb92fa989c3e87d734ee5a600"; // the result from invoking the C version
+  auto hash_output = representation(x"3dc7925e13e4c5f0f8756af2cc71d5624b58833bb92fa989c3e87d734ee5a600"); // the result from invoking the C version
   assert(equal(hash[], hash_output));
+
+  ubyte[crypto_generichash_KEYBYTES] key32 = void;
+  randombytes(key32);
+  crypto_generichash(hash, MESSAGE, key32);
 
 //Multi-part example with a key
 
