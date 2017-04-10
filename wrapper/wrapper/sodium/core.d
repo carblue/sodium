@@ -14,8 +14,8 @@ shared static this() {
 @safe
 unittest
 {
+  import std.stdio : writeln;
   debug {
-    import std.stdio : writeln;
     writeln("unittest block 1 from sodium.core.d");
   }
   assert(sodium_init() == 1);

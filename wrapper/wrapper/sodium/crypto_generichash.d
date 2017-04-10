@@ -170,6 +170,7 @@ unittest
   import std.stdio : writeln, writefln;
   import std.algorithm.comparison : equal;
   import std.string : representation; // @system fromStringz
+  import wrapper.sodium.randombytes : randombytes;
   debug  writeln("unittest block 2 from sodium.crypto_generichash.d");
 
 //Single-part example without a key

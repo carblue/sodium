@@ -1,5 +1,9 @@
 language: d
-d: dmd
+d:
+  - dmd
+  - gdc
+  - ldc
+
 sudo: required
 dist: trusty
 env:
@@ -16,6 +20,7 @@ install:
   - chmod +x doveralls
 
 script:
-  - dub test sodium:deimos
-  - dub test sodium:wrapper --debug=TRAVIS_TEST -b unittest-cov
+  - dub test  sodium:deimos  --compiler=${DC}
+  - dub test  sodium:wrapper --compiler=${DC} --build unittest-cov --debug=TRAVIS_TEST
   - ./doveralls
+  - dub build sodium:wrapper --compiler=${DC} --build release
