@@ -173,14 +173,15 @@ bool crypto_aead_aes256gcm_decrypt_detached_afternm(scope ubyte[] m,
   return  crypto_aead_aes256gcm_decrypt_detached_afternm(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, &ctx_) == 0;
 }
 
+
 version(unittest)
 {
   import wrapper.sodium.randombytes : randombytes;
   // share a key and nonce in the following unittests
   ubyte[crypto_aead_aes256gcm_NPUBBYTES]  nonce = void;
   ubyte[crypto_aead_aes256gcm_KEYBYTES]   key   = void;
-  static this()
-  {
+
+  static this() {
     randombytes(nonce);
     randombytes(key);
   }
@@ -217,6 +218,11 @@ unittest
       assert(decrypted == message); //writeln("Decrypted message (aead_aes256gcm): ", cast(string)decrypted);
       assert(decrypted_len == decrypted.length);
     }
+    // test null for &ciphertext_len
+    crypto_aead_aes256gcm_encrypt(ciphertext.ptr, null, message.ptr, message.length,
+      additional_data.ptr, additional_data.length, null, nonce.ptr, key.ptr);
+    crypto_aead_aes256gcm_decrypt(decrypted.ptr, null, null, ciphertext.ptr, ciphertext_len,
+      additional_data.ptr, additional_data.length, nonce.ptr, key.ptr);
   }
 }
 

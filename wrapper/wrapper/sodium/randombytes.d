@@ -271,9 +271,10 @@ unittest
   string impl_name = randombytes_implementation_name();
   writeln("wrapper.sodium.randombytes.randombytes_implementation_name(): ", impl_name);
   version (__native_client__) {}
-  else
+  else {
+//    version(QRNG)  assert(impl_name == "qrandom"); else
     assert(impl_name == "sysrandom");
-
+  }
 //randombytes
 //  ubyte[] buf = uninitializedArray!(ubyte[])(8);
   ubyte[] buf = new ubyte[8];

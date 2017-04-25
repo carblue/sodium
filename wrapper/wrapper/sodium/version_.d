@@ -11,7 +11,7 @@ public import  deimos.sodium.version_ : SODIUM_VERSION_STRING, SODIUM_LIBRARY_VE
 
 /*
  deimos.sodium.version_.sodium_version_string() gets trusted to return a valid (program lifetime) address, to be evaluated as a null-terminated C string
- added nothrow again for D, i.e. return value must be used
+ added nothrow again for D, i.e. return value must be used (enforced since DMD 2.066.0 by -w compiler switch/warnings enabled)
 */
 string sodium_version_string() pure nothrow @nogc @trusted
 {
@@ -20,8 +20,8 @@ string sodium_version_string() pure nothrow @nogc @trusted
   const(char)[] c_arr;
   try
     c_arr = fromStringz(deimos.sodium.version_.sodium_version_string()); // strips terminating \0
-  catch (Throwable t) { /* known not to throw */ }
-  return c_arr;
+  catch (Exception e) { /* known not to throw */ }
+  return c_arr; // compiler infers assumeUnique
 }
 
 

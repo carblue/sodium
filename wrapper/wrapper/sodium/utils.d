@@ -33,7 +33,7 @@ alias sodium_memzero     = deimos.sodium.utils.sodium_memzero;
 pragma(inline, true)
 void sodium_memzero(scope ubyte[] a) pure nothrow @nogc @trusted
 {
-//  enforce(a !is null, "a is null"); // not necessary
+//  enforce(a !is null, "a is null"); // not necessary (tested on Linux and Windows)
   static import deimos.sodium.utils;
   deimos.sodium.utils.sodium_memzero(a.ptr, a.length);
 }
@@ -142,15 +142,13 @@ alias sodium_bin2hex     = deimos.sodium.utils.sodium_bin2hex;
  * @returns a copy of hex as D string on success, or null on overflow. It evaluates in constant time for a given size.
  * NOTE: This function uses heap memory for the return value
  */
-string sodium_bin2hex(in ubyte[] bin) pure nothrow @trusted // Error: function sodium_bin2hex cannot inline function
+string sodium_bin2hex(in ubyte[] bin) pure nothrow @trusted
 {
 //  enforce(bin !is null, "bin is null"); // not necessary
   static import deimos.sodium.utils;
   char[] hex = new char[2*bin.length+1];
-  if ( assumeWontThrow(deimos.sodium.utils.sodium_bin2hex(hex.ptr, hex.length, bin.ptr, bin.length)) )
-    return hex[0..$-1]; // strips terminating null character; assumeUnique not strictly required, as compiler can infer uniqueness for a pure function
-  else
-    return null;
+// hex[0..$-1] strips terminating null character; assumeUnique not strictly required, as compiler can infer uniqueness for a pure function
+  return (assumeWontThrow(deimos.sodium.utils.sodium_bin2hex(hex.ptr, hex.length, bin.ptr, bin.length))? hex[0..$-1] : cast(char[])null);
 }
 
 alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
@@ -174,13 +172,13 @@ alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
  * @see https://download.libsodium.org/libsodium/content/helpers/<br>
  * NOTE: This function uses heap memory for it's string parameters, and for the toStringz and idup calls.
  */
-int sodium_hex2bin(scope ubyte[] bin, in string hex, in string ignore, out size_t bin_len, out string hex_end) pure nothrow @trusted // Error: function sodium_hex2bin cannot inline function
+int sodium_hex2bin(scope ubyte[] bin, in string hex, in string ignore, out size_t bin_len, out string hex_end) pure nothrow @trusted
 {
   import std.string : toStringz, fromStringz;
   static import deimos.sodium.utils;
   const(char)*  hex_end_ptr;
-  /* in the nex function call:
-     prefering  toStringz(ignore) i.e. possibly a copy over ignore.ptr is conservative as AFAIK it's not reliable to have a '\0' in memorey behind a D string  */
+  /* in the next function call:
+     prefering  toStringz(ignore) i.e. possibly a copy over ignore.ptr is conservative: AFAIK it's not reliable to have a '\0' in memory behind a D string  */
   int rv = assumeWontThrow(deimos.sodium.utils.sodium_hex2bin(bin.ptr, bin.length, hex.ptr, hex.length, toStringz(ignore), &bin_len, &hex_end_ptr));
   hex_end = fromStringz(hex_end_ptr).idup;
   return rv;

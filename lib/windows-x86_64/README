@@ -2,9 +2,12 @@ This folder has to be populated with file libsodium.lib (COFF format) (import li
 
 https://download.libsodium.org/libsodium/releases/
 
-libsodium.lib and libsodium.dll file from e.g.:
+E.g. libsodium.lib and libsodium.dll file from:
 https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip
 
-folder ...\libsodium-1.0.12-msvc\x64\Release\v140\dynamic
+e.g. folder ...\libsodium-1.0.12-msvc\x64\Release\v140\dynamic (Visual Studio 2015)
+e.g. folder ...\libsodium-1.0.12-msvc\x64\Release\v141\dynamic (Visual Studio 2017)
 
-there is a dependency on  vcruntime140.dll too
+The file included is the import library from ...libsodium-1.0.12-msvc\x64\Release\v140\dynamic
+
+I recommend to replace it by Your own download, as You will require either the .dll or static lib anyway

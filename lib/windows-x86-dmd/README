@@ -1,6 +1,6 @@
 This folder has to be populated with file libsodium.lib (import library OMF format for -m32 or COFF for -m32mscoff; or static lib):
 
-libsodium.dll (or static lib) to be downloaded from (adapt link to new version):
+libsodium.dll for dynamic linking (or static lib) to be downloaded from:
 
 https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip
 folder e.g. .../libsodium-1.0.12-msvc/Win32/Release/v140/dynamic
