@@ -2,11 +2,24 @@
 	"name": "deimos",
 	"optional": true,
 	"default": true,
+	"targetPath": "../lib",
 	"sourceFiles-windows-x86-dmd": [
 		"../lib/windows-x86-dmd/libsodium.lib"
 	],
+	"sourceFiles-windows-x86_mscoff": [
+		"../lib/windows-x86_mscoff/libsodium.lib"
+	],
 	"sourceFiles-windows-x86_64": [
 		"../lib/windows-x86_64/libsodium.lib"
+	],
+	"copyFiles-windows-x86-dmd": [
+		"../lib/windows-x86-dmd/libsodium.dll"
+	],
+	"copyFiles-windows-x86_mscoff": [
+		"../lib/windows-x86_mscoff/libsodium.dll"
+	],
+	"copyFiles-windows-x86_64": [
+		"../lib/windows-x86_64/libsodium.dll"
 	],
 	"libs-posix": ["sodium"],
 	"configurations": [
@@ -25,3 +38,5 @@
 		}
 	]
 }
+
+	]
