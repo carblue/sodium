@@ -38,3 +38,8 @@ The case is different, more complex with sodium:wrapper: It shall provide more D
   Many functions call enforce to ensure, that some requirement is fullfilled, thus may allocate only just before the program bails out.<br>
   The residual: They use heap allocation !
 3. Other functions perform convenience procedures or part of procedures shown in the Sodium documentaion, like DH keyexchange and may make generous use of heap memory.
+
+Windows:
+While it get's built, I recommend to stay away from the -m32_mscoff (--arch=x86_mscoff) build currently:
+1. DUB (1.2.1) doesn't handle that correctly.
+2. unittest of wrapper.crypto_aead_aes256gcm.d fails for crypto_aead_aes256gcm_beforenm for some unknown reason (same compiler, code and .dll as for -m32, only import lib/format of .obj/linker differ)

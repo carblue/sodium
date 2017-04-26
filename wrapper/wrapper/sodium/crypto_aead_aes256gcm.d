@@ -112,11 +112,11 @@ bool crypto_aead_aes256gcm_decrypt_detached(scope ubyte[] m,
 
 alias crypto_aead_aes256gcm_beforenm = deimos.sodium.crypto_aead_aes256gcm.crypto_aead_aes256gcm_beforenm;
 
-//pragma(inline, true)
-bool crypto_aead_aes256gcm_beforenm(out crypto_aead_aes256gcm_state ctx_,
+pragma(inline, true)
+bool crypto_aead_aes256gcm_beforenm(ref crypto_aead_aes256gcm_state ctx_,
                                     in ubyte[crypto_aead_aes256gcm_KEYBYTES] k) pure @nogc @trusted
 {
-  enforce(k.length == crypto_aead_aes256gcm_KEYBYTES);
+//  enforce(k.length == crypto_aead_aes256gcm_KEYBYTES, "Error invoking crypto_aead_aes256gcm_beforenm: k.length is wrong");
   return  crypto_aead_aes256gcm_beforenm(&ctx_, k.ptr) == 0;
 }
 
@@ -127,8 +127,9 @@ bool crypto_aead_aes256gcm_encrypt_afternm(scope ubyte[] c,
                                            in ubyte[] m,
                                            in ubyte[] ad,
                                            in ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
-                                           in crypto_aead_aes256gcm_state ctx_) pure @trusted
+                                           ref const crypto_aead_aes256gcm_state ctx_) pure @trusted
 {
+  enforce(m.length>0, "Error invoking crypto_aead_aes256gcm_encrypt_afternm: m is null");
   enforce(c.length >= m.length + crypto_aead_aes256gcm_ABYTES, "Error invoking crypto_aead_aes256gcm_encrypt_afternm: out buffer too small");
   return  crypto_aead_aes256gcm_encrypt_afternm(c.ptr, &clen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, &ctx_) == 0;
 }
@@ -140,7 +141,7 @@ bool crypto_aead_aes256gcm_decrypt_afternm(scope ubyte[] m,
                                            in ubyte[] c,
                                            in ubyte[] ad,
                                            in ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
-                                           in crypto_aead_aes256gcm_state ctx_) pure @trusted
+                                           ref const crypto_aead_aes256gcm_state ctx_) pure @trusted
 {
   enforce(c.length >= crypto_aead_aes256gcm_ABYTES, "Error invoking crypto_aead_aes256gcm_decrypt_afternm: in ciphertext too short");
   enforce(m.length >= c.length - crypto_aead_aes256gcm_ABYTES, "Error invoking crypto_aead_aes256gcm_decrypt_afternm: out buffer too small");
@@ -155,7 +156,7 @@ bool crypto_aead_aes256gcm_encrypt_detached_afternm(scope ubyte[] c,
                                                     in ubyte[] m,
                                                     in ubyte[] ad,
                                                     in ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
-                                                    in crypto_aead_aes256gcm_state ctx_) pure @trusted
+                                                    ref const crypto_aead_aes256gcm_state ctx_) pure @trusted
 {
   enforce(c.length >= m.length, "Error invoking crypto_aead_aes256gcm_encrypt_detached_afternm: out buffer too small");
   return  crypto_aead_aes256gcm_encrypt_detached_afternm(c.ptr, mac.ptr, &maclen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, &ctx_) == 0;
@@ -168,7 +169,7 @@ bool crypto_aead_aes256gcm_decrypt_detached_afternm(scope ubyte[] m,
                                                     in ubyte[crypto_aead_aes256gcm_ABYTES] mac,
                                                     in ubyte[] ad,
                                                     in ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
-                                                    in crypto_aead_aes256gcm_state ctx_) pure @trusted
+                                                    ref const crypto_aead_aes256gcm_state ctx_) pure @trusted
 {
   enforce(m.length >= c.length, "Error invoking crypto_aead_aes256gcm_decrypt_detached_afternm: out buffer too small");
   return  crypto_aead_aes256gcm_decrypt_detached_afternm(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, &ctx_) == 0;
@@ -344,7 +345,7 @@ else {
     sodium_increment(nonce);
 
     assertThrown   (crypto_aead_aes256gcm_encrypt_afternm(ciphertext[0..$-1], ciphertext_len, message, additional_data, nonce, ctx_));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt_afternm(ciphertext        , ciphertext_len, null,    additional_data, nonce, ctx_));
+    assertThrown   (crypto_aead_aes256gcm_encrypt_afternm(ciphertext        , ciphertext_len, null,    additional_data, nonce, ctx_));
     assertNotThrown(crypto_aead_aes256gcm_encrypt_afternm(ciphertext        , ciphertext_len, message, null,            nonce, ctx_));
 
     crypto_aead_aes256gcm_encrypt_afternm(ciphertext, ciphertext_len, message, additional_data, nonce, ctx_);
