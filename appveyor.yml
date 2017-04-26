@@ -47,11 +47,11 @@ install:
             }
         }
   - ps: SetUpDCompiler
+  - powershell -Command Invoke-WebRequest https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip -OutFile xsodium.zip
+  - 7z x xsodium.zip -oxsodium > nul
   - powershell -Command Invoke-WebRequest https://code.dlang.org/files/dub-1.2.0-windows-x86.zip -OutFile dub.zip
   - 7z x dub.zip -odub > nul
-  - Invoke-WebRequest https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip -OutFile sodium.zip
-  - 7z x sodium.zip -osodium > nul
-  - set PATH=%CD%\%binpath%;%CD%\dub;%CD%\sodium\x64\Release\v140\dynamic;%PATH%
+  - set PATH=%CD%\%binpath%;%CD%\dub;%CD%\xsodium\x64\Release\v140\dynamic;%PATH%
   - dub --version
 
 before_build:
