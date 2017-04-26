@@ -47,7 +47,7 @@ install:
             }
         }
   - ps: SetUpDCompiler
-  - powershell -Command Invoke-WebRequest https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip -OutFile xsodium.zip
+  - powershell -Command Invoke-WebRequest http://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip -OutFile xsodium.zip
   - 7z x xsodium.zip -oxsodium > nul
   - powershell -Command Invoke-WebRequest https://code.dlang.org/files/dub-1.2.0-windows-x86.zip -OutFile dub.zip
   - 7z x dub.zip -odub > nul
