@@ -28,6 +28,7 @@ enum crypto_aead_aes256gcm_ABYTES   = 16U;
 
 size_t crypto_aead_aes256gcm_abytes() @trusted;
 
+// it's not absolutely clear, if in D the align attribute will be part of the alias (as in C)  or not
 alias  crypto_aead_aes256gcm_state = align(16) ubyte[512]; // typedef CRYPTO_ALIGN(16) unsigned char crypto_aead_aes256gcm_state[512];
 
 size_t crypto_aead_aes256gcm_statebytes() @trusted;

@@ -112,10 +112,11 @@ bool crypto_aead_aes256gcm_decrypt_detached(scope ubyte[] m,
 
 alias crypto_aead_aes256gcm_beforenm = deimos.sodium.crypto_aead_aes256gcm.crypto_aead_aes256gcm_beforenm;
 
-pragma(inline, true)
+//pragma(inline, true)
 bool crypto_aead_aes256gcm_beforenm(out crypto_aead_aes256gcm_state ctx_,
                                     in ubyte[crypto_aead_aes256gcm_KEYBYTES] k) pure @nogc @trusted
 {
+  enforce(k.length == crypto_aead_aes256gcm_KEYBYTES);
   return  crypto_aead_aes256gcm_beforenm(&ctx_, k.ptr) == 0;
 }
 
@@ -238,7 +239,7 @@ unittest
   import std.stdio : writeln, writefln;
   import wrapper.sodium.utils : sodium_increment;
 
-version(WindowsX86) {
+version(none/*WindowsX86*/) {
   writeln("early return for Windows X86: unittest block 2 from sodium.crypto_aead_aes256gcm.d");
   writeln("There is some not yet checked issue with 'Access Violation' running -m32 or m32_mscoff (alignment?)");
   return;
@@ -336,7 +337,7 @@ else {
 //      writefln("MAC: 0x%(%02x%)", mac);
     }
 
-    crypto_aead_aes256gcm_state ctx_;
+    align(16) crypto_aead_aes256gcm_state  ctx_;
     crypto_aead_aes256gcm_beforenm(ctx_, key);
 
     ciphertext.length = message.length + crypto_aead_aes256gcm_ABYTES;
