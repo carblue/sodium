@@ -375,7 +375,7 @@ unittest
   assert(bin_len  == 5);
   assert(hex.ptr+14 == hex_end); // addresses pointing to character y; i.e. hex_end points into hex
   assert(*hex_end == 'y');
-  assert(*++hex_end == '\0'); // i.e. a D string is guaranteed to be followed by a '\0' in memory ! Is this always true ???
+//  assert(*++hex_end == '\0'); // i.e. a D string is guaranteed to be followed by a '\0' in memory ? Is this always true ???
 
   --hex.length;
   hex ~= ":fa";
@@ -385,7 +385,7 @@ unittest
   assert(bin_len == 5);
   assert(*hex_end == 'f');
   assert(*++hex_end == 'a');
-  assert(*++hex_end == '\0');
+//  assert(*++hex_end == '\0');
 }
 
 pure @safe
