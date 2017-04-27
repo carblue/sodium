@@ -2,6 +2,7 @@
 	"name": "deimos",
 	"optional": true,
 	"default": true,
+	"importPaths": ["."],
 	"targetPath": "../lib",
 	"sourceFiles-windows-x86-dmd": [
 		"../lib/windows-x86-dmd/libsodium.lib"
@@ -25,16 +26,12 @@
 	"configurations": [
 		{
 			"name": "library",
-			"targetType": "sourceLibrary",
-			"importPaths": ["."],
-			"versions": []
+			"targetType": "sourceLibrary"
 		},
 		{
 			"name": "unittest",
 			"targetType": "library",
-			"importPaths": ["."],
-			"sourcePaths": ["."],
-			"versions": []
+			"sourcePaths": ["."]
 		}
 	]
 }

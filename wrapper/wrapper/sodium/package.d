@@ -6,10 +6,10 @@ public :
 
 import wrapper.sodium.version_; /* unittest + code */
 
-//import wrapper.sodium.core;   /* unittest + code */ No public import any more: it get's imported privately in all other modules to ensure running it's shared static this() first
+//import wrapper.sodium.core;   /* unittest + code */ No public import any more: it get's imported privately in all other modules (except randombytes_*) to ensure running it's shared static this() first
 
-import wrapper.sodium.crypto_aead_aes256gcm;         /* unittest + code  */
-import wrapper.sodium.crypto_aead_chacha20poly1305;  /* currently mere redirection; TODO v1.0.12 */
+import wrapper.sodium.crypto_aead_aes256gcm;         /* unittest + code  TODO update Precomputation interface, update doc. comments, check -m32_mscoff */
+import wrapper.sodium.crypto_aead_chacha20poly1305;  /* unittest + code */
 import wrapper.sodium.crypto_aead_xchacha20poly1305; /* currently mere redirection; TODO v1.0.12 */
 
 import wrapper.sodium.crypto_auth;                   /* unittest + code  */
@@ -56,8 +56,8 @@ import wrapper.sodium.crypto_sign_ed25519;           /* currently mere redirecti
 //import wrapper.sodium.crypto_sign_edwards25519sha512batch; /* currently mere redirection; TODO */
 
 import wrapper.sodium.crypto_stream;           /* unittest + code  */
-import wrapper.sodium.crypto_stream_chacha20;  // no_compile  // FERTIG
-import wrapper.sodium.crypto_stream_salsa20;   // no_compile  // FERTIG
+import wrapper.sodium.crypto_stream_chacha20;  // no_compile
+import wrapper.sodium.crypto_stream_salsa20;   // no_compile
 import wrapper.sodium.crypto_stream_xsalsa20;  /* unittest */
 
 import wrapper.sodium.crypto_verify_16;  /* unittest + code */
