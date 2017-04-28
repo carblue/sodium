@@ -81,7 +81,7 @@ bool crypto_aead_chacha20poly1305_ietf_encrypt(ref ubyte[] c,
   if (clen_p) {
     assert(clen_p ==  m.length + crypto_aead_chacha20poly1305_ietf_ABYTES);
     if (c.length>clen_p)
-	    c.length = clen_p;
+      c.length = cast(size_t)clen_p;
   }
   return  result;
 }
@@ -114,7 +114,7 @@ bool crypto_aead_chacha20poly1305_ietf_decrypt(ref ubyte[] m,
   if (result && mlen_p) {
     assert(mlen_p ==  c.length - crypto_aead_chacha20poly1305_ietf_ABYTES);
     if (m.length>mlen_p)
-      m.length = mlen_p;
+      m.length = cast(size_t)mlen_p;
   }
   return  result;
 }
@@ -174,7 +174,7 @@ bool  crypto_aead_chacha20poly1305_encrypt(ref ubyte[] c,
   if (clen_p) {
     assert(clen_p ==  m.length + crypto_aead_chacha20poly1305_ABYTES);
     if (c.length>clen_p)
-	    c.length = clen_p;
+	    c.length = cast(size_t)clen_p;
   }
   return  result;
 }
@@ -196,7 +196,7 @@ bool  crypto_aead_chacha20poly1305_decrypt(ref ubyte[] m,
   if (result && mlen_p) {
     assert(mlen_p ==  c.length - crypto_aead_chacha20poly1305_ABYTES);
     if (m.length>mlen_p)
-      m.length = mlen_p;
+      m.length = cast(size_t)mlen_p;
   }
   return  result;
 }

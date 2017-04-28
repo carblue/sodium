@@ -48,7 +48,6 @@ alias crypto_aead_aes256gcm_encrypt = deimos.sodium.crypto_aead_aes256gcm.crypto
  * randombytes_buf() for the first message, and then to increment it for each subsequent message using the same key.
  */
 bool crypto_aead_aes256gcm_encrypt(ref ubyte[] c,
-//                                   out ulong clen_p,
                                    in ubyte[] m,
                                    in ubyte[] ad,
                                    in ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
@@ -63,7 +62,7 @@ bool crypto_aead_aes256gcm_encrypt(ref ubyte[] c,
   if (clen_p) {
     assert(clen_p ==  m.length + crypto_aead_aes256gcm_ABYTES);
     if (c.length>clen_p)
-	    c.length = clen_p;
+      c.length = cast(size_t)clen_p;
   }
   return  result;
 }
@@ -82,7 +81,6 @@ alias crypto_aead_aes256gcm_decrypt = deimos.sodium.crypto_aead_aes256gcm.crypto
  * At most c.length - crypto_aead_aes256gcm_ABYTES bytes will be put into m.
  */
 bool crypto_aead_aes256gcm_decrypt(ref ubyte[] m,
-//                                   out ulong mlen_p,
                                    in ubyte[] c,
                                    in ubyte[] ad,
                                    in ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
@@ -97,7 +95,7 @@ bool crypto_aead_aes256gcm_decrypt(ref ubyte[] m,
   if (result && mlen_p) {
     assert(mlen_p ==  c.length - crypto_aead_aes256gcm_ABYTES);
     if (m.length>mlen_p)
-      m.length = mlen_p;
+      m.length = cast(size_t)mlen_p;
   }
   return  result;
 }
@@ -106,7 +104,6 @@ alias crypto_aead_aes256gcm_encrypt_detached = deimos.sodium.crypto_aead_aes256g
 
 bool crypto_aead_aes256gcm_encrypt_detached(ref ubyte[] c,
                                             out ubyte[crypto_aead_aes256gcm_ABYTES] mac,
-//                                            out ulong maclen_p,
                                             in ubyte[] m,
                                             in ubyte[] ad,
                                             in ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,

@@ -1,6 +1,7 @@
 **Build state**
 
 [![Build Status](https://travis-ci.org/carblue/sodium.svg?branch=master)](https://travis-ci.org/carblue/sodium)
+[![Build status](https://ci.appveyor.com/api/projects/status/2k14jpgh2grshq13/branch/master?svg=true)](https://ci.appveyor.com/project/carblue/sodium/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/carblue/sodium/badge.svg?branch=master)](https://coveralls.io/github/carblue/sodium?branch=master)
 
 # sodium
