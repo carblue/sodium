@@ -34,24 +34,6 @@ import  deimos.sodium.crypto_aead_chacha20poly1305 : crypto_aead_chacha20poly130
 ;
 
 
-// Written in the D programming language.
-
-/* Authenticated Encryption with Additional Data : AES256-GCM */
-
-/+
-public
-import  deimos.sodium.crypto_aead_aes256gcm : crypto_aead_aes256gcm_ABYTES,
-/*                                            crypto_aead_aes256gcm_encrypt,
-                                              crypto_aead_aes256gcm_decrypt,
-                                              crypto_aead_aes256gcm_encrypt_detached,
-                                              crypto_aead_aes256gcm_decrypt_detached,
-                                              crypto_aead_aes256gcm_beforenm,
-                                              crypto_aead_aes256gcm_encrypt_afternm,
-                                              crypto_aead_aes256gcm_decrypt_afternm,
-                                              crypto_aead_aes256gcm_encrypt_detached_afternm,
-                                              crypto_aead_aes256gcm_decrypt_detached_afternm; */
-                                              crypto_aead_aes256gcm_keygen;
-+/
 import std.exception : enforce, assertThrown, assertNotThrown;
 
 // overloading some functions between module deimos.sodium.crypto_aead_chacha20poly1305 and this module
@@ -85,7 +67,6 @@ each	subsequent	message	using	the	same	key.
 
  */
 bool crypto_aead_chacha20poly1305_ietf_encrypt(ref ubyte[] c,
-//                                               out ulong clen_p,
                                                in ubyte[] m,
                                                in ubyte[] ad,
                                                in ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
@@ -119,7 +100,6 @@ alias crypto_aead_chacha20poly1305_ietf_decrypt = deimos.sodium.crypto_aead_chac
  * At most c.length - crypto_aead_chacha20poly1305_ietf_ABYTES bytes will be put into m.
  */
 bool crypto_aead_chacha20poly1305_ietf_decrypt(ref ubyte[] m,
-//                                               out ulong mlen_p,
                                                in ubyte[] c,
                                                in ubyte[] ad,
                                                in ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
@@ -143,7 +123,6 @@ alias crypto_aead_chacha20poly1305_ietf_encrypt_detached = deimos.sodium.crypto_
 
 bool  crypto_aead_chacha20poly1305_ietf_encrypt_detached(ref ubyte[] c,
                                                         out ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac,
-//                                                        out ulong maclen_p,
                                                         in ubyte[] m,
                                                         in ubyte[] ad,
                                                         in ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
@@ -181,11 +160,10 @@ bool crypto_aead_chacha20poly1305_ietf_decrypt_detached(ref ubyte[] m,
 alias crypto_aead_chacha20poly1305_encrypt = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_encrypt;
 
 bool  crypto_aead_chacha20poly1305_encrypt(ref ubyte[] c,
-//                                               out ulong clen_p,
-                                               in ubyte[] m,
-                                               in ubyte[] ad,
-                                               in ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
-                                               in ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) pure @trusted
+                                           in ubyte[] m,
+                                           in ubyte[] ad,
+                                           in ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
+                                           in ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) pure @trusted
 {
   enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_encrypt: m is null"); // TODO check if m.ptr==null would be okay
   if (c.length <      m.length + crypto_aead_chacha20poly1305_ABYTES)
@@ -204,7 +182,6 @@ bool  crypto_aead_chacha20poly1305_encrypt(ref ubyte[] c,
 alias crypto_aead_chacha20poly1305_decrypt = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_decrypt;
 
 bool  crypto_aead_chacha20poly1305_decrypt(ref ubyte[] m,
-//                                               out ulong mlen_p,
                                            in ubyte[] c,
                                            in ubyte[] ad,
                                            in ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
@@ -228,7 +205,6 @@ alias crypto_aead_chacha20poly1305_encrypt_detached = deimos.sodium.crypto_aead_
 
 bool  crypto_aead_chacha20poly1305_encrypt_detached(ref ubyte[] c,
                                                     out ubyte[crypto_aead_chacha20poly1305_ABYTES] mac,
-//                                                  out ulong maclen_p,
                                                     in ubyte[] m,
                                                     in ubyte[] ad,
                                                     in ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
@@ -363,7 +339,6 @@ unittest
 //
   ciphertext.length = message.length;
   ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac;
-//  ulong                               maclen_p;
   sodium_increment(nonce);
   ciphertext_short.length = message.length + crypto_aead_chacha20poly1305_ietf_ABYTES -1;
 
@@ -427,7 +402,6 @@ unittest
 //
   ciphertext.length = message.length;
   ubyte[crypto_aead_chacha20poly1305_ABYTES] mac;
-//  ulong                               maclen_p;
   sodium_increment(nonce2);
   ciphertext_short.length = message.length + crypto_aead_chacha20poly1305_ABYTES -1;
 
