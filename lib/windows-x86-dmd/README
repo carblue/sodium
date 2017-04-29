@@ -17,7 +17,7 @@ implib /s libsodium.lib libsodium.dll
 
 At Your option place the .dll here as well (or within %PATH%), and dub.json (copyFiles-windows-*)
 will copy the .dll to directory 'targetPath' (in turn for possibly different Windows builds), thus this ensures, that always the
-matching pair of import lib and .dll is used; requires adding 'targetPath' (/lib) to %PATH%.
+matching pair of import lib and .dll is used.
 
 The libsodium.dll included is from https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip,
 folder ...\libsodium-1.0.12-msvc\Win32\Release\v140\dynamic  (Visual Studio 2015)

@@ -53,7 +53,7 @@ int crypto_sign_ed25519_verify_detached(const(ubyte)* sig,
                                         ulong mlen,
                                         const(ubyte)* pk) pure nothrow @system; //  __attribute__ ((warn_unused_result))
 
-int crypto_sign_ed25519_keypair(ubyte* pk, ubyte* sk) @system;
+int crypto_sign_ed25519_keypair(ubyte* pk, ubyte* sk) nothrow @system;
 
 int crypto_sign_ed25519_seed_keypair(ubyte* pk, ubyte* sk,
                                      const(ubyte)* seed) pure @system;
