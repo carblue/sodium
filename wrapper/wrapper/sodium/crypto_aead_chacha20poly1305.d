@@ -314,7 +314,7 @@ unittest
   auto message         = representation("test");
   auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
     "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
-  ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_chacha20poly1305_ietf_ABYTES];
+  ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_chacha20poly1305_ietf_ABYTES +1];
   ubyte[] ciphertext_short = new ubyte[message.length + crypto_aead_chacha20poly1305_ietf_ABYTES -1];
   sodium_increment(nonce);
 
@@ -332,7 +332,7 @@ unittest
   assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted_short, ciphertext,                                                additional_data, nonce, key));
   assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,       ciphertext,                                                null,            nonce, key));
 
-  decrypted.length = 0;
+  decrypted.length =         ciphertext.length - crypto_aead_chacha20poly1305_ietf_ABYTES +1;
   assert(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted, ciphertext, additional_data, nonce, key));
   assert(decrypted == message);
   assert(decrypted.length == ciphertext.length - crypto_aead_chacha20poly1305_ietf_ABYTES);
@@ -385,7 +385,7 @@ unittest
   assertThrown   (crypto_aead_chacha20poly1305_encrypt(ciphertext      , null,    additional_data, nonce2, key2));
   assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext      , message, null,            nonce2, key2));
 
-  ciphertext.length = 0;
+  ciphertext.length =         message.length + crypto_aead_chacha20poly1305_ABYTES +1;
   assert(crypto_aead_chacha20poly1305_encrypt(ciphertext, message, additional_data, nonce2, key2));
   assert(ciphertext.length == message.length + crypto_aead_chacha20poly1305_ABYTES);
 
@@ -395,7 +395,7 @@ unittest
   assertNotThrown(crypto_aead_chacha20poly1305_decrypt(decrypted_short, ciphertext,                                           additional_data, nonce2, key2));
   assertNotThrown(crypto_aead_chacha20poly1305_decrypt(decrypted,       ciphertext,                                           null,            nonce2, key2));
 
-  decrypted.length = 0;
+  decrypted.length =         ciphertext.length - crypto_aead_chacha20poly1305_ABYTES +1;
   assert(crypto_aead_chacha20poly1305_decrypt(decrypted, ciphertext, additional_data, nonce2, key2));
   assert(decrypted == message);
   assert(decrypted.length == ciphertext.length - crypto_aead_chacha20poly1305_ABYTES);

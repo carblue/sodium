@@ -213,10 +213,10 @@ unittest
   ubyte[] decrypted       = new ubyte[message.length +1];
   ubyte[] decrypted_short = new ubyte[message.length -1];
   assertThrown   (crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted,       ciphertext[0..crypto_aead_xchacha20poly1305_ietf_ABYTES-1], additional_data, nonce, key));
-  assertNotThrown(crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted_short, ciphertext,                                                additional_data, nonce, key));
-  assertNotThrown(crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted,       ciphertext,                                                null,            nonce, key));
+  assertNotThrown(crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted_short, ciphertext,                                                 additional_data, nonce, key));
+  assertNotThrown(crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted,       ciphertext,                                                 null,            nonce, key));
 
-  decrypted.length = 0;
+  decrypted.length =         ciphertext.length - crypto_aead_xchacha20poly1305_ietf_ABYTES +2;
   assert(crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted, ciphertext, additional_data, nonce, key));
   assert(decrypted == message);
   assert(decrypted.length == ciphertext.length - crypto_aead_xchacha20poly1305_ietf_ABYTES);

@@ -298,7 +298,7 @@ else {
     assertThrown   (crypto_aead_aes256gcm_encrypt(ciphertext      , null,    additional_data, nonce, key));
     assertNotThrown(crypto_aead_aes256gcm_encrypt(ciphertext      , message, null,            nonce, key));
 
-    ciphertext.length = 0;
+    ciphertext.length =         message.length + crypto_aead_aes256gcm_ABYTES +1;
     assert(crypto_aead_aes256gcm_encrypt(ciphertext, message, additional_data, nonce, key));
     assert(ciphertext.length == message.length + crypto_aead_aes256gcm_ABYTES);
 
@@ -308,7 +308,7 @@ else {
     assertNotThrown(crypto_aead_aes256gcm_decrypt(decrypted_short, ciphertext,                                    additional_data, nonce, key));
     assertNotThrown(crypto_aead_aes256gcm_decrypt(decrypted,       ciphertext,                                    null,            nonce, key));
 
-    decrypted.length = 0;
+    decrypted.length =         ciphertext.length - crypto_aead_aes256gcm_ABYTES +1;
     assert(crypto_aead_aes256gcm_decrypt(decrypted, ciphertext, additional_data, nonce, key));
     assert(decrypted == message);
     assert(decrypted.length == ciphertext.length - crypto_aead_aes256gcm_ABYTES);
@@ -321,6 +321,7 @@ else {
 
     assertNotThrown(crypto_aead_aes256gcm_encrypt_detached(ciphertext_short, mac, message, additional_data, nonce, key));
     assertThrown   (crypto_aead_aes256gcm_encrypt_detached(ciphertext      , mac, null,    additional_data, nonce, key));
+    ciphertext.length = message.length -1;
     assertNotThrown(crypto_aead_aes256gcm_encrypt_detached(ciphertext      , mac, message, null,            nonce, key));
 
     assert(crypto_aead_aes256gcm_encrypt_detached(ciphertext, mac, message, additional_data, nonce, key));
