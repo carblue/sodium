@@ -162,7 +162,7 @@ unittest
 	immutable ubyte[randombytes_SEEDBYTES] seed = array(iota(ubyte(0), randombytes_SEEDBYTES))[];
 	randombytes_buf_deterministic(buf.ptr, buf.length, seed);
 
-debug(TRAVIS_TEST)
+debug(none/*TRAVIS_TEST*/)
 {
 /*
   This block runs successfully but is disabled in regular builds as it does dubious actions; only for a test run by travis/code coverage):
