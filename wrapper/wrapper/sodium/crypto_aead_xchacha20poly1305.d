@@ -38,20 +38,6 @@ alias crypto_aead_xchacha20poly1305_ietf_encrypt = deimos.sodium.crypto_aead_xch
  * The function always returns true.
  * The public nonce npub should never ever be reused with the same key. The recommended way to generate it is to use
  * randombytes_buf() for the first message, and then to increment it for each subsequent message using the same key.
-
- The	 	crypto_aead_xchacha20poly1305_ietf_encrypt()		function	encrypts	a	message	 	m		whose
-length	is	 	mlen	 	bytes	using	a	secret	key	 	k	 	( 	crypto_aead_xchacha20poly1305_IETF_KEYBYTES
-bytes)	and	public	nonce	 	npub		( 	crypto_aead_xchacha20poly1305_IETF_NPUBBYTES		bytes).
-The	encrypted	message,	as	well	as	a	tag	authenticating	both	the	confidential	message	 	m
-and	 	adlen		bytes	of	non-confidential	data	 	ad	 ,	are	put	into	 	c	 .
-	ad		can	be	a	 	NULL		pointer	with	 	adlen		equal	to	 	0		if	no	additional	data	are	required.
-At	most	 	mlen	+	crypto_aead_xchacha20poly1305_IETF_ABYTES		bytes	are	put	into	 	c	 ,	and	the
-actual	number	of	bytes	is	stored	into	 	clen		unless	 	clen		is	a	 	NULL		pointer.
-	nsec	 	is	not	used	by	this	particular	construction	and	should	always	be	 	NULL	 .
-The	public	nonce	 	npub		should	never	ever	be	reused	with	the	same	key.	The	recommended
-way	to	generate	it	is	to	use	 	randombytes_buf()	 	for	the	first	message,	and	increment	it	for
-each	subsequent	message	using	the	same	key.
-
  */
 bool crypto_aead_xchacha20poly1305_ietf_encrypt(ref ubyte[] c,
                                                 in ubyte[] m,
@@ -212,7 +198,7 @@ unittest
   auto message         = representation("test");
   auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
     "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
-  ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_xchacha20poly1305_ietf_ABYTES];
+  ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_xchacha20poly1305_ietf_ABYTES +1];
   ubyte[] ciphertext_short = new ubyte[message.length + crypto_aead_xchacha20poly1305_ietf_ABYTES -1];
   sodium_increment(nonce);
 
@@ -224,7 +210,7 @@ unittest
   assert(crypto_aead_xchacha20poly1305_ietf_encrypt(ciphertext, message, additional_data, nonce, key));
   assert(ciphertext.length == message.length + crypto_aead_xchacha20poly1305_ietf_ABYTES);
 
-  ubyte[] decrypted       = new ubyte[message.length];
+  ubyte[] decrypted       = new ubyte[message.length +1];
   ubyte[] decrypted_short = new ubyte[message.length -1];
   assertThrown   (crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted,       ciphertext[0..crypto_aead_xchacha20poly1305_ietf_ABYTES-1], additional_data, nonce, key));
   assertNotThrown(crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted_short, ciphertext,                                                additional_data, nonce, key));

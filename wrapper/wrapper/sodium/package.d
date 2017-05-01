@@ -18,7 +18,7 @@ import wrapper.sodium.crypto_auth_hmacsha512;        /* unittest + code  */
 import wrapper.sodium.crypto_auth_hmacsha512256;     /* unittest + code  */
 
 import wrapper.sodium.crypto_box;                    /* unittest + code  */
-import wrapper.sodium.crypto_box_curve25519xsalsa20poly1305; /* currently mere redirection; TODO */
+import wrapper.sodium.crypto_box_curve25519xsalsa20poly1305; /* unittest + code; TODO crypto_box_curve25519xsalsa20poly1305_open_afternm & update doc. comments */
 
 import wrapper.sodium.crypto_core_hsalsa20;          /* currently mere redirection; TODO */
 import wrapper.sodium.crypto_core_hchacha20;         /* currently mere redirection; TODO */

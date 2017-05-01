@@ -19,7 +19,7 @@ string crypto_hash_primitive() pure nothrow @nogc @trusted
   const(char)[] c_arr;
   try
     c_arr = fromStringz(deimos.sodium.crypto_hash.crypto_hash_primitive()); // strips terminating \0
-  catch (Throwable t) { /* known not to throw */ }
+  catch (Exception t) { /* known not to throw */ }
   return c_arr;
 }
 

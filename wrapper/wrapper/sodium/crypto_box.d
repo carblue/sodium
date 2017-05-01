@@ -16,15 +16,24 @@ import  deimos.sodium.crypto_box : crypto_box_SEEDBYTES,
                                    crypto_box_MACBYTES,
                                    crypto_box_macbytes,
                                    crypto_box_PRIMITIVE,
+/*                                 crypto_box_primitive,
+                                   crypto_box_seed_keypair,
+                                   crypto_box_keypair,
+                                   crypto_box_easy,
+                                   crypto_box_open_easy,
+                                   crypto_box_detached,
+                                   crypto_box_open_detached, */
                                    crypto_box_BEFORENMBYTES,
                                    crypto_box_beforenmbytes,
-                                   crypto_box_beforenm,
+/*                                 crypto_box_beforenm,
                                    crypto_box_easy_afternm,
                                    crypto_box_open_easy_afternm,
                                    crypto_box_detached_afternm,
-                                   crypto_box_open_detached_afternm,
+                                   crypto_box_open_detached_afternm, */
                                    crypto_box_SEALBYTES,
                                    crypto_box_sealbytes,
+/*                                 crypto_box_seal,
+                                   crypto_box_seal_open, */
                                    crypto_box_ZEROBYTES,
                                    crypto_box_zerobytes,
                                    crypto_box_BOXZEROBYTES,
@@ -34,10 +43,6 @@ import  deimos.sodium.crypto_box : crypto_box_SEEDBYTES,
                                    crypto_box_afternm,
                                    crypto_box_open_afternm;
 
-/*
-//crypto_box_primitive(), crypto_box_seed_keypair, crypto_box_keypair, crypto_box_easy, crypto_box_open_easy, crypto_box_detached, crypto_box_open_detached,
-//crypto_box_seal, crypto_box_seal_open
-*/
 
 import std.exception : enforce, assertThrown;
 
@@ -50,7 +55,7 @@ string crypto_box_primitive() pure nothrow @nogc @trusted
   const(char)[] c_arr;
   try
     c_arr = fromStringz(deimos.sodium.crypto_box.crypto_box_primitive()); // strips terminating \0
-  catch (Throwable t) { /* known not to throw */ }
+  catch (Exception t) { /* known not to throw */ }
   return c_arr;
 }
 
@@ -66,8 +71,7 @@ pragma(inline, true)
 bool crypto_box_seed_keypair(out ubyte[crypto_box_PUBLICKEYBYTES] pkey, out ubyte[crypto_box_SECRETKEYBYTES] skey,
                              in ubyte[crypto_box_SEEDBYTES] seed) pure @nogc @trusted
 {
-  static import deimos.sodium.crypto_box;
-  return  deimos.sodium.crypto_box.crypto_box_seed_keypair(pkey.ptr, skey.ptr, seed.ptr) == 0;
+  return  crypto_box_seed_keypair(pkey.ptr, skey.ptr, seed.ptr) == 0;
 }
 
 alias crypto_box_keypair        = deimos.sodium.crypto_box.crypto_box_keypair;
@@ -79,8 +83,7 @@ alias crypto_box_keypair        = deimos.sodium.crypto_box.crypto_box_keypair;
 pragma(inline, true)
 bool crypto_box_keypair(out ubyte[crypto_box_PUBLICKEYBYTES] pkey, out ubyte[crypto_box_SECRETKEYBYTES] skey) @nogc @trusted
 {
-  static import deimos.sodium.crypto_box;
-  return  deimos.sodium.crypto_box.crypto_box_keypair(pkey.ptr, skey.ptr) == 0;
+  return  crypto_box_keypair(pkey.ptr, skey.ptr) == 0;
 }
 
 alias crypto_box_easy           = deimos.sodium.crypto_box.crypto_box_easy;
@@ -91,8 +94,7 @@ bool crypto_box_easy(scope ubyte[] c, in ubyte[] m, in ubyte[crypto_box_NONCEBYT
                      in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure @trusted
 {
   enforce(c.length >= crypto_box_MACBYTES + m.length, "Error in crypto_box_easy: c.length < crypto_box_MACBYTES + m.length");
-  static import deimos.sodium.crypto_box;
-  return  deimos.sodium.crypto_box.crypto_box_easy(c.ptr, m.ptr, m.length, n.ptr, pkey.ptr, skey.ptr) == 0;
+  return  crypto_box_easy(c.ptr, m.ptr, m.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
 alias crypto_box_open_easy      = deimos.sodium.crypto_box.crypto_box_open_easy;
@@ -102,9 +104,8 @@ alias crypto_box_open_easy      = deimos.sodium.crypto_box.crypto_box_open_easy;
 bool crypto_box_open_easy(scope ubyte[] m, in ubyte[] c, in ubyte[crypto_box_NONCEBYTES] n,
                           in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure @trusted
 {
-  enforce(m.length >= c.length - crypto_box_MACBYTES, "Error in crypto_box_easy: m.length < c.length - crypto_box_MACBYTES");
-  static import deimos.sodium.crypto_box;
-  return  deimos.sodium.crypto_box.crypto_box_open_easy(m.ptr, c.ptr, c.length, n.ptr, pkey.ptr, skey.ptr) == 0;
+  enforce(m.length >= c.length - crypto_box_MACBYTES, "Error in crypto_box_open_easy: m.length < c.length - crypto_box_MACBYTES");
+  return  crypto_box_open_easy(m.ptr, c.ptr, c.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
 alias crypto_box_detached       = deimos.sodium.crypto_box.crypto_box_detached;
@@ -114,24 +115,87 @@ alias crypto_box_detached       = deimos.sodium.crypto_box.crypto_box_detached;
 bool crypto_box_detached(scope ubyte[] c, out ubyte[crypto_box_MACBYTES] mac, in ubyte[] m, in ubyte[crypto_box_NONCEBYTES] n,
                          in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure @trusted
 {
-  enforce(c.length >= m.length, "Error in crypto_box_easy: c.length < m.length");
-  static import deimos.sodium.crypto_box;
-  return  deimos.sodium.crypto_box.crypto_box_detached(c.ptr, mac.ptr, m.ptr, m.length, n.ptr, pkey.ptr, skey.ptr) == 0;
+  enforce(c.length >= m.length, "Error in crypto_box_detached: c.length < m.length");
+  return  crypto_box_detached(c.ptr, mac.ptr, m.ptr, m.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
 alias crypto_box_open_detached  = deimos.sodium.crypto_box.crypto_box_open_detached;
 
 /**
  */
+pragma(inline, true)
 bool crypto_box_open_detached(scope ubyte[] m, in ubyte[] c, in ubyte[crypto_box_MACBYTES] mac, in ubyte[crypto_box_NONCEBYTES] n,
                               in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure @trusted
 {
-  enforce(m.length >= c.length, "Error in crypto_box_easy: m.length < c.length");
-  static import deimos.sodium.crypto_box;
-  return  deimos.sodium.crypto_box.crypto_box_open_detached(m.ptr, c.ptr, mac.ptr, c.length, n.ptr, pkey.ptr, skey.ptr) == 0;
+  enforce(m.length >= c.length, "Error in crypto_box_open_detached: m.length < c.length");
+  return  crypto_box_open_detached(m.ptr, c.ptr, mac.ptr, c.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
-/* No overloads for -- Precomputation interface -- */
+
+/* -- Precomputation interface -- */
+
+alias crypto_box_beforenm  = deimos.sodium.crypto_box.crypto_box_beforenm;
+
+pragma(inline, true)
+bool  crypto_box_beforenm(out ubyte[crypto_box_BEFORENMBYTES] k,
+                          in  ubyte[crypto_box_PUBLICKEYBYTES] pk,
+                          in  ubyte[crypto_box_SECRETKEYBYTES] sk) pure nothrow @nogc @trusted // __attribute__ ((warn_unused_result));
+{
+  return  crypto_box_beforenm(k.ptr, pk.ptr, sk.ptr) == 0;
+}
+
+alias crypto_box_easy_afternm  = deimos.sodium.crypto_box.crypto_box_easy_afternm;
+
+pragma(inline, true)
+bool  crypto_box_easy_afternm(scope ubyte[] c,
+                              in ubyte[] m,
+                              in ubyte[crypto_box_NONCEBYTES] n,
+                              in ubyte[crypto_box_BEFORENMBYTES] k) pure @trusted
+{
+//  static const exception = new Exception("Error in crypto_box_easy_afternm: c.length < crypto_box_MACBYTES + m.length");
+//  if (c.length >= crypto_box_MACBYTES + m.length) throw exception;
+  enforce(c.length >= crypto_box_MACBYTES + m.length, "Error in crypto_box_easy_afternm: c.length < crypto_box_MACBYTES + m.length");
+  return  crypto_box_easy_afternm(c.ptr, m.ptr, m.length, n.ptr, k.ptr) == 0;
+}
+
+alias crypto_box_open_easy_afternm  = deimos.sodium.crypto_box.crypto_box_open_easy_afternm;
+
+pragma(inline, true)
+bool  crypto_box_open_easy_afternm(scope ubyte[] m,
+                                   in ubyte[] c,
+                                   in ubyte[crypto_box_NONCEBYTES] n,
+                                   in ubyte[crypto_box_BEFORENMBYTES] k) pure @trusted // __attribute__ ((warn_unused_result));
+{
+  enforce(m.length >= c.length - crypto_box_MACBYTES, "Error in crypto_box_open_easy_afternm: m.length < c.length - crypto_box_MACBYTES");
+  return  crypto_box_open_easy_afternm(m.ptr, c.ptr, c.length, n.ptr, k.ptr) == 0;
+}
+
+alias crypto_box_detached_afternm  = deimos.sodium.crypto_box.crypto_box_detached_afternm;
+
+//pragma(inline, true)
+bool  crypto_box_detached_afternm(scope ubyte[] c,
+                                  out ubyte[crypto_box_MACBYTES] mac,
+                                  in  ubyte[] m,
+                                  in  ubyte[crypto_box_NONCEBYTES] n,
+                                  in  ubyte[crypto_box_BEFORENMBYTES] k) pure @trusted
+{
+  enforce(c.length >= m.length, "Error in crypto_box_detached_afternm: c.length < m.length");
+  return  crypto_box_detached_afternm(c.ptr, mac.ptr, m.ptr, m.length, n.ptr, k.ptr) == 0;
+}
+
+alias crypto_box_open_detached_afternm  = deimos.sodium.crypto_box.crypto_box_open_detached_afternm;
+
+//pragma(inline, true)
+bool  crypto_box_open_detached_afternm(scope ubyte[] m,
+                                       in ubyte[] c,
+                                       in ubyte[crypto_box_MACBYTES] mac,
+                                       in ubyte[crypto_box_NONCEBYTES] n,
+                                       in ubyte[crypto_box_BEFORENMBYTES] k) pure @trusted // __attribute__ ((warn_unused_result));
+{
+  enforce(m.length >= c.length, "Error in crypto_box_open_detached_afternm: m.length < c.length");
+  return  crypto_box_open_detached_afternm(m.ptr, c.ptr, mac.ptr, c.length, n.ptr, k.ptr) == 0;
+}
+
 
 /* -- Ephemeral SK interface -- */
 
@@ -146,8 +210,7 @@ alias crypto_box_seal           = deimos.sodium.crypto_box.crypto_box_seal;
 bool crypto_box_seal(scope ubyte[] c, in ubyte[] m, in ubyte[crypto_box_PUBLICKEYBYTES] pkey) pure @trusted
 {
   enforce(c.length >= crypto_box_SEALBYTES + m.length, "Error in crypto_box_seal: c.length >= crypto_box_SEALBYTES + m.length");
-  static import deimos.sodium.crypto_box;
-  return  deimos.sodium.crypto_box.crypto_box_seal(c.ptr, m.ptr, m.length, pkey.ptr) == 0;
+  return  crypto_box_seal(c.ptr, m.ptr, m.length, pkey.ptr) == 0;
 }
 
 alias crypto_box_seal_open      = deimos.sodium.crypto_box.crypto_box_seal_open;
@@ -158,8 +221,7 @@ bool crypto_box_seal_open(scope ubyte[] m, in ubyte[] c,
                           in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure @trusted
 {
   enforce(m.length >= c.length - crypto_box_SEALBYTES, "Error in crypto_box_seal_open: m.length < c.length - crypto_box_SEALBYTES");
-  static import deimos.sodium.crypto_box;
-  return  deimos.sodium.crypto_box.crypto_box_seal_open(m.ptr, c.ptr, c.length, pkey.ptr, skey.ptr) == 0;
+  return  crypto_box_seal_open(m.ptr, c.ptr, c.length, pkey.ptr, skey.ptr) == 0;
 }
 
 /* No overloads for -- NaCl compatibility interface ; Requires padding -- */
@@ -180,17 +242,21 @@ unittest {
   assert(crypto_box_noncebytes()     == crypto_box_NONCEBYTES);
   assert(crypto_box_macbytes()       == crypto_box_MACBYTES);
   assert(crypto_box_primitive()      == crypto_box_PRIMITIVE);
-
-
+  assert(crypto_box_beforenmbytes()  == crypto_box_BEFORENMBYTES);
+  assert(crypto_box_sealbytes()      == crypto_box_SEALBYTES);
+  assert(crypto_box_zerobytes()      == crypto_box_ZEROBYTES);
+  assert(crypto_box_boxzerobytes()   == crypto_box_BOXZEROBYTES);
 
   auto message = representation("test");
   // avoid heap allocation, like in the example code
   enum MESSAGE_LEN = 4;
   enum CIPHERTEXT_LEN = (crypto_box_MACBYTES + MESSAGE_LEN);
+  ubyte[crypto_box_SEEDBYTES]  seed = void;
+  randombytes(seed);
 
   ubyte[crypto_box_PUBLICKEYBYTES]  alice_publickey = void;
   ubyte[crypto_box_SECRETKEYBYTES]  alice_secretkey = void;
-  crypto_box_keypair(alice_publickey, alice_secretkey);
+  assert(crypto_box_seed_keypair(alice_publickey, alice_secretkey, seed));
   // check crypto_scalarmult_base (compute alice_publickey from alice_secretkey)
   {
     import wrapper.sodium.crypto_scalarmult;
@@ -217,7 +283,6 @@ unittest {
   // Bob decrypts ciphertext from Alice
   assertThrown(crypto_box_open_easy(decrypted[0..$-1], ciphertext, nonce, alice_publickey, bob_secretkey));
   assert(crypto_box_open_easy(decrypted, ciphertext, nonce, alice_publickey, bob_secretkey));
-//  { /* message for Bob pretending to be from Alice has been forged! */ }
   assert(decrypted == message);
 //
   ubyte[crypto_box_MACBYTES]  mac = void;
@@ -229,12 +294,25 @@ unittest {
 
   assertThrown(crypto_box_open_detached(decrypted[0..$-1], ciphertext[0..$-crypto_box_MACBYTES], mac, nonce, alice_publickey, bob_secretkey));
   assert(crypto_box_open_detached(decrypted, ciphertext[0..$-crypto_box_MACBYTES], mac, nonce, alice_publickey, bob_secretkey));
-//  { /* message for Bob pretending to be from Alice has been forged! */ }
+  assert(decrypted == message);
+//
+  ubyte[crypto_box_BEFORENMBYTES] k;
+  assert(crypto_box_beforenm(k, bob_publickey, alice_secretkey));
+  ciphertext = ubyte.init;
+  decrypted  = ubyte.init;
+  sodium_increment(nonce);
+  assert(crypto_box_easy_afternm(ciphertext, message, nonce, k));
+  assert(crypto_box_open_easy_afternm(decrypted, ciphertext, nonce, k));
   assert(decrypted == message);
 
+  ciphertext = ubyte.init;
+  decrypted  = ubyte.init;
+  mac        = ubyte.init;
+  sodium_increment(nonce);
+  assert(crypto_box_detached_afternm(ciphertext[0..$-crypto_box_MACBYTES], mac, message, nonce, k));
+  assert(crypto_box_open_detached_afternm(decrypted, ciphertext[0..$-crypto_box_MACBYTES], mac, nonce, k));
+  assert(decrypted == message);
 //
-  assert(crypto_box_sealbytes()      == crypto_box_SEALBYTES);
-
   enum CIPHERTEXTSEALED_LEN = (crypto_box_SEALBYTES + MESSAGE_LEN);
   ubyte[CIPHERTEXTSEALED_LEN] ciphertext_sealed = void;
   decrypted  = ubyte.init;
@@ -246,9 +324,4 @@ unittest {
   assert(crypto_box_seal_open(decrypted, ciphertext_sealed, bob_publickey, bob_secretkey));
   assert(decrypted == message);
 
-  ubyte[crypto_box_PUBLICKEYBYTES] pkey = void;
-  ubyte[crypto_box_SECRETKEYBYTES] skey = void;
-  ubyte[crypto_box_SEEDBYTES]      seed = void;
-  randombytes(seed);
-  assert(crypto_box_seed_keypair(pkey, skey, seed));
 }

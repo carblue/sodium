@@ -53,7 +53,7 @@ const(char)* crypto_box_primitive() pure @system;
 int crypto_box_seed_keypair(ubyte* pk, ubyte* sk,
                             const(ubyte)* seed) pure @system;
 
-int crypto_box_keypair(ubyte* pk, ubyte* sk) @system;
+int crypto_box_keypair(ubyte* pk, ubyte* sk) nothrow @system;
 
 int crypto_box_easy(ubyte* c, const(ubyte)* m,
                     ulong mlen, const(ubyte)* n,

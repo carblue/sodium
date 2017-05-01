@@ -19,12 +19,11 @@ public import  deimos.sodium.randombytes : randombytes_buf, randombytes_random, 
 string randombytes_implementation_name() pure nothrow @nogc @trusted //@system
 {
   import std.string : fromStringz; // @system
-//  import std.exception : assumeUnique;
   static import deimos.sodium.randombytes;
   const(char)[] c_arr;
   try
     c_arr = fromStringz(deimos.sodium.randombytes.randombytes_implementation_name());
-  catch (Throwable t) { /* known not to throw */}
+  catch (Exception t) { /* known not to throw */}
   return c_arr; //assumeUnique(c_arr);
 }
 
@@ -38,8 +37,7 @@ alias randombytes_buf = deimos.sodium.randombytes.randombytes_buf;
 pragma(inline, true)
 void randombytes_buf(scope ubyte[] buf) nothrow @nogc @trusted
 {
-  static import deimos.sodium.randombytes;
-  deimos.sodium.randombytes.randombytes_buf(buf.ptr, buf.length);
+  randombytes_buf(buf.ptr, buf.length);
 }
 +/
 
@@ -50,8 +48,7 @@ pragma(inline, true)
 void randombytes(scope ubyte[] buf) nothrow @nogc @trusted
 {
 //  enforce(buf !is null, "buf is null"); // not necessary
-  static import deimos.sodium.randombytes;
-  deimos.sodium.randombytes.randombytes(buf.ptr, buf.length);
+  randombytes(buf.ptr, buf.length);
 }
 
 alias randombytes_buf_deterministic  = deimos.sodium.randombytes.randombytes_buf_deterministic;

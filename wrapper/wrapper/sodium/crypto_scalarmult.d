@@ -33,7 +33,7 @@ string crypto_scalarmult_primitive() pure nothrow @nogc @trusted
   const(char)[] c_arr;
   try
     c_arr = fromStringz(deimos.sodium.crypto_scalarmult.crypto_scalarmult_primitive()); // strips terminating \0
-  catch (Throwable t) { /* known not to throw */ }
+  catch (Exception t) { /* known not to throw */ }
   return c_arr;
 }
 

@@ -278,9 +278,12 @@ unittest
   auto     message = representation("test");
   ubyte[]  signed_message;
   assertNotThrown(crypto_sign_ed25519(signed_message, null,    sk));
+  signed_message.length = crypto_sign_ed25519_BYTES + message.length +1;
   assert         (crypto_sign_ed25519(signed_message, message, sk));
 
   ubyte[]  unsigned_message;
+  assertNotThrown(crypto_sign_ed25519_open(unsigned_message, signed_message, pk));
+  unsigned_message.length = signed_message.length - crypto_sign_ed25519_BYTES +1;
   assert(crypto_sign_ed25519_open(unsigned_message, signed_message, pk));
   assert(equal(message[], unsigned_message[]));
 
