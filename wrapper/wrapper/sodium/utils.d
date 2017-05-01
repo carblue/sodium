@@ -4,10 +4,23 @@ module wrapper.sodium.utils;
 
 import wrapper.sodium.core; // assure sodium got initialized
 
-public import  deimos.sodium.utils : sodium_memcmp, sodium_increment, sodium_add,
-  sodium_bin2hex, sodium_hex2bin, sodium_mlock, sodium_munlock, sodium_malloc, sodium_allocarray, sodium_free,
-  sodium_mprotect_noaccess, sodium_mprotect_readonly, sodium_mprotect_readwrite; /* , sodium_memzero, sodium_is_zero, sodium_compare */
-// in order to use sodium_memzero, sodium_is_zero, sodium_compare from deimos, they must be statically imported explicitely.
+public
+import  deimos.sodium.utils : sodium_memcmp,
+/*                            sodium_increment,
+                              sodium_add,
+                              sodium_bin2hex,
+                              sodium_hex2bin, */
+                              sodium_mlock,
+                              sodium_munlock,
+                              sodium_malloc,
+                              sodium_allocarray,
+                              sodium_free,
+                              sodium_mprotect_noaccess,
+                              sodium_mprotect_readonly,
+                              sodium_mprotect_readwrite;
+/*                            sodium_memzero,
+                              sodium_is_zero,
+                              sodium_compare; */
 
 import std.exception : enforce, assumeWontThrow, assumeUnique;
 
@@ -34,8 +47,7 @@ pragma(inline, true)
 void sodium_memzero(scope ubyte[] a) pure nothrow @nogc @trusted
 {
 //  enforce(a !is null, "a is null"); // not necessary (tested on Linux and Windows)
-  static import deimos.sodium.utils;
-  deimos.sodium.utils.sodium_memzero(a.ptr, a.length);
+  sodium_memzero(a.ptr, a.length);
 }
 
 /** int sodium_is_zero(const unsigned char *n, const size_t nlen);<br><br>
@@ -53,11 +65,10 @@ alias sodium_is_zero     = deimos.sodium.utils.sodium_is_zero;
  * This function was introduced in libsodium 1.0.7.
  */
 pragma(inline, true)
-bool sodium_is_zero(in ubyte[] a) pure nothrow @nogc @trusted // Error: function sodium_is_zero cannot inline function (with try.. catch-block)
+bool sodium_is_zero(in ubyte[] a) pure nothrow @nogc @trusted
 {
 //  enforce(n !is null, "n is null"); // not necessary
-  static import deimos.sodium.utils;
-  return  deimos.sodium.utils.sodium_is_zero(a.ptr, a.length) == 1;
+  return  sodium_is_zero(a.ptr, a.length) == 1;
 }
 
 version(LittleEndian) {
@@ -79,13 +90,12 @@ version(LittleEndian) {
    * The comparison is done in constant time for a given length.
    * Throws an Exception if b1_.length != b2_.length
    */
-  int sodium_compare(in ubyte[] b1_, in ubyte[] b2_) pure @trusted // Error: function sodium_compare cannot inline function
+  int sodium_compare(in ubyte[] b1_, in ubyte[] b2_) pure @trusted
   {
     enforce(b1_.length == b2_.length, "b1_.length != b2_.length");
 //    enforce(b1_ !is null, "b1_ is null"); // not necessary
 //    enforce(b2_ !is null, "b2_ is null"); // not necessary
-    static import deimos.sodium.utils;
-    return  deimos.sodium.utils.sodium_compare(b1_.ptr, b2_.ptr, b1_.length);
+    return  sodium_compare(b1_.ptr, b2_.ptr, b1_.length);
   }
 
   /**
@@ -105,8 +115,7 @@ version(LittleEndian) {
   void sodium_increment(scope ubyte[] n) pure nothrow @nogc @trusted
   {
 //  enforce(n !is null, "n is null"); // not necessary
-    static import deimos.sodium.utils;
-    deimos.sodium.utils.sodium_increment(n.ptr, n.length);
+    sodium_increment(n.ptr, n.length);
   }
 
   /**
@@ -122,13 +131,12 @@ version(LittleEndian) {
    * Throws if a_.length != b.length
    * Does nothing if both arrays are null
    */
-  void sodium_add(scope ubyte[] a, in ubyte[] b) pure @trusted // Error: function sodium_add cannot inline function
+  void sodium_add(scope ubyte[] a, in ubyte[] b) pure @trusted
   {
     enforce(a.length == b.length, "a.length != b.length");
 //    enforce(a !is null, "a is null"); // not necessary
 //    enforce(b !is null, "b is null"); // not necessary
-    static import deimos.sodium.utils;
-    deimos.sodium.utils.sodium_add(a.ptr, b.ptr, a.length);
+    sodium_add(a.ptr, b.ptr, a.length);
   }
 } // version(LittleEndian)
 
@@ -145,10 +153,9 @@ alias sodium_bin2hex     = deimos.sodium.utils.sodium_bin2hex;
 string sodium_bin2hex(in ubyte[] bin) pure nothrow @trusted
 {
 //  enforce(bin !is null, "bin is null"); // not necessary
-  static import deimos.sodium.utils;
   char[] hex = new char[2*bin.length+1];
 // hex[0..$-1] strips terminating null character; assumeUnique not strictly required, as compiler can infer uniqueness for a pure function
-  return (assumeWontThrow(deimos.sodium.utils.sodium_bin2hex(hex.ptr, hex.length, bin.ptr, bin.length))? hex[0..$-1] : cast(char[])null);
+  return (assumeWontThrow(sodium_bin2hex(hex.ptr, hex.length, bin.ptr, bin.length))? hex[0..$-1] : cast(char[])null);
 }
 
 alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
@@ -175,11 +182,10 @@ alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
 int sodium_hex2bin(scope ubyte[] bin, in string hex, in string ignore, out size_t bin_len, out string hex_end) pure nothrow @trusted
 {
   import std.string : toStringz, fromStringz;
-  static import deimos.sodium.utils;
   const(char)*  hex_end_ptr;
   /* in the next function call:
      prefering  toStringz(ignore) i.e. possibly a copy over ignore.ptr is conservative: AFAIK it's not reliable to have a '\0' in memory behind a D string  */
-  int rv = assumeWontThrow(deimos.sodium.utils.sodium_hex2bin(bin.ptr, bin.length, hex.ptr, hex.length, toStringz(ignore), &bin_len, &hex_end_ptr));
+  int rv = assumeWontThrow(sodium_hex2bin(bin.ptr, bin.length, hex.ptr, hex.length, toStringz(ignore), &bin_len, &hex_end_ptr));
   hex_end = fromStringz(hex_end_ptr).idup;
   return rv;
 }
@@ -420,13 +426,25 @@ unittest // same as before except @safe and wrapping delegates + overloads
   assert(hex_end == "y");
 
   --hex.length;
-  hex ~= ":fa";
+  hex ~= "fa";
   bin[]   = ubyte.init; // bin.length unchanged
   assert(sodium_hex2bin(bin, hex, ignore, bin_len, hex_end) == -1);
   assert(bin == vbuf); // [172, 159, 255, 78, 186]);
   assert(bin_len == 5);
 //  debug writeln("hex_end:", hex_end);
   assert(hex_end == "fa");
+/+
+int sodium_hex2bin(scope ubyte[] bin, in string hex, in string ignore, out size_t bin_len, out string hex_end) pure nothrow @trusted
+{
+  import std.string : toStringz, fromStringz;
+  const(char)*  hex_end_ptr;
+  /* in the next function call:
+     prefering  toStringz(ignore) i.e. possibly a copy over ignore.ptr is conservative: AFAIK it's not reliable to have a '\0' in memory behind a D string  */
+  int rv = assumeWontThrow(sodium_hex2bin(bin.ptr, bin.length, hex.ptr, hex.length, toStringz(ignore), &bin_len, &hex_end_ptr));
+  hex_end = fromStringz(hex_end_ptr).idup;
+  return rv;
+}
++/
 }
 
 @system
