@@ -432,19 +432,7 @@ unittest // same as before except @safe and wrapping delegates + overloads
   assert(bin == vbuf); // [172, 159, 255, 78, 186]);
   assert(bin_len == 5);
 //  debug writeln("hex_end:", hex_end);
-  assert(hex_end == "fa");
-/+
-int sodium_hex2bin(scope ubyte[] bin, in string hex, in string ignore, out size_t bin_len, out string hex_end) pure nothrow @trusted
-{
-  import std.string : toStringz, fromStringz;
-  const(char)*  hex_end_ptr;
-  /* in the next function call:
-     prefering  toStringz(ignore) i.e. possibly a copy over ignore.ptr is conservative: AFAIK it's not reliable to have a '\0' in memory behind a D string  */
-  int rv = assumeWontThrow(sodium_hex2bin(bin.ptr, bin.length, hex.ptr, hex.length, toStringz(ignore), &bin_len, &hex_end_ptr));
-  hex_end = fromStringz(hex_end_ptr).idup;
-  return rv;
-}
-+/
+  assert(hex_end[0..2] == "fa");
 }
 
 @system
