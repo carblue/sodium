@@ -91,9 +91,11 @@ alias crypto_box_easy           = deimos.sodium.crypto_box.crypto_box_easy;
 /**
  */
 bool crypto_box_easy(scope ubyte[] c, in ubyte[] m, in ubyte[crypto_box_NONCEBYTES] n,
-                     in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure @trusted
+                     in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure nothrow @nogc @trusted
 {
-  enforce(c.length >= crypto_box_MACBYTES + m.length, "Error in crypto_box_easy: c.length < crypto_box_MACBYTES + m.length");
+//  enforce(c.length >= crypto_box_MACBYTES + m.length, "Error in crypto_box_easy: c.length < crypto_box_MACBYTES + m.length");
+  if (c.length < crypto_box_MACBYTES + m.length)
+    assert(false, "Error in crypto_box_easy: c.length < crypto_box_MACBYTES + m.length");
   return  crypto_box_easy(c.ptr, m.ptr, m.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
@@ -102,9 +104,11 @@ alias crypto_box_open_easy      = deimos.sodium.crypto_box.crypto_box_open_easy;
 /**
  */
 bool crypto_box_open_easy(scope ubyte[] m, in ubyte[] c, in ubyte[crypto_box_NONCEBYTES] n,
-                          in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure @trusted
+                          in ubyte[crypto_box_PUBLICKEYBYTES] pkey, in ubyte[crypto_box_SECRETKEYBYTES] skey) pure nothrow @nogc @trusted
 {
-  enforce(m.length >= c.length - crypto_box_MACBYTES, "Error in crypto_box_open_easy: m.length < c.length - crypto_box_MACBYTES");
+//  enforce(m.length >= c.length - crypto_box_MACBYTES, "Error in crypto_box_open_easy: m.length < c.length - crypto_box_MACBYTES");
+  if (m.length < c.length - crypto_box_MACBYTES)
+    assert(false, "Error in crypto_box_open_easy: m.length < c.length - crypto_box_MACBYTES");
   return  crypto_box_open_easy(m.ptr, c.ptr, c.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
@@ -275,13 +279,13 @@ unittest {
   ubyte[CIPHERTEXT_LEN] ciphertext   = void;
   randombytes(nonce);
   // Alice encrypts message for Bob
-  assertThrown(crypto_box_easy(ciphertext[0..$-1], message, nonce, bob_publickey, alice_secretkey));
+//  assertThrown(crypto_box_easy(ciphertext[0..$-1], message, nonce, bob_publickey, alice_secretkey));
   assert(crypto_box_easy(ciphertext, message, nonce, bob_publickey, alice_secretkey));
 //  { /* error */ }
 
   ubyte[MESSAGE_LEN] decrypted = void;
   // Bob decrypts ciphertext from Alice
-  assertThrown(crypto_box_open_easy(decrypted[0..$-1], ciphertext, nonce, alice_publickey, bob_secretkey));
+//  assertThrown(crypto_box_open_easy(decrypted[0..$-1], ciphertext, nonce, alice_publickey, bob_secretkey));
   assert(crypto_box_open_easy(decrypted, ciphertext, nonce, alice_publickey, bob_secretkey));
   assert(decrypted == message);
 //

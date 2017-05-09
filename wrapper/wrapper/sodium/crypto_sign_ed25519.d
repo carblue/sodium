@@ -37,41 +37,31 @@ import std.exception : enforce, assumeWontThrow;
 
 alias crypto_sign_ed25519 = deimos.sodium.crypto_sign_ed25519.crypto_sign_ed25519;
 
-bool  crypto_sign_ed25519(ref ubyte[] sm,
+bool  crypto_sign_ed25519(ubyte[] sm,
                           in ubyte[] m,
                           in ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure /*@nogc*/ @trusted
 {
 //  enforce(m.length, "Error invoking crypto_sign_ed25519: m is null"); // TODO check if m.ptr==null would be okay
-  if (sm.length <      m.length + crypto_sign_ed25519_BYTES)
-    sm.length =        m.length + crypto_sign_ed25519_BYTES;
   enforce(sm.length >= m.length + crypto_sign_ed25519_BYTES, "Error invoking crypto_sign_ed25519: out buffer too small");
   ulong  smlen_p;
   bool  result = crypto_sign_ed25519(sm.ptr, &smlen_p, m.ptr, m.length, sk.ptr) == 0;
-  if (smlen_p && result) {
-    assert(smlen_p ==  m.length + crypto_sign_ed25519_BYTES);
-    if (sm.length>smlen_p)
-      sm.length = cast(size_t)smlen_p;
-  }
+  if (result && smlen_p)
+    assert(smlen_p ==  m.length + crypto_sign_ed25519_BYTES); // okay to be removed in release code
   return  result;
 }
 
 alias crypto_sign_ed25519_open = deimos.sodium.crypto_sign_ed25519.crypto_sign_ed25519_open;
 
-bool  crypto_sign_ed25519_open(ref ubyte[] m,
+bool  crypto_sign_ed25519_open(ubyte[] m,
                                in ubyte[] sm,
                                in ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk) pure /*@nogc*/ @trusted //  __attribute__ ((warn_unused_result))
 {
   enforce(sm.length >= crypto_sign_ed25519_BYTES, "Error invoking crypto_sign_ed25519_open: in buffer too small"); // TODO check if m.ptr==null would be okay
-  if (m.length <      sm.length - crypto_sign_ed25519_BYTES)
-    m.length =        sm.length - crypto_sign_ed25519_BYTES;
   enforce(m.length >= sm.length - crypto_sign_ed25519_BYTES, "Error invoking crypto_sign_ed25519_open: out buffer too small");
   ulong mlen_p;
   bool  result = crypto_sign_ed25519_open(m.ptr, &mlen_p, sm.ptr, sm.length, pk.ptr) == 0;
-  if (mlen_p && result) {
-    assert(mlen_p ==  sm.length - crypto_sign_ed25519_BYTES);
-    if (m.length>mlen_p)
-      m.length = cast(size_t)mlen_p;
-  }
+  if (result)
+    assert(mlen_p ==  sm.length - crypto_sign_ed25519_BYTES); // okay to be removed in release code
   return  result;
 }
 
@@ -276,14 +266,13 @@ unittest
   assert(crypto_sign_ed25519_seed_keypair(pk, sk, seed));
 
   auto     message = representation("test");
-  ubyte[]  signed_message;
-  assertNotThrown(crypto_sign_ed25519(signed_message, null,    sk));
-  signed_message.length = crypto_sign_ed25519_BYTES + message.length +1;
+  enum     message_len = 4;
+  ubyte[crypto_sign_ed25519_BYTES + message_len]  signed_message;
+  assertNotThrown(crypto_sign_ed25519(signed_message[0..$-message_len], null,    sk));
   assert         (crypto_sign_ed25519(signed_message, message, sk));
 
-  ubyte[]  unsigned_message;
+  ubyte[message_len]  unsigned_message;
   assertNotThrown(crypto_sign_ed25519_open(unsigned_message, signed_message, pk));
-  unsigned_message.length = signed_message.length - crypto_sign_ed25519_BYTES +1;
   assert(crypto_sign_ed25519_open(unsigned_message, signed_message, pk));
   assert(equal(message[], unsigned_message[]));
 

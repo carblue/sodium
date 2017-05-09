@@ -38,7 +38,7 @@ int crypto_aead_xchacha20poly1305_ietf_encrypt(ubyte* c,
                                                ulong adlen,
                                                const(ubyte)* nsec,
                                                const(ubyte)* npub,
-                                               const(ubyte)* k) @system;
+                                               const(ubyte)* k);
 
 int crypto_aead_xchacha20poly1305_ietf_decrypt(ubyte* m,
                                                ulong* mlen_p,
@@ -48,7 +48,7 @@ int crypto_aead_xchacha20poly1305_ietf_decrypt(ubyte* m,
                                                const(ubyte)* ad,
                                                ulong adlen,
                                                const(ubyte)* npub,
-                                               const(ubyte)* k) nothrow @system; //  __attribute__ ((warn_unused_result)); //  __attribute__ ((warn_unused_result));
+                                               const(ubyte)* k) nothrow; //  __attribute__ ((warn_unused_result)); //  __attribute__ ((warn_unused_result));
 
 int crypto_aead_xchacha20poly1305_ietf_encrypt_detached(ubyte* c,
                                                         ubyte* mac,
@@ -59,7 +59,7 @@ int crypto_aead_xchacha20poly1305_ietf_encrypt_detached(ubyte* c,
                                                         ulong adlen,
                                                         const(ubyte)* nsec,
                                                         const(ubyte)* npub,
-                                                        const(ubyte)* k) @system;
+                                                        const(ubyte)* k);
 
 int crypto_aead_xchacha20poly1305_ietf_decrypt_detached(ubyte* m,
                                                         ubyte* nsec,
@@ -69,9 +69,9 @@ int crypto_aead_xchacha20poly1305_ietf_decrypt_detached(ubyte* m,
                                                         const(ubyte)* ad,
                                                         ulong adlen,
                                                         const(ubyte)* npub,
-                                                        const(ubyte)* k) nothrow @system; //  __attribute__ ((warn_unused_result));
+                                                        const(ubyte)* k) nothrow; //  __attribute__ ((warn_unused_result));
 
-void crypto_aead_xchacha20poly1305_ietf_keygen(ref ubyte[crypto_aead_xchacha20poly1305_ietf_KEYBYTES] k) nothrow @system;
+void crypto_aead_xchacha20poly1305_ietf_keygen(out ubyte[crypto_aead_xchacha20poly1305_ietf_KEYBYTES] k) nothrow @trusted;
 
 /* Aliases */
 

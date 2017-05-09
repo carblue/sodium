@@ -13,18 +13,16 @@ alias crypto_stream_xor = deimos.sodium.crypto_stream.crypto_stream_xor;
 /* overloaded functions */
 
 
-int crypto_stream_xor(scope ubyte[] ciphertext, in ubyte[] message, in ubyte[crypto_stream_NONCEBYTES] nonce, in ubyte[crypto_stream_KEYBYTES] key) pure @trusted
+int crypto_stream_xor(scope ubyte[] ciphertext, in ubyte[] message, in ubyte[crypto_stream_NONCEBYTES] nonce, in ubyte[crypto_stream_KEYBYTES] key) /*pure*/ @nogc @trusted
 {
-  import std.exception : enforce;
-  static import deimos.sodium.crypto_stream;
+//  if (ciphertext.length<message.length )
+//    assert(false, "Error in arguments of crypto_stream_xor");
   enforce(ciphertext.length>=message.length, "ciphertext.length<message.length");
-//  if (ciphertext.length<message.length /*|| nonce.length!=crypto_stream_NONCEBYTES || key.length!=crypto_stream_KEYBYTES*/)
-//    throw new Exception("Error in arguments of crypto_stream_xor");
-  return  deimos.sodium.crypto_stream.crypto_stream_xor(ciphertext.ptr, message.ptr, message.length, nonce.ptr, key.ptr);
+  return  crypto_stream_xor(ciphertext.ptr, message.ptr, message.length, nonce.ptr, key.ptr);
 }
 
 
-pure @system
+@system
 unittest
 {
   import std.stdio : writeln, writefln;

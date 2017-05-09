@@ -7,7 +7,7 @@ For git maintenance (ensure at least one congruent line with originating C heade
 module deimos.sodium.randombytes;
 
 
-extern(C) :
+extern(C) nothrow @nogc :
 
 
 struct randombytes_implementation {
@@ -20,18 +20,19 @@ struct randombytes_implementation {
 }
 
 
-nothrow @nogc :
-/* my understanding of the pure attribute in D is, that the following functions are impure; all depend on hidden global mutable state */
+
+/* my understanding of the pure attribute in D is, that the following functions (except randombytes_seedbytes and randombytes_buf_deterministic)
+   are impure; all depend on hidden global mutable state */
 
 
 enum ubyte randombytes_SEEDBYTES = 32U;
 
-size_t randombytes_seedbytes() @trusted;
+size_t randombytes_seedbytes() pure @trusted;
 
-void randombytes_buf(void* buf, const size_t size) @system;
+void randombytes_buf(void* buf, const size_t size);
 
 void randombytes_buf_deterministic(void* buf, const size_t size,
-                                   ref const(ubyte)[randombytes_SEEDBYTES] seed) @system;
+                                   ref const(ubyte)[randombytes_SEEDBYTES] seed) pure;
 
 uint randombytes_random() @trusted;
 
@@ -41,17 +42,10 @@ void randombytes_stir() @trusted;
 
 int randombytes_close() @trusted;
 
-/** See comment of function randombytes_implementation_name() */
-int randombytes_set_implementation(randombytes_implementation* impl) @system;
+int randombytes_set_implementation(randombytes_implementation* impl);
 
-/**
- * With attribute pure, function randombytes_implementation_name() is allowed to be called only
- * after the last call to randombytes_set_implementation (and this only before sodium_init() is called),
- * otherwise this function is strongly impure because the return value might change !
- * In the wrapper interface, function randombytes_set_implementation() is not allowed to be called at all !
- */
-const(char)* randombytes_implementation_name() pure @system;
+const(char)* randombytes_implementation_name();
 
 /* -- NaCl compatibility interface -- */
 
-void randombytes(ubyte* buf, const ulong buf_len) @system;
+void randombytes(ubyte* buf, const ulong buf_len);

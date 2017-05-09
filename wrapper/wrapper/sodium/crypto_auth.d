@@ -37,10 +37,13 @@ alias crypto_auth        = deimos.sodium.crypto_auth.crypto_auth;
 /**
  */
 pragma(inline, true)
-bool crypto_auth(out ubyte[crypto_auth_BYTES] mac, in ubyte[] message, in ubyte[crypto_auth_KEYBYTES] skey) pure @nogc @trusted
+bool crypto_auth(out ubyte[crypto_auth_BYTES] mac, in ubyte[] message, const ubyte[crypto_auth_KEYBYTES] skey) pure nothrow @nogc @trusted
 {
-  static import deimos.sodium.crypto_auth;
-  return  deimos.sodium.crypto_auth.crypto_auth(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
+  bool result;
+  try
+    result =  crypto_auth(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
+  catch(Exception e) { /* known not to throw */ }
+  return result;
 }
 
 alias crypto_auth_verify = deimos.sodium.crypto_auth.crypto_auth_verify;
@@ -48,10 +51,9 @@ alias crypto_auth_verify = deimos.sodium.crypto_auth.crypto_auth_verify;
 /**
  */
 pragma(inline, true)
-bool crypto_auth_verify(in ubyte[crypto_auth_BYTES] mac, in ubyte[] message, in ubyte[crypto_auth_KEYBYTES] skey) pure nothrow @nogc @trusted
+bool crypto_auth_verify(const ubyte[crypto_auth_BYTES] mac, in ubyte[] message, const ubyte[crypto_auth_KEYBYTES] skey) pure nothrow @nogc @trusted
 {
-  static import deimos.sodium.crypto_auth;
-  return  deimos.sodium.crypto_auth.crypto_auth_verify(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
+  return  crypto_auth_verify(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
 }
 
 
@@ -80,4 +82,15 @@ unittest
 //    writeln("*** ATTENTION : The message has been forged ! ***");
   ubyte[crypto_auth_KEYBYTES] k;
   crypto_auth_keygen(k);
+}
+
+@safe
+unittest
+{
+  ubyte[crypto_auth_BYTES] mac;
+  ubyte[4] message  = [116, 101, 115, 116]; //representation("test");
+  ubyte[crypto_auth_KEYBYTES] skey;
+  crypto_auth_keygen(skey);
+  assert(crypto_auth(mac, message, skey));
+  assert(crypto_auth_verify(mac, message, skey));
 }

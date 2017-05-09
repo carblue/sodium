@@ -6,6 +6,7 @@
 	"sourcePaths": ["wrapper"],
 	"targetType": "library",
 	"targetPath": "../lib",
+	"libs-posix": ["sodium"],
 	"sourceFiles-windows-x86-dmd": [
 		"../lib/windows-x86-dmd/libsodium.lib"
 	],
@@ -24,15 +25,14 @@
 	"copyFiles-windows-x86_64": [
 		"../lib/windows-x86_64/libsodium.dll"
 	],
-	"libs-posix": ["sodium"],
 	"configurations": [
 		{
-			"name": "library",
-			"versions": []
+			"name": "library"
 		},
 		{
-			"name": "unittest",
-			"versions": []
+			"name": "travis",
+			"buildRequirements": ["disallowDeprecations"],
+			"dflags-dmd": ["-dip1000"]
 		}
 	]
 }

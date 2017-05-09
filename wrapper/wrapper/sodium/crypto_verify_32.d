@@ -2,10 +2,10 @@ module wrapper.sodium.crypto_verify_32;
 
 import wrapper.sodium.core; // assure sodium got initialized
 
-public import  deimos.sodium.crypto_verify_32;
+public
+import  deimos.sodium.crypto_verify_32;
 
-
-/* overloaded function */
+// overloading a functions between module deimos.sodium.crypto_verify_32 and this module
 
 alias crypto_verify_32 = deimos.sodium.crypto_verify_32.crypto_verify_32;
 
@@ -13,10 +13,12 @@ alias crypto_verify_32 = deimos.sodium.crypto_verify_32.crypto_verify_32;
  * @returns 0 if the len bytes pointed to by x match the len bytes pointed to by y.
  * Otherwise, it returns -1.
  */
+pragma(inline, true)
 int crypto_verify_32(in ubyte[crypto_verify_32_BYTES] x, in ubyte[crypto_verify_32_BYTES] y) pure nothrow @nogc @trusted
 {
-  return deimos.sodium.crypto_verify_32.crypto_verify_32(x.ptr, y.ptr);
+  return crypto_verify_32(x.ptr, y.ptr);
 }
+
 
 pure @system
 unittest
@@ -33,19 +35,26 @@ unittest
   assert(crypto_verify_32(buf1.ptr, buf2.ptr) == -1);
 }
 
-pure @safe
+pure nothrow @nogc @safe
 unittest
 {
-  import std.stdio : writeln;
-  import std.range : iota, array;
-  debug  writeln("unittest block 2 from sodium.crypto_verify_32.d");
-
+  import std.range : iota, enumerate; //, array;
 //crypto_verify_32_bytes
   assert(crypto_verify_32_bytes() == crypto_verify_32_BYTES);
 
 //crypto_verify_32 overload
-  ubyte[32] buf1 = array(iota(ubyte(1), cast(ubyte)(1+crypto_verify_32_BYTES)))[];
-  ubyte[32] buf2 = buf1;
+  ubyte[crypto_verify_32_BYTES] buf1 = void; // = array(iota(ubyte(1), cast(ubyte)(1+crypto_verify_32_BYTES)))[];
+version(GNU) // 	GDC (GNU D Compiler) is the compiler ; there, enumerate is not @nogc
+{
+  size_t idx;
+  foreach (e; iota(ubyte(1), cast(ubyte)(1+crypto_verify_32_BYTES)))
+    buf1[idx++] = e;
+}
+else {
+  foreach (i, e; iota(ubyte(1), cast(ubyte)(1+crypto_verify_32_BYTES)).enumerate)
+    buf1[i] = e;
+}
+  ubyte[crypto_verify_32_BYTES] buf2 = buf1;
   assert(crypto_verify_32(buf1, buf2) ==  0);
   buf2[$-1] = 33;
   assert(crypto_verify_32(buf1, buf2) == -1);

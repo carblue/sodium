@@ -120,4 +120,4 @@ int crypto_aead_aes256gcm_decrypt_detached_afternm(ubyte* m,
                                                    const(ubyte)* npub,
                                                    const(crypto_aead_aes256gcm_state)* ctx_) nothrow @system; // __attribute__ ((warn_unused_result))
 
-void crypto_aead_aes256gcm_keygen(ref ubyte[crypto_aead_aes256gcm_KEYBYTES] k) nothrow @trusted;
+void crypto_aead_aes256gcm_keygen(out ubyte[crypto_aead_aes256gcm_KEYBYTES] k) nothrow @trusted;

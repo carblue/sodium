@@ -31,10 +31,9 @@ import  deimos.sodium.crypto_aead_chacha20poly1305 : crypto_aead_chacha20poly130
                                                      crypto_aead_chacha20poly1305_encrypt_detached,
                                                      crypto_aead_chacha20poly1305_decrypt_detached, */
                                                      crypto_aead_chacha20poly1305_keygen;
-;
 
 
-import std.exception : enforce, assertThrown, assertNotThrown;
+import std.exception : assertThrown, assertNotThrown;
 
 // overloading some functions between module deimos.sodium.crypto_aead_chacha20poly1305 and this module
 
@@ -47,42 +46,25 @@ alias crypto_aead_chacha20poly1305_ietf_encrypt = deimos.sodium.crypto_aead_chac
  * The encrypted message, as well as a tag authenticating both the confidential message m and ad.length bytes of non-confidential data `ad`,
  * are put into `c`.
  * ad can also be an empty array if no additional data are required.
- * At most m.length + crypto_aead_chacha20poly1305_ietf_ABYTES bytes are put into `c`, and the actual number of bytes is stored into `clen_p`.
+ * At most m.length + crypto_aead_chacha20poly1305_ietf_ABYTES bytes are put into `c`.
  * The function always returns true.
  * The public nonce npub should never ever be reused with the same key. The recommended way to generate it is to use
  * randombytes_buf() for the first message, and then to increment it for each subsequent message using the same key.
-
- The	 	crypto_aead_chacha20poly1305_ietf_encrypt()		function	encrypts	a	message	 	m		whose
-length	is	 	mlen	 	bytes	using	a	secret	key	 	k	 	( 	crypto_aead_chacha20poly1305_IETF_KEYBYTES
-bytes)	and	public	nonce	 	npub		( 	crypto_aead_chacha20poly1305_IETF_NPUBBYTES		bytes).
-The	encrypted	message,	as	well	as	a	tag	authenticating	both	the	confidential	message	 	m
-and	 	adlen		bytes	of	non-confidential	data	 	ad	 ,	are	put	into	 	c	 .
-	ad		can	be	a	 	NULL		pointer	with	 	adlen		equal	to	 	0		if	no	additional	data	are	required.
-At	most	 	mlen	+	crypto_aead_chacha20poly1305_IETF_ABYTES		bytes	are	put	into	 	c	 ,	and	the
-actual	number	of	bytes	is	stored	into	 	clen		unless	 	clen		is	a	 	NULL		pointer.
-	nsec	 	is	not	used	by	this	particular	construction	and	should	always	be	 	NULL	 .
-The	public	nonce	 	npub		should	never	ever	be	reused	with	the	same	key.	The	recommended
-way	to	generate	it	is	to	use	 	randombytes_buf()	 	for	the	first	message,	and	increment	it	for
-each	subsequent	message	using	the	same	key.
-
  */
-bool crypto_aead_chacha20poly1305_ietf_encrypt(ref ubyte[] c,
-                                               in ubyte[] m,
-                                               in ubyte[] ad,
-                                               in ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
-                                               in ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) pure @trusted
+bool crypto_aead_chacha20poly1305_ietf_encrypt(scope ubyte[] c,
+                                               scope const ubyte[] m,
+                                               scope const ubyte[] ad,
+                                               const ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
+                                               const ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) @nogc @trusted
 {
-  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_ietf_encrypt: m is null"); // TODO check if m.ptr==null would be okay
-  if (c.length <      m.length + crypto_aead_chacha20poly1305_ietf_ABYTES)
-    c.length =        m.length + crypto_aead_chacha20poly1305_ietf_ABYTES;
-  enforce(c.length >= m.length + crypto_aead_chacha20poly1305_ietf_ABYTES, "Error invoking crypto_aead_chacha20poly1305_ietf_encrypt: out buffer too small");
+//  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_ietf_encrypt: m is null"); // TODO check if m.ptr==null would be okay
+  enforce(m.length <=  ulong.max - crypto_aead_chacha20poly1305_ietf_ABYTES);
+  const  c_expect_len = m.length + crypto_aead_chacha20poly1305_ietf_ABYTES;
+  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_aead_chacha20poly1305_ietf_ABYTES: ", c_expect_len);
   ulong clen_p;
   bool result = crypto_aead_chacha20poly1305_ietf_encrypt(c.ptr, &clen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, k.ptr) == 0;
-  if (clen_p) {
-    assert(clen_p ==  m.length + crypto_aead_chacha20poly1305_ietf_ABYTES);
-    if (c.length>clen_p)
-      c.length = cast(size_t)clen_p;
-  }
+  if (result)
+    assert(clen_p ==  c_expect_len); // okay to be removed in release code
   return  result;
 }
 
@@ -99,59 +81,50 @@ alias crypto_aead_chacha20poly1305_ietf_decrypt = deimos.sodium.crypto_aead_chac
  * If the verification succeeds, the function returns true, puts the decrypted message into `m` and stores its actual number of bytes into `mlen_p`.
  * At most c.length - crypto_aead_chacha20poly1305_ietf_ABYTES bytes will be put into m.
  */
-bool crypto_aead_chacha20poly1305_ietf_decrypt(ref ubyte[] m,
-                                               in ubyte[] c,
-                                               in ubyte[] ad,
-                                               in ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
-                                               in ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) pure @trusted
+bool crypto_aead_chacha20poly1305_ietf_decrypt(scope ubyte[] m,
+                                               scope const ubyte[] c,
+                                               scope const ubyte[] ad,
+                                               const ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
+                                               const ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) @nogc @trusted
 {
-  enforce(c.length >= crypto_aead_chacha20poly1305_ietf_ABYTES, "Error invoking crypto_aead_chacha20poly1305_ietf_decrypt: in buffer ciphertext too small");
-  if (m.length <      c.length - crypto_aead_chacha20poly1305_ietf_ABYTES)
-    m.length =        c.length - crypto_aead_chacha20poly1305_ietf_ABYTES;
-  enforce(m.length >= c.length - crypto_aead_chacha20poly1305_ietf_ABYTES, "Error invoking crypto_aead_chacha20poly1305_ietf_decrypt: out buffer too small");
+  enforce(c.length >= crypto_aead_chacha20poly1305_ietf_ABYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_aead_chacha20poly1305_ietf_ABYTES: ", crypto_aead_chacha20poly1305_ietf_ABYTES);
+  const  m_expect_len = c.length - crypto_aead_chacha20poly1305_ietf_ABYTES;
+  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_aead_chacha20poly1305_ietf_ABYTES: ", m_expect_len);
   ulong mlen_p;
   bool result = crypto_aead_chacha20poly1305_ietf_decrypt(m.ptr, &mlen_p, null, c.ptr, c.length, ad.ptr, ad.length, npub.ptr, k.ptr) == 0;
-  if (result && mlen_p) {
-    assert(mlen_p ==  c.length - crypto_aead_chacha20poly1305_ietf_ABYTES);
-    if (m.length>mlen_p)
-      m.length = cast(size_t)mlen_p;
-  }
+  if (result)
+    assert(mlen_p ==  m_expect_len); // okay to be removed in release code
   return  result;
 }
 
 alias crypto_aead_chacha20poly1305_ietf_encrypt_detached = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_ietf_encrypt_detached;
 
-bool  crypto_aead_chacha20poly1305_ietf_encrypt_detached(ref ubyte[] c,
-                                                        out ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac,
-                                                        in ubyte[] m,
-                                                        in ubyte[] ad,
-                                                        in ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
-                                                        in ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) pure @trusted
+bool  crypto_aead_chacha20poly1305_ietf_encrypt_detached(scope ubyte[] c,
+                                                         out ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac,
+                                                         scope const ubyte[] m,
+                                                         scope const ubyte[] ad,
+                                                         const ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
+                                                         const ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) @nogc @trusted
 {
-  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_ietf_encrypt_detached: m is null"); // TODO check if m.ptr==null would be okay
-  if (c.length <      m.length)
-    c.length =        m.length;
-  enforce(c.length >= m.length, "Error invoking crypto_aead_chacha20poly1305_ietf_encrypt_detached: out buffer too small");
+//  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_ietf_encrypt_detached: m is null"); // TODO check if m.ptr==null would be okay
+  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
   ulong maclen_p;
   bool result = crypto_aead_chacha20poly1305_ietf_encrypt_detached(c.ptr, mac.ptr, &maclen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, k.ptr) == 0;
-  if (maclen_p && result)
-    assert(maclen_p == crypto_aead_chacha20poly1305_ietf_ABYTES);
+  assert(maclen_p == crypto_aead_chacha20poly1305_ietf_ABYTES); // okay to be removed in release code
   return  result;
 }
 
 alias crypto_aead_chacha20poly1305_ietf_decrypt_detached = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_ietf_decrypt_detached;
 
-bool crypto_aead_chacha20poly1305_ietf_decrypt_detached(ref ubyte[] m,
-                                                        in ubyte[] c,
-                                                        in ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac,
-                                                        in ubyte[] ad,
-                                                        in ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
-                                                        in ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) pure @trusted
+bool  crypto_aead_chacha20poly1305_ietf_decrypt_detached(scope ubyte[] m,
+                                                         scope const ubyte[] c,
+                                                         const ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac,
+                                                         scope const ubyte[] ad,
+                                                         const ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
+                                                         const ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) @nogc @trusted
 {
-  enforce(c.length, "Error invoking crypto_aead_chacha20poly1305_ietf_decrypt_detached: c is null"); // TODO check if c.ptr==null would be okay
-  if (m.length <      c.length)
-    m.length =        c.length;
-  enforce(m.length >= c.length, "Error invoking crypto_aead_chacha20poly1305_ietf_decrypt_detached: out buffer too small");
+//  enforce(c.length, "Error invoking crypto_aead_chacha20poly1305_ietf_decrypt_detached: c is null"); // TODO check if c.ptr==null would be okay
+  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
   return  crypto_aead_chacha20poly1305_ietf_decrypt_detached(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, k.ptr) == 0;
 }
 
@@ -159,81 +132,68 @@ bool crypto_aead_chacha20poly1305_ietf_decrypt_detached(ref ubyte[] m,
 
 alias crypto_aead_chacha20poly1305_encrypt = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_encrypt;
 
-bool  crypto_aead_chacha20poly1305_encrypt(ref ubyte[] c,
-                                           in ubyte[] m,
-                                           in ubyte[] ad,
-                                           in ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
-                                           in ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) pure @trusted
+bool  crypto_aead_chacha20poly1305_encrypt(scope ubyte[] c,
+                                           scope const ubyte[] m,
+                                           scope const ubyte[] ad,
+                                           const ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
+                                           const ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) @nogc @trusted
 {
-  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_encrypt: m is null"); // TODO check if m.ptr==null would be okay
-  if (c.length <      m.length + crypto_aead_chacha20poly1305_ABYTES)
-    c.length =        m.length + crypto_aead_chacha20poly1305_ABYTES;
-  enforce(c.length >= m.length + crypto_aead_chacha20poly1305_ABYTES, "Error invoking crypto_aead_chacha20poly1305_encrypt: out buffer too small");
+//  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_encrypt: m is null"); // TODO check if m.ptr==null would be okay
+  const  c_expect_len = m.length + crypto_aead_chacha20poly1305_ABYTES;
+  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_aead_chacha20poly1305_ABYTES: ", c_expect_len);
   ulong clen_p;
   bool result = crypto_aead_chacha20poly1305_encrypt(c.ptr, &clen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, k.ptr) == 0;
-  if (clen_p) {
-    assert(clen_p ==  m.length + crypto_aead_chacha20poly1305_ABYTES);
-    if (c.length>clen_p)
-	    c.length = cast(size_t)clen_p;
-  }
+  if (result)
+    assert(clen_p ==  c_expect_len); // okay to be removed in release code
   return  result;
 }
 
 alias crypto_aead_chacha20poly1305_decrypt = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_decrypt;
 
-bool  crypto_aead_chacha20poly1305_decrypt(ref ubyte[] m,
-                                           in ubyte[] c,
-                                           in ubyte[] ad,
-                                           in ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
-                                           in ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) pure @trusted
+bool  crypto_aead_chacha20poly1305_decrypt(scope ubyte[] m,
+                                           scope const ubyte[] c,
+                                           scope const ubyte[] ad,
+                                           const ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
+                                           const ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) @nogc @trusted
 {
-  enforce(c.length >= crypto_aead_chacha20poly1305_ABYTES, "Error invoking crypto_aead_chacha20poly1305_decrypt: in buffer ciphertext too small");
-  if (m.length <      c.length - crypto_aead_chacha20poly1305_ABYTES)
-    m.length =        c.length - crypto_aead_chacha20poly1305_ABYTES;
-  enforce(m.length >= c.length - crypto_aead_chacha20poly1305_ABYTES, "Error invoking crypto_aead_chacha20poly1305_decrypt: out buffer too small");
+  enforce(c.length >= crypto_aead_chacha20poly1305_ABYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_aead_chacha20poly1305_ABYTES: ", crypto_aead_chacha20poly1305_ABYTES);
+  const  m_expect_len = c.length - crypto_aead_chacha20poly1305_ABYTES;
+  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_aead_chacha20poly1305_ABYTES: ", m_expect_len);
   ulong mlen_p;
   bool result = crypto_aead_chacha20poly1305_decrypt(m.ptr, &mlen_p, null, c.ptr, c.length, ad.ptr, ad.length, npub.ptr, k.ptr) == 0;
-  if (result && mlen_p) {
-    assert(mlen_p ==  c.length - crypto_aead_chacha20poly1305_ABYTES);
-    if (m.length>mlen_p)
-      m.length = cast(size_t)mlen_p;
-  }
+  if (result)
+    assert(mlen_p ==  m_expect_len); // okay to be removed in release code
   return  result;
 }
 
 alias crypto_aead_chacha20poly1305_encrypt_detached = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_encrypt_detached;
 
-bool  crypto_aead_chacha20poly1305_encrypt_detached(ref ubyte[] c,
+bool  crypto_aead_chacha20poly1305_encrypt_detached(scope ubyte[] c,
                                                     out ubyte[crypto_aead_chacha20poly1305_ABYTES] mac,
-                                                    in ubyte[] m,
-                                                    in ubyte[] ad,
-                                                    in ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
-                                                    in ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) pure @trusted
+                                                    scope const ubyte[] m,
+                                                    scope const ubyte[] ad,
+                                                    const ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
+                                                    const ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) @nogc @trusted
 {
-  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_encrypt_detached: m is null"); // TODO check if m.ptr==null would be okay
-  if (c.length <      m.length)
-    c.length =        m.length;
-  enforce(c.length >= m.length, "Error invoking crypto_aead_chacha20poly1305_encrypt_detached: out buffer too small");
+//  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_encrypt_detached: m is null"); // TODO check if m.ptr==null would be okay
+  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
   ulong maclen_p;
   bool result = crypto_aead_chacha20poly1305_encrypt_detached(c.ptr, mac.ptr, &maclen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, k.ptr) == 0;
-  if (maclen_p && result)
-    assert(maclen_p == crypto_aead_chacha20poly1305_ABYTES);
+  assert(maclen_p == crypto_aead_chacha20poly1305_ABYTES); // okay to be removed in release code
   return  result;
 }
 
 alias crypto_aead_chacha20poly1305_decrypt_detached = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_decrypt_detached;
 
-bool crypto_aead_chacha20poly1305_decrypt_detached(ref ubyte[] m,
-                                                   in ubyte[] c,
-                                                   in ubyte[crypto_aead_chacha20poly1305_ABYTES] mac,
-                                                   in ubyte[] ad,
-                                                   in ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
-                                                   in ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) pure @trusted
+bool  crypto_aead_chacha20poly1305_decrypt_detached(scope ubyte[] m,
+                                                    scope const ubyte[] c,
+                                                    const ubyte[crypto_aead_chacha20poly1305_ABYTES] mac,
+                                                    scope const ubyte[] ad,
+                                                    const ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
+                                                    const ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) @nogc @trusted
 {
-  enforce(c.length, "Error invoking crypto_aead_chacha20poly1305_decrypt_detached: c is null"); // TODO check if c.ptr==null would be okay
-  if (m.length <      c.length)
-    m.length =        c.length;
-  enforce(m.length >= c.length, "Error invoking crypto_aead_chacha20poly1305_decrypt_detached: out buffer too small");
+//  enforce(c.length, "Error invoking crypto_aead_chacha20poly1305_decrypt_detached: c is null"); // TODO check if c.ptr==null would be okay
+  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
   return  crypto_aead_chacha20poly1305_decrypt_detached(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, k.ptr) == 0;
 }
 
@@ -314,48 +274,37 @@ unittest
   auto message         = representation("test");
   auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
     "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
-  ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_chacha20poly1305_ietf_ABYTES +1];
-  ubyte[] ciphertext_short = new ubyte[message.length + crypto_aead_chacha20poly1305_ietf_ABYTES -1];
+  ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_chacha20poly1305_ietf_ABYTES];
   sodium_increment(nonce);
 
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext_short, message, additional_data, nonce, key));
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext      , null,    additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext      , message, null,            nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext[0..$-1],              message, additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext[0..$-message.length], null,    additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext,                      message, null,            nonce, key));
 
-  ciphertext.length = 0;
   assert(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext, message, additional_data, nonce, key));
-  assert(ciphertext.length == message.length + crypto_aead_chacha20poly1305_ietf_ABYTES);
 
   ubyte[] decrypted       = new ubyte[message.length];
-  ubyte[] decrypted_short = new ubyte[message.length -1];
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,       ciphertext[0..crypto_aead_chacha20poly1305_ietf_ABYTES-1], additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted_short, ciphertext,                                                additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,       ciphertext,                                                null,            nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,         ciphertext[0..crypto_aead_chacha20poly1305_ietf_ABYTES-1], additional_data, nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt(decrypted[0..$-1], ciphertext,                                                additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,         ciphertext,                                                null,            nonce, key));
 
-  decrypted.length =         ciphertext.length - crypto_aead_chacha20poly1305_ietf_ABYTES +1;
   assert(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted, ciphertext, additional_data, nonce, key));
   assert(decrypted == message);
-  assert(decrypted.length == ciphertext.length - crypto_aead_chacha20poly1305_ietf_ABYTES);
 //
   ciphertext.length = message.length;
   ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac;
   sodium_increment(nonce);
-  ciphertext_short.length = message.length + crypto_aead_chacha20poly1305_ietf_ABYTES -1;
 
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext_short, mac, message, additional_data, nonce, key));
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext      , mac, null,    additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext      , mac, message, null,            nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext[0..$-1],              mac, message, additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext[0..$-message.length], mac, null,    additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext,                      mac, message, null,            nonce, key));
 
-  ciphertext.length = 0;
   assert(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext, mac, message, additional_data, nonce, key));
-  assert(ciphertext.length == message.length);
 
-  decrypted_short.length = message.length -1;
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted_short, ciphertext, mac, additional_data, nonce, key));
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted,       null,       mac, additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted,       ciphertext, mac, null,            nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted[0..$-1],              ciphertext, mac, additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted[0..$-message.length], null,       mac, additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted,                      ciphertext, mac, null,            nonce, key));
 
-  decrypted.length = 0;
   assert(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted, ciphertext, mac, additional_data, nonce, key));
   assert(decrypted == message);
 
@@ -378,48 +327,78 @@ unittest
   auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
     "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
   ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_chacha20poly1305_ABYTES];
-  ubyte[] ciphertext_short = new ubyte[message.length + crypto_aead_chacha20poly1305_ABYTES -1];
   sodium_increment(nonce2);
 
-  assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext_short, message, additional_data, nonce2, key2));
-  assertThrown   (crypto_aead_chacha20poly1305_encrypt(ciphertext      , null,    additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext      , message, null,            nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_encrypt(ciphertext[0..$-1],              message, additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext[0..$-message.length], null,    additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext,                      message, null,            nonce2, key2));
 
-  ciphertext.length =         message.length + crypto_aead_chacha20poly1305_ABYTES +1;
   assert(crypto_aead_chacha20poly1305_encrypt(ciphertext, message, additional_data, nonce2, key2));
-  assert(ciphertext.length == message.length + crypto_aead_chacha20poly1305_ABYTES);
 
   ubyte[] decrypted       = new ubyte[message.length];
-  ubyte[] decrypted_short = new ubyte[message.length -1];
-  assertThrown   (crypto_aead_chacha20poly1305_decrypt(decrypted,       ciphertext[0..crypto_aead_chacha20poly1305_ABYTES-1], additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_decrypt(decrypted_short, ciphertext,                                           additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_decrypt(decrypted,       ciphertext,                                           null,            nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_decrypt(decrypted,         ciphertext[0..crypto_aead_chacha20poly1305_ABYTES-1], additional_data, nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_decrypt(decrypted[0..$-1], ciphertext,                                           additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_decrypt(decrypted,         ciphertext,                                           null,            nonce2, key2));
 
-  decrypted.length =         ciphertext.length - crypto_aead_chacha20poly1305_ABYTES +1;
   assert(crypto_aead_chacha20poly1305_decrypt(decrypted, ciphertext, additional_data, nonce2, key2));
   assert(decrypted == message);
-  assert(decrypted.length == ciphertext.length - crypto_aead_chacha20poly1305_ABYTES);
 //
   ciphertext.length = message.length;
   ubyte[crypto_aead_chacha20poly1305_ABYTES] mac;
   sodium_increment(nonce2);
-  ciphertext_short.length = message.length + crypto_aead_chacha20poly1305_ABYTES -1;
 
-  assertNotThrown(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext_short, mac, message, additional_data, nonce2, key2));
-  assertThrown   (crypto_aead_chacha20poly1305_encrypt_detached(ciphertext      , mac, null,    additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext      , mac, message, null,            nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_encrypt_detached(ciphertext[0..$-1],              mac, message, additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext[0..$-message.length], mac, null,    additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext,                      mac, message, null,            nonce2, key2));
 
-  ciphertext.length = 0;
   assert(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext, mac, message, additional_data, nonce2, key2));
-  assert(ciphertext.length == message.length);
 
-  decrypted_short.length = message.length -1;
-  assertNotThrown(crypto_aead_chacha20poly1305_decrypt_detached(decrypted_short, ciphertext, mac, additional_data, nonce2, key2));
-  assertThrown   (crypto_aead_chacha20poly1305_decrypt_detached(decrypted,       null,       mac, additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_decrypt_detached(decrypted,       ciphertext, mac, null,            nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_decrypt_detached(decrypted[0..$-1],              ciphertext, mac, additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_decrypt_detached(decrypted[0..$-message.length], null,       mac, additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_decrypt_detached(decrypted,                      ciphertext, mac, null,            nonce2, key2));
 
-  decrypted.length = 0;
   assert(crypto_aead_chacha20poly1305_decrypt_detached(decrypted, ciphertext, mac, additional_data, nonce2, key2));
   assert(decrypted == message);
+}
 
+
+
+@nogc @safe
+unittest
+{
+  // usage is not cryptographically safe here; it's purpose is to test @nogc @safe
+  import std.string : representation;
+  ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES]  n1 = nonce;
+  ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES]   k1;
+  crypto_aead_chacha20poly1305_ietf_keygen(k1);
+  ubyte[4] message  = [116, 101, 115, 116]; //representation("test");
+  ubyte[4] decrypted;
+  enum  m_len  = 4UL;
+  auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
+    "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
+  ubyte[m_len+crypto_aead_chacha20poly1305_ietf_ABYTES] ciphertext1;
+  ubyte[m_len]                                          ciphertext2;
+  ubyte[      crypto_aead_chacha20poly1305_ietf_ABYTES] mac1;
+
+  assert(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext1,   message, additional_data, n1, k1));
+  assert(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted, ciphertext1, additional_data, n1, k1));
+  assert(decrypted == message);
+  decrypted = decrypted.init;
+  assert(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext2, mac1,   message, additional_data, n1, k1));
+  assert(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted, ciphertext2, mac1, additional_data, n1, k1));
+  assert(decrypted == message);
+  ubyte[crypto_aead_chacha20poly1305_NPUBBYTES]  n2 = nonce[0..crypto_aead_chacha20poly1305_NPUBBYTES];
+  ubyte[crypto_aead_chacha20poly1305_KEYBYTES]   k2;
+  crypto_aead_chacha20poly1305_keygen(k2);
+  ubyte[m_len+crypto_aead_chacha20poly1305_ABYTES] ciphertext3;
+  ubyte[m_len]                                     ciphertext4;
+  ubyte[      crypto_aead_chacha20poly1305_ABYTES] mac2;
+  decrypted = decrypted.init;
+  assert(crypto_aead_chacha20poly1305_encrypt(ciphertext3,   message, additional_data, n2, k2));
+  assert(crypto_aead_chacha20poly1305_decrypt(decrypted, ciphertext3, additional_data, n2, k2));
+  assert(decrypted == message);
+  decrypted = decrypted.init;
+  assert(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext4, mac2,   message, additional_data, n2, k2));
+  assert(crypto_aead_chacha20poly1305_decrypt_detached(decrypted, ciphertext4, mac2, additional_data, n2, k2));
+  assert(decrypted == message);
 }

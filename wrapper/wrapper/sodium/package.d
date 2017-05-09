@@ -4,9 +4,9 @@ module wrapper.sodium;
 
 public :
 
-import wrapper.sodium.version_; /* unittest + code */
+import wrapper.sodium.version_; /* unittest + code (both no-GC-alloc profiled) */
 
-//import wrapper.sodium.core;   /* unittest + code */ No public import any more: it get's imported privately in all other modules (except randombytes_*) to ensure running it's shared static this() first
+//import wrapper.sodium.core;   /* unittest + code (both no-GC-alloc profiled) */ No public import any more: it get's imported privately in all other modules (except randombytes_*) to ensure running it's shared static this() first
 
 import wrapper.sodium.crypto_aead_aes256gcm;         /* unittest + code  TODO update Precomputation interface, update doc. comments, check -m32_mscoff */
 import wrapper.sodium.crypto_aead_chacha20poly1305;  /* unittest + code  TODO update doc. comments */
@@ -60,9 +60,9 @@ import wrapper.sodium.crypto_stream_chacha20;  // no_compile
 import wrapper.sodium.crypto_stream_salsa20;   // no_compile
 import wrapper.sodium.crypto_stream_xsalsa20;  /* unittest */
 
-import wrapper.sodium.crypto_verify_16;  /* unittest + code */
-import wrapper.sodium.crypto_verify_32;  /* unittest + code */
-import wrapper.sodium.crypto_verify_64;  /* unittest + code */
+import wrapper.sodium.crypto_verify_16;  /* unittest + code ; wrapper: @nogc */
+import wrapper.sodium.crypto_verify_32;  /* unittest + code ; wrapper: @nogc */
+import wrapper.sodium.crypto_verify_64;  /* unittest + code ; wrapper: @nogc */
 
 /* WARNING: randombytes_set_implementation is not available from 'wrapper' and shouldn't be used through 'deimos' either, except You know what You are doing */
 import wrapper.sodium.randombytes;                 /* unittest + code */
@@ -71,7 +71,7 @@ import wrapper.sodium.randombytes_nativeclient;    /* unittest not required; mer
 
 import wrapper.sodium.randombytes_salsa20_random;  /* unittest not required; mere redirection */
 import wrapper.sodium.randombytes_sysrandom;       /* unittest not required; mere redirection */
-import wrapper.sodium.runtime;                     /* unittest */
+import wrapper.sodium.runtime;                     /* unittest (no-GC-alloc profiled) */
 import wrapper.sodium.utils;                       /* unittest + code */
 
 version(SODIUM_LIBRARY_MINIMAL) {}
@@ -82,5 +82,12 @@ else {
 	import wrapper.sodium.crypto_stream_aes128ctr;  /* currently mere redirection; TODO v1.0.12 */
 	import wrapper.sodium.crypto_stream_salsa2012;  /* currently mere redirection; TODO v1.0.12 */
 	import wrapper.sodium.crypto_stream_salsa208;   /* currently mere redirection; TODO v1.0.12 */
-	import wrapper.sodium.crypto_stream_xchacha20;
+	import wrapper.sodium.crypto_stream_xchacha20;  /* currently mere redirection; TODO v1.0.12 */
 }
+
+/*
+ * The only reason for commenting-out the FunctionAttribute nothrow for some functions is this conflict:
+ * Some functions don't return void and effectively are strongly pure nothrow AND DON'T declare  __attribute__ ((warn_unused_result)) ! But,
+ * Since DMD 2.066.0, compiler switch -w warns about an unused return value of a strongly pure nothrow function call,
+ * thus these C function signatures can't be translated exactly to D, if compiler switch -w is thrown (assumed to be the case, e.g. it's the default for dub).
+ */

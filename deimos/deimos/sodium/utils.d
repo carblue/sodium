@@ -7,9 +7,16 @@ For git maintenance (ensure at least one congruent line with originating C heade
 module deimos.sodium.utils;
 
 
-extern(C) /*nothrow*/ @nogc @system :
+extern(C) /*nothrow*/ @nogc :
 
 
+/** Zeroing memory.
+ * After use, sensitive data should be overwritten, but memset() and hand-written code can be
+ * silently stripped out by an optimizing compiler or by the linker.
+ * The sodium_memzero() function tries to effectively zero `len` bytes starting at `pnt`, even if
+ * optimizations are being applied to the code.
+ * @see https://download.libsodium.org/libsodium/content/helpers/memory_management.html
+ */
 void sodium_memzero(void* pnt, const size_t len) pure nothrow;
 
 /**
@@ -21,18 +28,24 @@ void sodium_memzero(void* pnt, const size_t len) pure nothrow;
 int sodium_memcmp(const(void*) b1_, const(void*) b2_, size_t len) pure nothrow; // __attribute__ ((warn_unused_result));
 
 version(LittleEndian) {
-  /*
+  /** Comparing large numbers.
    * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
    * It is suitable for lexicographical comparisons, or to compare nonces
    * and counters stored in little-endian format.
    * However, it is slower than sodium_memcmp().
+   * The comparison is done in constant time for a given length.
    */
   int sodium_compare(const(ubyte)* b1_, const(ubyte)* b2_,
                      size_t len) pure nothrow; // __attribute__ ((warn_unused_result));
 }
 
-/*
- * deviating from the C source, this received attributes equivalent to __attribute__ ((warn_unused_result))
+/**
+ * deviating from the C source, this function received attributes equivalent to __attribute__ ((warn_unused_result))
+ *
+ * Testing for all zeros.
+ * This function returns  1  if the `nlen` bytes vector pointed by `n` contains only zeros.
+ * It returns  0  if non-zero bits are found.
+ * It's execution time is constant for a given length.
  */
 int sodium_is_zero(const(ubyte)* n, const size_t nlen) pure nothrow;
 
@@ -50,8 +63,17 @@ int sodium_hex2bin(ubyte* bin, const size_t bin_maxlen,
                    const(char*) ignore, size_t* bin_len,
                    const(char)** hex_end) pure;
 
+/**
+ * The  sodium_mlock()  function locks at least `len` bytes of memory starting at `addr`.
+ * This can help avoid swapping sensitive data to disk.
+ */
 int sodium_mlock(void* addr, const size_t len) nothrow;
 
+/**
+ * The  sodium_munlock()  function should be called after locked memory is not being used any more.
+ * It will zero `len` bytes starting at `addr` before actually flagging the pages as
+ * swappable again. Calling  sodium_memzero()  prior to  sodium_munlock()  is thus not required.
+ */
 int sodium_munlock(void* addr, const size_t len) nothrow;
 
 /* WARNING: sodium_malloc() and sodium_allocarray() are not general-purpose

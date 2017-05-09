@@ -69,7 +69,7 @@ int crypto_aead_chacha20poly1305_ietf_decrypt_detached(ubyte* m,
                                                        const(ubyte)* npub,
                                                        const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result))
 
-void crypto_aead_chacha20poly1305_ietf_keygen(ref ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) nothrow @system;
+void crypto_aead_chacha20poly1305_ietf_keygen(out ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) nothrow @trusted;
 
 /* -- Original ChaCha20-Poly1305 construction with a 64-bit nonce and a 64-bit internal counter -- */
 
@@ -130,7 +130,7 @@ int crypto_aead_chacha20poly1305_decrypt_detached(ubyte* m,
                                                   const(ubyte)* npub,
                                                   const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result))
 
-void crypto_aead_chacha20poly1305_keygen(ref ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) nothrow @system;
+void crypto_aead_chacha20poly1305_keygen(out ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) nothrow @trusted;
 
 /* Aliases */
 

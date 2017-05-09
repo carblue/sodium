@@ -21,6 +21,6 @@ install:
 
 script:
   - dub test  sodium:deimos  --compiler=${DC}
-  - dub test  sodium:wrapper --compiler=${DC} --build unittest-cov
+  - dub test  sodium:wrapper --compiler=${DC} --config=travis --build unittest-cov
   - ./doveralls
-  - dub build sodium:wrapper --compiler=${DC} --build release
+  - dub build sodium:wrapper --compiler=${DC} --config=travis --build release -v

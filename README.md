@@ -11,7 +11,7 @@ Twofold binding to libsodium, current C-source version 1.0.12, released on Mar 1
 subPackage 'deimos':  Static binding, the "import-only" C header's declarations.<br>
 subPackage 'wrapper': 'deimos' + some 'D-friendly' stuff, predominantly overloaded functions and unittests.
 
-dub.json sets dependency sodium:deimos as default. For the 'wrapper' subPackage, explicitely choose dependency:  sodium:wrapper
+The dependency name is either  sodium:deimos  or  sodium:wrapper
 
 Some restructuring (subPackages)/changing importPath and sourcePath was done for version 0.1.0 (different from previous 0.08) in order to have the 'wrapper' subPackage sit aside
 subPackage 'deimos'.<br>

@@ -4,31 +4,32 @@ module wrapper.sodium.version_;
 
 import wrapper.sodium.core; // assure sodium got initialized
 
-public import  deimos.sodium.version_ : SODIUM_VERSION_STRING, SODIUM_LIBRARY_VERSION_MAJOR, SODIUM_LIBRARY_VERSION_MINOR,
-                                 sodium_library_version_major, sodium_library_version_minor, sodium_library_minimal; /* , sodium_version_string */
+public
+import  deimos.sodium.version_ : SODIUM_VERSION_STRING,
+                                 SODIUM_LIBRARY_VERSION_MAJOR,
+                                 SODIUM_LIBRARY_VERSION_MINOR,
+//                               sodium_version_string,
+                                 sodium_library_version_major,
+                                 sodium_library_version_minor,
+                                 sodium_library_minimal;
 // in order to use sodium_version_string() from deimos, it must be statically imported explicitely.
 
+import std.string : fromStringz; // is @system
 
 /*
  deimos.sodium.version_.sodium_version_string() gets trusted to return a valid (program lifetime) address, to be evaluated as a null-terminated C string
  added nothrow again for D, i.e. return value must be used (enforced since DMD 2.066.0 by -w compiler switch/warnings enabled)
 */
+pragma(inline, true)
 string sodium_version_string() pure nothrow @nogc @trusted
 {
-  import std.string : fromStringz;
   static import deimos.sodium.version_;
-  const(char)[] c_arr;
-  try
-    c_arr = fromStringz(deimos.sodium.version_.sodium_version_string()); // strips terminating \0
-  catch (Exception e) { /* known not to throw */ }
-  return c_arr; // compiler infers assumeUnique
+  return  fromStringz(deimos.sodium.version_.sodium_version_string()); // strips terminating \0 ; compiler infers assumeUnique
 }
 
-
-pure @system
+pure /*nothrow @nogc ; deactivated due to writeln */ @system
 unittest
 {
-  import std.string : fromStringz;
   import std.algorithm.comparison : equal;
   import std.stdio : writeln;
   static import deimos.sodium.version_;
@@ -36,21 +37,30 @@ unittest
   assert(equal(fromStringz(deimos.sodium.version_.sodium_version_string()), sodium_version_string()));
 }
 
-@safe
+pure nothrow @nogc @safe
+unittest
+{
+  cast(void) sodium_version_string();
+  cast(void) sodium_library_version_major();
+  cast(void) sodium_library_version_minor();
+  cast(void) sodium_library_minimal();
+}
+
+pure /*nothrow @nogc ; deactivated due to writeln */ @safe
 unittest
 {
   import std.stdio : writeln;
   debug writeln("unittest block 2 from sodium.version_.d");
-  writeln("SODIUM_VERSION_STRING        of binding: ", SODIUM_VERSION_STRING);
-  writeln("SODIUM_VERSION_STRING        of binary:  ", sodium_version_string());
+  debug writeln("SODIUM_VERSION_STRING        of binding: ", SODIUM_VERSION_STRING);
+  debug writeln("SODIUM_VERSION_STRING        of binary:  ", sodium_version_string());
 
-  writeln("SODIUM_LIBRARY_VERSION_MAJOR of binding: ", SODIUM_LIBRARY_VERSION_MAJOR);
-  writeln("SODIUM_LIBRARY_VERSION_MAJOR of binary:  ", sodium_library_version_major());
+  debug writeln("SODIUM_LIBRARY_VERSION_MAJOR of binding: ", SODIUM_LIBRARY_VERSION_MAJOR);
+  debug writeln("SODIUM_LIBRARY_VERSION_MAJOR of binary:  ", sodium_library_version_major());
 
-  writeln("SODIUM_LIBRARY_VERSION_MINOR of binding: ", SODIUM_LIBRARY_VERSION_MINOR);
-  writeln("SODIUM_LIBRARY_VERSION_MINOR of binary:  ", sodium_library_version_minor());
+  debug writeln("SODIUM_LIBRARY_VERSION_MINOR of binding: ", SODIUM_LIBRARY_VERSION_MINOR);
+  debug writeln("SODIUM_LIBRARY_VERSION_MINOR of binary:  ", sodium_library_version_minor());
 
-  writeln("sodium_library_minimal()              :  ", sodium_library_minimal());
+  debug writeln("sodium_library_minimal()              :  ", sodium_library_minimal());
 
 /*
   if SODIUM_VERSION_STRING of binding and binary don't match:

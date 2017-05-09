@@ -6,29 +6,42 @@ module wrapper.sodium.randombytes;
 
 import wrapper.sodium.core; // assure sodium got initialized
 
-public import  deimos.sodium.randombytes : randombytes_buf, randombytes_random, randombytes_uniform, randombytes_stir,
-        randombytes_close, randombytes_SEEDBYTES, randombytes_seedbytes /*, randombytes_set_implementation, randombytes_implementation */;
-// must use this "complete" import (including undesired randombytes_implementation_name), otherwise the following aliases don't work
-// randombytes_buf_deterministic
+public
+import  deimos.sodium.randombytes :
+//                                  randombytes_implementation,
+                                    randombytes_SEEDBYTES,
+                                    randombytes_seedbytes,
+                                    randombytes_buf,
+//                                  randombytes_buf_deterministic,
+                                    randombytes_random,
+                                    randombytes_uniform,
+                                    randombytes_stir,
+                                    randombytes_close;
+/*                                  randombytes_set_implementation,
+                                    randombytes_implementation_name,
+                                    randombytes; */
+
+import std.string : fromStringz; // @system
 
 /*
  We can't trust in general to receive a valid address from randombytes_implementation_name() to be evaluated as a null-terminated C string, except
  randombytes_set_implementation wasn't used or used to reset to a sodium-supplied implementaion or used and a valid implementation_name function supplied.
  Now randombytes_set_implementation is inaccessible !
 */
-string randombytes_implementation_name() pure nothrow @nogc @trusted //@system
+string randombytes_implementation_name() nothrow @nogc @trusted
 {
-  import std.string : fromStringz; // @system
+  import std.exception : assumeUnique;
   static import deimos.sodium.randombytes;
   const(char)[] c_arr;
   try
     c_arr = fromStringz(deimos.sodium.randombytes.randombytes_implementation_name());
   catch (Exception t) { /* known not to throw */}
-  return c_arr; //assumeUnique(c_arr);
+  return assumeUnique(c_arr);
 }
 
 
 // overloading some functions between module deimos.sodium.randombytes and this module
+
 /+
 /** The randombytes_buf() function fills `size` bytes starting at buf with an unpredictable sequence of bytes. */
 alias randombytes_buf = deimos.sodium.randombytes.randombytes_buf;
@@ -54,49 +67,50 @@ void randombytes(scope ubyte[] buf) nothrow @nogc @trusted
 alias randombytes_buf_deterministic  = deimos.sodium.randombytes.randombytes_buf_deterministic;
 
 pragma(inline, true)
-void randombytes_buf_deterministic(scope ubyte[] buf, const(ubyte)[randombytes_SEEDBYTES] seed) nothrow @nogc @trusted
+void randombytes_buf_deterministic(ubyte[] buf, const ubyte[randombytes_SEEDBYTES] seed) pure nothrow @nogc @trusted
 {
 //  enforce(buf !is null, "buf is null"); // not necessary
-  static import deimos.sodium.randombytes;
-  deimos.sodium.randombytes.randombytes_buf_deterministic(buf.ptr, buf.length, seed);
+  randombytes_buf_deterministic(buf.ptr, buf.length, seed);
 }
 
 // InputRange interface
 
+auto randombytes_range() nothrow @nogc @trusted
+{
 /**
  * An InputRange representing an infinite, randomly generated sequence of ubytes
  */
-struct RandomBytes_Range
-{
-  private uint  randombytes_random_result = void;
-  private ubyte randombytes_random_index  = 0;
-  private bool  refresh_required          = true; // be lazy and don't refresh in popFront()
+  static struct RandomBytes_Range {
+    enum  chunk_size                = 4;
+    uint  randombytes_random_result = void;
+    ubyte randombytes_random_index  = 0;
+    bool  refresh_required          = true; // be lazy and don't refresh in popFront()
 
-  enum empty = false;
-  @property ubyte front() {
-    if (refresh_required) {
-      randombytes_random_result = randombytes_random();
-      refresh_required = false;
+    enum empty = false;
+    @property ubyte front() {
+      if (refresh_required) {
+        randombytes_random_result = randombytes_random();
+        refresh_required = false;
+      }
+      return *(cast(ubyte*)&randombytes_random_result + randombytes_random_index);
     }
-    return *(cast(ubyte*)&randombytes_random_result + randombytes_random_index);
-  }
 
-  void popFront() {
-    randombytes_random_index = ++randombytes_random_index % 4;
-    if (!randombytes_random_index)
-      refresh_required = true;
-  }
-
-  int opApply(int delegate(ubyte) operations) {
-    int result = 0;
-    for ( ; !empty ; popFront) {
-      result = operations(front);
-      if (result)
-        break;
+    void popFront() {
+      randombytes_random_index = ++randombytes_random_index % chunk_size;
+      if (!randombytes_random_index)
+        refresh_required = true;
     }
-    return result;
-  }
-/+
+
+    int opApply(int delegate(ubyte) operations) {
+      int result = 0;
+      for ( ; !empty ; popFront) {
+        result = operations(front);
+        if (result)
+          break;
+      }
+      return result;
+    }
+/+ instead use enumerate
   int opApply(int delegate(size_t, ubyte) operations) {
     int result = 0;
     size_t counter;
@@ -109,20 +123,24 @@ struct RandomBytes_Range
     return result;
   }
 +/
-}
+  } // struct RandomBytes_Range
 
-RandomBytes_Range randombytes_range() nothrow @nogc @safe
-{
   return RandomBytes_Range();
 }
 
 
+version(QRNG_ONLINE) {
+  import wrapper.sodium.QRNG;
+  alias QRNG_randombytes_range_singleton = wrapper.sodium.QRNG.QRNG_randombytes_range_singleton;
+}
+
 @system
 unittest
 {
-  import std.stdio : writeln, writefln, printf;
+  import std.stdio : writeln, writefln;
   import std.algorithm.searching : any, all;
   import std.algorithm.comparison : equal;
+  import std.range : array, take, enumerate, iota;
   debug  writeln("unittest block 1 from sodium.randombytes.d");
 
   ubyte[] buf = new ubyte[8];
@@ -136,7 +154,7 @@ unittest
 //randombytes_implementation_name
   {
     static import deimos.sodium.randombytes;
-    printf("deimos.sodium.randombytes.randombytes_implementation_name():  %s\n", deimos.sodium.randombytes.randombytes_implementation_name());
+    writeln("deimos.sodium.randombytes.randombytes_implementation_name():  ", fromStringz(deimos.sodium.randombytes.randombytes_implementation_name()));
   }
 //randombytes
   buf[] = ubyte.init;
@@ -145,16 +163,17 @@ unittest
   assert( any(buf));
 	writefln("Unpredictable sequence of %s bytes: %s", buf.length, buf);
 
-  import std.range : array, take, enumerate, iota;
   foreach (i,element; randombytes_range().take(8).enumerate(1))
     writefln("%s: %02X", i, element);
   writeln;
+/*
   int cnt;
   foreach (element; randombytes_range()) {
     if (++cnt > 8)
 	    break;
     writefln("%s: %02X", cnt, element);
   }
+*/
   ubyte[] populated_from_infinite_range = array(randombytes_range().take(8));
 //  writefln("0x %(%02X %)", populated_from_infinite_range);
 
@@ -235,9 +254,9 @@ debug(none/*TRAVIS_TEST*/)
 @safe
 unittest
 {
-  import std.stdio : writeln;
+  import std.stdio : writeln, writefln;
   import std.algorithm.searching : any, all;
-  import std.range : iota, array;
+  import std.range : iota, array, take, takeExactly;
 
   writeln("unittest block 2 from sodium.randombytes.d");
 
@@ -268,12 +287,10 @@ unittest
   string impl_name = randombytes_implementation_name();
   writeln("wrapper.sodium.randombytes.randombytes_implementation_name(): ", impl_name);
   version (__native_client__) {}
-  else {
-//    version(QRNG)  assert(impl_name == "qrandom"); else
+  else
     assert(impl_name == "sysrandom");
-  }
+
 //randombytes
-//  ubyte[] buf = uninitializedArray!(ubyte[])(8);
   ubyte[] buf = new ubyte[8];
   assert(!any(buf)); // none of buf evaluate to true
 
@@ -284,4 +301,12 @@ unittest
 //randombytes_buf_deterministic
 	immutable ubyte[randombytes_SEEDBYTES] seed = array(iota(ubyte(0), randombytes_SEEDBYTES))[];
 	randombytes_buf_deterministic(buf, seed);
+}
+
+@nogc @safe
+unittest {
+  ubyte[4] a;
+  ubyte[randombytes_SEEDBYTES] seed;
+  randombytes(a);
+  randombytes_buf_deterministic(a, seed);
 }

@@ -2,4 +2,5 @@
 
 module wrapper.sodium.randombytes_sysrandom;
 
-public import  deimos.sodium.randombytes_sysrandom;
+public
+import  deimos.sodium.randombytes_sysrandom;

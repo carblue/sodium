@@ -23,12 +23,12 @@ size_t  crypto_auth_keybytes() @trusted;
 
 enum crypto_auth_PRIMITIVE = "hmacsha512256";
 
-const(char)* crypto_auth_primitive() @system;
+const(char)* crypto_auth_primitive();
 
 int crypto_auth(ubyte* out_, const(ubyte)* in_,
-                ulong inlen, const(ubyte)* k) @system;
+                ulong inlen, const(ubyte)* k);
 
 int crypto_auth_verify(const(ubyte)* h, const(ubyte)* in_,
-                       ulong inlen, const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result));
+                       ulong inlen, const(ubyte)* k) nothrow; // __attribute__ ((warn_unused_result));
 
-void crypto_auth_keygen(ref ubyte[crypto_auth_KEYBYTES] k) nothrow @trusted;
+void crypto_auth_keygen(out ubyte[crypto_auth_KEYBYTES] k) nothrow @trusted;
