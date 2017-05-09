@@ -126,7 +126,7 @@ bool crypto_aead_aes256gcm_decrypt_detached(scope ubyte[] m,
 }
 
 /* -- Precomputation interface -- */
-
+/+
 alias crypto_aead_aes256gcm_beforenm = deimos.sodium.crypto_aead_aes256gcm.crypto_aead_aes256gcm_beforenm;
 
 pragma(inline, true)
@@ -205,7 +205,7 @@ bool  crypto_aead_aes256gcm_decrypt_detached_afternm(scope ubyte[] m,
   enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
   return  crypto_aead_aes256gcm_decrypt_detached_afternm(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, &ctx_) == 0;
 }
-
++/
 
 version(unittest)
 {
@@ -320,7 +320,7 @@ else {
     assert(decrypted == message);
 
     /* -- Precomputation interface -- */
-
+/+
     align(16) crypto_aead_aes256gcm_state  ctx_;
     crypto_aead_aes256gcm_beforenm(ctx_, key);
 
@@ -356,7 +356,7 @@ else {
 
     assert(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted, ciphertext, mac, additional_data, nonce, ctx_));
     assert(decrypted == message);
-
++/
     ubyte[crypto_aead_aes256gcm_KEYBYTES] k;
     crypto_aead_aes256gcm_keygen(k);
   } // if (crypto_aead_aes256gcm_is_available() != 0)
@@ -379,7 +379,7 @@ unittest
       "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
     ubyte[m_len+crypto_aead_aes256gcm_ABYTES] ciphertext1;
     ubyte[m_len]                              ciphertext2;
-    align(16) crypto_aead_aes256gcm_state     ctx;
+
     ubyte[      crypto_aead_aes256gcm_ABYTES] mac;
     assert(crypto_aead_aes256gcm_encrypt(ciphertext1, message, additional_data, n, k));
     assert(crypto_aead_aes256gcm_decrypt(decrypted, ciphertext1, additional_data, n, k));
@@ -388,6 +388,8 @@ unittest
     assert(crypto_aead_aes256gcm_encrypt_detached(ciphertext2, mac, message, additional_data, n, k));
     assert(crypto_aead_aes256gcm_decrypt_detached(decrypted, ciphertext2, mac, additional_data, n, k));
     assert(decrypted == message);
+/*
+    align(16) crypto_aead_aes256gcm_state     ctx;
     decrypted = decrypted.init;
     ciphertext1 = ciphertext1.init;
     ciphertext2 = ciphertext2.init;
@@ -399,5 +401,6 @@ unittest
     assert(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext2, mac, message, additional_data, n, ctx));
     assert(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted, ciphertext2, mac, additional_data, n, ctx));
     assert(decrypted == message);
+*/
   }
 }
