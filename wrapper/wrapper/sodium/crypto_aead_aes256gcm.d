@@ -401,7 +401,7 @@ unittest
     decrypted = decrypted.init;
     ciphertext1 = ciphertext1.init;
     ciphertext2 = ciphertext2.init;
-    assert(crypto_aead_aes256gcm_beforenm(ctx, k));
+    assert(crypto_aead_aes256gcm_beforenm(ctx, key));
     assert(crypto_aead_aes256gcm_encrypt_afternm(ciphertext1, message, additional_data, n, ctx));
     assert(crypto_aead_aes256gcm_decrypt_afternm(decrypted, ciphertext1, additional_data, n, ctx));
     assert(decrypted == message);
