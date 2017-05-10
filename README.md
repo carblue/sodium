@@ -8,23 +8,22 @@
 
 Twofold binding to libsodium, current C-source version 1.0.12, released on Mar 12, 2017 [https://github.com/jedisct1/libsodium]
 
-subPackage 'deimos':  Static binding, the "import-only" C header's declarations.<br>
+subPackage 'deimos':  The "import-only" C header's declarations.<br>
 subPackage 'wrapper': 'deimos' + some 'D-friendly' stuff, predominantly overloaded functions and unittests.
 
 The dependency name is either  sodium:deimos  or  sodium:wrapper
 
-Some restructuring (subPackages)/changing importPath and sourcePath was done for version 0.1.0 (different from previous 0.08) in order to have the 'wrapper' subPackage sit aside
-subPackage 'deimos'.<br>
+Some restructuring (subPackages)/changing importPath and sourcePath was done for version 0.1.0 (different from previous 0.08) in order to have the 'wrapper' subPackage sit aside subPackage 'deimos'.<br>
 Thus code that already used versions<0.1.0 needs to replace 'import sodium...' by either 'import deimos.sodium...' or 'import wrapper.sodium...'.
 
-'wrapper' aims at providing at least the same functionality as 'deimos' and provide @trusted @nogc (pure nothrow) alternatives, work in progress:
-a) 'wrapper' is a superset of 'deimos' in that everything from 'deimos' is reachable, but deliberately not all at your fingertips.
-b) all new functions with 'deimos-functionality' have the same name as their 'deimos'-cousins, building either overload sets to choose from, or for parameter-less functions, 'substituting' their cousins.
-c) all new functions calculating a variable-length output are restrictive about the size of the output-buffer offered, if the required size can be easily computed in advance, throwing in case of wrong-sized buffers.
-   This way, if the function succeeds, all buffer.length bytes are meaningful and no additional function parameter carrying the meaningful length information is required
+'wrapper' aims at providing at least the same functionality as 'deimos' and provide @trusted @nogc (pure nothrow) 'D-friendly' alternatives that are hard to use in a wrong way; work in progress:<br>
+a) 'wrapper' is a superset of 'deimos' in that everything from 'deimos' is reachable, but deliberately not all at your fingertips.<br>
+b) all new functions with 'deimos-functionality' have the same name as their 'deimos'-cousins and call them, building either overload sets to choose from, or for parameter-less functions, 'substituting' their cousins.<br>
+c) all new functions calculating a variable-length output are restrictive referring to the size of the output-buffer offered, if the required size can be easily computed in advance, throwing in case of wrong-sized buffers.<br>
+   This way, if a function succeeds, all output-buffer.length bytes are meaningful and no additional/deimos-like function out parameter carrying the meaningful length information is required.<br>
+d) No need to explicitely call sodium_init() up-front.<br>
+e) Usage of 'wrapper' isn't possible, if function randombytes_set_implementation shall be used (wrapper.sodium.core:shared static this() calls sodium_init()).
 
-
-Probably, usage of 'wrapper' isn't possible, if function randombytes_set_implementation shall be used (wrapper.sodium.core:shared static this() calls sodium_init()).
 The unittests of subPackage 'wrapper' include a lot of function usage examples, the next is a simple application example based on sodium:deimos, using rdmd:<br>
 
 	cd example/source  &&  chmod 775 app.d  &&  ./app.d
@@ -38,15 +37,7 @@ ciphertext: [76, 18, 112, 219, 144, 230, 206, 219, 40, 255, 78, 43, 172, 49, 129
 
 **Heap allocations**:
 Quoting the Sodium-manual: "Cryptographic operations in Sodium (C binary) never allocate memory on the heap (malloc, calloc, etc) with the obvious exceptions of crypto_pwhash and sodium_malloc."<br>
-The same holds, if usage is restricted to sodium:deimos and also holds for many functions of sodium:wrapper.<br>
-
-The case is different, more complex with sodium:wrapper: It shall provide more D-convenience and @safe callables making it hard to use functions in a wrong way, but this may involve the heap allocation's cost.<br>
-1. The unittests make permissive use of heap allocations by means of GC allocated memory, but don't handle real secrets and aren't meant for release builds, thus no security problem.<br>
-2. Most new functions are @nogc @trusted "overloads" (just D friendly wrappers around the C function calls and may throw a NoGcException in order to still be @trusted, even with -dip1000).<br>
-   Some are as simple as taking a D slice and pass it's .ptr and .length to be safe or require a static array to ensure .length, thus don't themselves allocate heap memory and have attribute @nogc (and calling them doesn't postulate heap allocation either; the D slice parameter is welcoming arguments being static arrays as well as dyn. heap allocated arrays).<br>
-   Many functions call a custom enforce function to ensure, that some requirement is fullfilled, and don't allocate either.<br>
- The residual: They use heap allocation !
-3. Other functions perform convenience procedures or part of procedures shown in the Sodium documentaion, like DH keyexchange and may make generous use of heap memory.
+The same holds, if usage is restricted to sodium:deimos  and also holds for many functions of sodium:wrapper.<br>
 
 Windows:
 While it get's built, I recommend to stay away from the -m32_mscoff (--arch=x86_mscoff) build currently:
