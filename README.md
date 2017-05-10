@@ -17,7 +17,14 @@ Some restructuring (subPackages)/changing importPath and sourcePath was done for
 subPackage 'deimos'.<br>
 Thus code that already used versions<0.1.0 needs to replace 'import sodium...' by either 'import deimos.sodium...' or 'import wrapper.sodium...'.
 
-Maybe, usage of 'wrapper' isn't possible, if function randombytes_set_implementation shall be used (or maybe (I did't test that) there is a way to use it before this runs: wrapper.sodium.core:shared static this(), which calls sodium_init()).
+'wrapper' aims at providing at least the same functionality as 'deimos' and provide @trusted @nogc (pure nothrow) alternatives, work in progress:
+a) 'wrapper' is a superset of 'deimos' in that everything from 'deimos' is reachable, but deliberately not all at your fingertips.
+b) all new functions with 'deimos-functionality' have the same name as their 'deimos'-cousins, building either overload sets to choose from, or for parameter-less functions, 'substituting' their cousins.
+c) all new functions calculating a variable-length output are restrictive about the size of the output-buffer offered, if the required size can be easily computed in advance, throwing in case of wrong-sized buffers.
+   This way, if the function succeeds, all buffer.length bytes are meaningful and no additional function parameter carrying the meaningful length information is required
+
+
+Probably, usage of 'wrapper' isn't possible, if function randombytes_set_implementation shall be used (wrapper.sodium.core:shared static this() calls sodium_init()).
 The unittests of subPackage 'wrapper' include a lot of function usage examples, the next is a simple application example based on sodium:deimos, using rdmd:<br>
 
 	cd example/source  &&  chmod 775 app.d  &&  ./app.d
@@ -31,13 +38,14 @@ ciphertext: [76, 18, 112, 219, 144, 230, 206, 219, 40, 255, 78, 43, 172, 49, 129
 
 **Heap allocations**:
 Quoting the Sodium-manual: "Cryptographic operations in Sodium (C binary) never allocate memory on the heap (malloc, calloc, etc) with the obvious exceptions of crypto_pwhash and sodium_malloc."<br>
-The same holds, if usage is restricted to sodium:deimos.<br>
+The same holds, if usage is restricted to sodium:deimos and also holds for many functions of sodium:wrapper.<br>
+
 The case is different, more complex with sodium:wrapper: It shall provide more D-convenience and @safe callables making it hard to use functions in a wrong way, but this may involve the heap allocation's cost.<br>
 1. The unittests make permissive use of heap allocations by means of GC allocated memory, but don't handle real secrets and aren't meant for release builds, thus no security problem.<br>
-2. Most new functions are "overloads" (just D friendly wrappers around the C function calls).<br>
-  Some are as simple as taking a D slice and pass it's .ptr and .length to be safe or require a static array to ensure .length, thus don't themselves allocate heap memory and have attribute @nogc (and calling them doesn't postulate heap allocation either; the D slice parameter is welcoming arguments being static arrays as well as dyn. heap allocated arrays).<br>
-  Many functions call enforce to ensure, that some requirement is fullfilled, thus may allocate only just before the program bails out.<br>
-  The residual: They use heap allocation !
+2. Most new functions are @nogc @trusted "overloads" (just D friendly wrappers around the C function calls and may throw a NoGcException in order to still be @trusted, even with -dip1000).<br>
+   Some are as simple as taking a D slice and pass it's .ptr and .length to be safe or require a static array to ensure .length, thus don't themselves allocate heap memory and have attribute @nogc (and calling them doesn't postulate heap allocation either; the D slice parameter is welcoming arguments being static arrays as well as dyn. heap allocated arrays).<br>
+   Many functions call a custom enforce function to ensure, that some requirement is fullfilled, and don't allocate either.<br>
+ The residual: They use heap allocation !
 3. Other functions perform convenience procedures or part of procedures shown in the Sodium documentaion, like DH keyexchange and may make generous use of heap memory.
 
 Windows:
