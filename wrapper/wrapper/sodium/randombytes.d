@@ -164,16 +164,16 @@ unittest
 	writefln("Unpredictable sequence of %s bytes: %s", buf.length, buf);
 
   foreach (i,element; randombytes_range().take(8).enumerate(1))
-    writefln("%s: %02X", i, element);
-  writeln;
-/*
+  { /* writefln("%s: %02X", i, element); */ }
+//  writeln;
+
   int cnt;
   foreach (element; randombytes_range()) {
     if (++cnt > 8)
 	    break;
-    writefln("%s: %02X", cnt, element);
+//    writefln("%s: %02X", cnt, element);
   }
-*/
+
   ubyte[] populated_from_infinite_range = array(randombytes_range().take(8));
 //  writefln("0x %(%02X %)", populated_from_infinite_range);
 

@@ -155,8 +155,6 @@ bool  crypto_box_easy_afternm(scope ubyte[] c,
                               const ubyte[crypto_box_NONCEBYTES] n,
                               const ubyte[crypto_box_BEFORENMBYTES] k) @nogc @trusted
 {
-//  static const exception = new Exception("Error in crypto_box_easy_afternm: c.length < crypto_box_MACBYTES + m.length");
-//  if (c.length >= crypto_box_MACBYTES + m.length) throw exception;
   const  c_expect_len = m.length + crypto_box_MACBYTES;
   enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_box_MACBYTES: ", c_expect_len);
   return  crypto_box_easy_afternm(c.ptr, m.ptr, m.length, n.ptr, k.ptr) == 0;

@@ -39,7 +39,7 @@ import  deimos.sodium.crypto_box_curve25519xsalsa20poly1305: crypto_box_curve255
                                                              crypto_box_curve25519xsalsa20poly1305_afternm,
                                                              crypto_box_curve25519xsalsa20poly1305_open_afternm; */
 
-import std.exception : enforce, assertThrown;
+import std.exception : assertThrown;
 
 
 // overloading some functions between module deimos.sodium.crypto_box_curve25519xsalsa20poly1305 and this module
@@ -77,9 +77,9 @@ bool  crypto_box_curve25519xsalsa20poly1305_open(scope ubyte[] m,
 alias crypto_box_curve25519xsalsa20poly1305_seed_keypair = deimos.sodium.crypto_box_curve25519xsalsa20poly1305.crypto_box_curve25519xsalsa20poly1305_seed_keypair;
 
 pragma(inline, true)
-bool  crypto_box_curve25519xsalsa20poly1305_seed_keypair(out ubyte[crypto_box_curve25519xsalsa20poly1305_PUBLICKEYBYTES] pk,
-                                                         out ubyte[crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES] sk,
-                                                         in  ubyte[crypto_box_curve25519xsalsa20poly1305_SEEDBYTES] seed) pure @nogc @trusted
+bool  crypto_box_curve25519xsalsa20poly1305_seed_keypair(out   ubyte[crypto_box_curve25519xsalsa20poly1305_PUBLICKEYBYTES] pk,
+                                                         out   ubyte[crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES] sk,
+                                                         const ubyte[crypto_box_curve25519xsalsa20poly1305_SEEDBYTES] seed) pure @nogc @trusted
 {
   return  crypto_box_curve25519xsalsa20poly1305_seed_keypair(pk.ptr, sk.ptr, seed.ptr) == 0;
 }
@@ -98,9 +98,9 @@ bool  crypto_box_curve25519xsalsa20poly1305_keypair(out ubyte[crypto_box_curve25
 alias crypto_box_curve25519xsalsa20poly1305_beforenm = deimos.sodium.crypto_box_curve25519xsalsa20poly1305.crypto_box_curve25519xsalsa20poly1305_beforenm;
 
 pragma(inline, true)
-bool  crypto_box_curve25519xsalsa20poly1305_beforenm(out ubyte[crypto_box_curve25519xsalsa20poly1305_BEFORENMBYTES] k,
-                                                     in  ubyte[crypto_box_curve25519xsalsa20poly1305_PUBLICKEYBYTES] pk,
-                                                     in  ubyte[crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES] sk) pure nothrow @nogc @trusted // __attribute__ ((warn_unused_result));
+bool  crypto_box_curve25519xsalsa20poly1305_beforenm(out   ubyte[crypto_box_curve25519xsalsa20poly1305_BEFORENMBYTES] k,
+                                                     const ubyte[crypto_box_curve25519xsalsa20poly1305_PUBLICKEYBYTES] pk,
+                                                     const ubyte[crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES] sk) pure nothrow @nogc @trusted // __attribute__ ((warn_unused_result));
 {
   return  crypto_box_curve25519xsalsa20poly1305_beforenm(k.ptr, pk.ptr, sk.ptr) == 0;
 }
@@ -109,11 +109,11 @@ alias crypto_box_curve25519xsalsa20poly1305_afternm = deimos.sodium.crypto_box_c
 
 pragma(inline, true)
 bool  crypto_box_curve25519xsalsa20poly1305_afternm(scope ubyte[] c,
-                                                    in ubyte[] m,
-                                                    in ubyte[crypto_box_curve25519xsalsa20poly1305_NONCEBYTES] n,
-                                                    in ubyte[crypto_box_curve25519xsalsa20poly1305_BEFORENMBYTES] k) pure @trusted
+                                                    scope const ubyte[] m,
+                                                    const ubyte[crypto_box_curve25519xsalsa20poly1305_NONCEBYTES] n,
+                                                    const ubyte[crypto_box_curve25519xsalsa20poly1305_BEFORENMBYTES] k) @nogc @trusted
 {
-  enforce(c.length >= m.length, "Error invoking crypto_box_curve25519xsalsa20poly1305_afternm: out buffer too small");
+  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
   return  crypto_box_curve25519xsalsa20poly1305_afternm(c.ptr, m.ptr, m.length, n.ptr, k.ptr) == 0;
 }
 
@@ -121,11 +121,11 @@ alias crypto_box_curve25519xsalsa20poly1305_open_afternm = deimos.sodium.crypto_
 
 pragma(inline, true)
 bool  crypto_box_curve25519xsalsa20poly1305_open_afternm(scope ubyte[] m,
-                                                         in ubyte[] c,
-                                                         in ubyte[crypto_box_curve25519xsalsa20poly1305_NONCEBYTES] n,
-                                                         in ubyte[crypto_box_curve25519xsalsa20poly1305_BEFORENMBYTES] k) pure @trusted
+                                                         scope const ubyte[] c,
+                                                         const ubyte[crypto_box_curve25519xsalsa20poly1305_NONCEBYTES] n,
+                                                         const ubyte[crypto_box_curve25519xsalsa20poly1305_BEFORENMBYTES] k) @nogc @trusted
 {
-  enforce(m.length >= c.length, "Error invoking crypto_box_curve25519xsalsa20poly1305_open_afternm: out buffer too small");
+  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
   return  crypto_box_curve25519xsalsa20poly1305_open_afternm(m.ptr, c.ptr, c.length, n.ptr, k.ptr) == 0;
 }
 

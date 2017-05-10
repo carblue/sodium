@@ -28,8 +28,6 @@ import  deimos.sodium.crypto_generichash : crypto_generichash_BYTES_MIN,
                                            crypto_generichash_keygen;
 
 
-import std.exception : enforce;
-
 string crypto_generichash_primitive() pure nothrow @nogc @trusted
 {
   import std.string : fromStringz;
@@ -41,7 +39,7 @@ string crypto_generichash_primitive() pure nothrow @nogc @trusted
   return c_arr;
 }
 
-void crypto_generichash_multi(scope ubyte[] out_, in ubyte[][] in_multi, in ubyte[] key = null) pure @trusted
+void crypto_generichash_multi(scope ubyte[] out_, scope const ubyte[][] in_multi, scope const ubyte[] key = null) @nogc @trusted
 {
   enforce(out_.length >= crypto_generichash_BYTES_MIN && out_.length <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   if (key.length)
@@ -58,25 +56,23 @@ void crypto_generichash_multi(scope ubyte[] out_, in ubyte[][] in_multi, in ubyt
 
 alias crypto_generichash = deimos.sodium.crypto_generichash.crypto_generichash;
 
-int crypto_generichash(scope ubyte[] out_, in ubyte[] in_, in ubyte[] key = null) pure @trusted
+bool  crypto_generichash(scope ubyte[] out_, scope const ubyte[] in_, scope const ubyte[] key = null) @nogc @trusted
 {
-  static import deimos.sodium.crypto_generichash;
   enforce(out_.length >= crypto_generichash_BYTES_MIN && out_.length <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   if (key.length)
     enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX, "wrong length of key: Must be either 0 or 16<=length<=64");
-  return deimos.sodium.crypto_generichash.crypto_generichash(out_.ptr, out_.length, in_.ptr, in_.length, key.ptr, key.length);
+  return  crypto_generichash(out_.ptr, out_.length, in_.ptr, in_.length, key.ptr, key.length) == 0;
 }
 
 alias crypto_generichash_init = deimos.sodium.crypto_generichash.crypto_generichash_init;
 
 bool crypto_generichash_init(out crypto_generichash_state state,
-                             in ubyte[] key, in size_t outlen) pure @trusted
+                             in ubyte[] key, const size_t outlen) @nogc @trusted
 {
-  static import deimos.sodium.crypto_generichash;
   enforce(outlen     >= crypto_generichash_BYTES_MIN    && outlen     <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   if (key.length)
     enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX, "wrong length allocated for key");
-  return  deimos.sodium.crypto_generichash.crypto_generichash_init(&state, key.ptr, key.length, outlen) == 0;
+  return  crypto_generichash_init(&state, key.ptr, key.length, outlen) == 0;
 }
 
 alias crypto_generichash_update = deimos.sodium.crypto_generichash.crypto_generichash_update;
@@ -85,18 +81,16 @@ alias crypto_generichash_update = deimos.sodium.crypto_generichash.crypto_generi
 bool crypto_generichash_update(ref crypto_generichash_state state,
                                in ubyte[] in_) pure @nogc @trusted
 {
-  static import deimos.sodium.crypto_generichash;
-  return  deimos.sodium.crypto_generichash.crypto_generichash_update(&state, in_.ptr, in_.length) == 0;
+  return  crypto_generichash_update(&state, in_.ptr, in_.length) == 0;
 }
 
 alias crypto_generichash_final = deimos.sodium.crypto_generichash.crypto_generichash_final;
 
 bool crypto_generichash_final(ref crypto_generichash_state state,
-                              scope ubyte[] out_) pure @trusted
+                              scope ubyte[] out_) @nogc @trusted
 {
-  static import deimos.sodium.crypto_generichash;
   enforce(out_.length >= crypto_generichash_BYTES_MIN && out_.length  <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
-  return  deimos.sodium.crypto_generichash.crypto_generichash_final(&state, out_.ptr, out_.length) == 0;
+  return  crypto_generichash_final(&state, out_.ptr, out_.length) == 0;
 }
 
 @system
@@ -140,8 +134,7 @@ else
   auto MESSAGE = representation("Arbitrary data to hash");
   ubyte[crypto_generichash_BYTES] hash;
   {
-    static import deimos.sodium.crypto_generichash;
-    deimos.sodium.crypto_generichash.crypto_generichash(hash.ptr, hash.length, MESSAGE.ptr, MESSAGE.length, null, 0);
+    crypto_generichash(hash.ptr, hash.length, MESSAGE.ptr, MESSAGE.length, null, 0);
 //  writefln("0x%(%02x%)", hash); // 0x3dc7925e13e4c5f0f8756af2cc71d5624b58833bb92fa989c3e87d734ee5a600
   }
 
