@@ -256,8 +256,8 @@ unittest
     crypto_aead_aes256gcm_decrypt(decrypted.ptr, null, null, ciphertext.ptr, ciphertext_len,
       additional_data.ptr, additional_data.length, nonce.ptr, key.ptr);
 
-    crypto_aead_aes256gcm_state  ctx;
-//    debug writeln("address of ctx: ", &ctx);
+    align(16) ubyte[512] /*crypto_aead_aes256gcm_state*/  ctx;
+    debug writeln("address of ctx: ", &ctx);
     crypto_aead_aes256gcm_beforenm(&ctx, key.ptr);
   }
 }
@@ -325,7 +325,7 @@ else {
 
     /* -- Precomputation interface -- */
 
-    crypto_aead_aes256gcm_state  ctx;
+    align(16) ubyte[512] /*crypto_aead_aes256gcm_state*/  ctx;
     assert(crypto_aead_aes256gcm_beforenm(ctx, key));
 
     sodium_increment(nonce);
@@ -397,7 +397,7 @@ unittest
     assert(crypto_aead_aes256gcm_decrypt_detached(decrypted, ciphertext2, mac, additional_data, n, k));
     assert(decrypted == message);
 
-    crypto_aead_aes256gcm_state  ctx;
+    align(16) ubyte[512] /*crypto_aead_aes256gcm_state*/  ctx;
     decrypted = decrypted.init;
     ciphertext1 = ciphertext1.init;
     ciphertext2 = ciphertext2.init;
