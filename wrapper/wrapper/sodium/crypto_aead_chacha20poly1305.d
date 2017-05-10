@@ -225,25 +225,23 @@ unittest
   debug writeln("unittest block 1 from sodium.crypto_aead_chacha20poly1305.d");
 
   auto message         = representation("test");
+  enum message_len = 4;
   auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
     "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
-  ubyte[] ciphertext = new ubyte[message.length + crypto_aead_chacha20poly1305_ietf_ABYTES];
+  ubyte[message_len + crypto_aead_chacha20poly1305_ietf_ABYTES]  ciphertext;
   ulong   ciphertext_len;
 
   crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext.ptr, &ciphertext_len, message.ptr, message.length,
     additional_data.ptr, additional_data.length, null, nonce.ptr, key.ptr);
 
-  ubyte[] decrypted = new ubyte[message.length];
+  ubyte[message_len] decrypted;
   ulong decrypted_len;
-  if (ciphertext_len < crypto_aead_chacha20poly1305_ietf_ABYTES ||
-    crypto_aead_chacha20poly1305_ietf_decrypt(decrypted.ptr, &decrypted_len, null, ciphertext.ptr, ciphertext_len,
-      additional_data.ptr, additional_data.length, nonce.ptr, key.ptr) != 0) {
-    writeln("*** ATTENTION : The message has been forged ! ***");
-  }
-  else { // successfull verification of mac
-    assert(decrypted == message); //writeln("Decrypted message (aead_chacha20poly1305): ", cast(string)decrypted);
-    assert(decrypted_len == decrypted.length);
-  }
+  assert(ciphertext_len==ciphertext.length);
+  assert(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted.ptr, &decrypted_len, null, ciphertext.ptr, ciphertext_len,
+      additional_data.ptr, additional_data.length, nonce.ptr, key.ptr) == 0);
+  assert(decrypted == message); //writeln("Decrypted message (aead_chacha20poly1305): ", cast(string)decrypted);
+  assert(decrypted_len == decrypted.length);
+
   // test null for &ciphertext_len / decrypted_len
   crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext.ptr, null, message.ptr, message.length,
     additional_data.ptr, additional_data.length, null, nonce.ptr, key.ptr);
@@ -272,40 +270,41 @@ unittest
 
 
   auto message         = representation("test");
+  enum message_len = 4;
   auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
     "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
-  ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_chacha20poly1305_ietf_ABYTES];
+  ubyte[message_len + crypto_aead_chacha20poly1305_ietf_ABYTES]  ciphertext1;
   sodium_increment(nonce);
 
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext[0..$-1],              message, additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext[0..$-message.length], null,    additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext,                      message, null,            nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext1[0..$-1],              message, additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext1[0..$-message.length], null,    additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext1,                      message, null,            nonce, key));
 
-  assert(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext, message, additional_data, nonce, key));
+  assert(crypto_aead_chacha20poly1305_ietf_encrypt(ciphertext1, message, additional_data, nonce, key));
 
-  ubyte[] decrypted       = new ubyte[message.length];
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,         ciphertext[0..crypto_aead_chacha20poly1305_ietf_ABYTES-1], additional_data, nonce, key));
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt(decrypted[0..$-1], ciphertext,                                                additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,         ciphertext,                                                null,            nonce, key));
+  ubyte[message_len] decrypted;
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,         ciphertext1[0..crypto_aead_chacha20poly1305_ietf_ABYTES-1], additional_data, nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt(decrypted[0..$-1], ciphertext1,                                                additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted,         ciphertext1,                                                null,            nonce, key));
 
-  assert(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted, ciphertext, additional_data, nonce, key));
+  assert(crypto_aead_chacha20poly1305_ietf_decrypt(decrypted, ciphertext1, additional_data, nonce, key));
   assert(decrypted == message);
 //
-  ciphertext.length = message.length;
+  ubyte[message_len] ciphertext2;
   ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac;
   sodium_increment(nonce);
 
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext[0..$-1],              mac, message, additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext[0..$-message.length], mac, null,    additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext,                      mac, message, null,            nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext2[0..$-1],              mac, message, additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext2[0..$-message.length], mac, null,    additional_data, nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext2,                      mac, message, null,            nonce, key));
 
-  assert(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext, mac, message, additional_data, nonce, key));
+  assert(crypto_aead_chacha20poly1305_ietf_encrypt_detached(ciphertext2, mac, message, additional_data, nonce, key));
 
-  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted[0..$-1],              ciphertext, mac, additional_data, nonce, key));
+  assertThrown   (crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted[0..$-1],              ciphertext2, mac, additional_data, nonce, key));
   assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted[0..$-message.length], null,       mac, additional_data, nonce, key));
-  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted,                      ciphertext, mac, null,            nonce, key));
+  assertNotThrown(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted,                      ciphertext2, mac, null,            nonce, key));
 
-  assert(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted, ciphertext, mac, additional_data, nonce, key));
+  assert(crypto_aead_chacha20poly1305_ietf_decrypt_detached(decrypted, ciphertext2, mac, additional_data, nonce, key));
   assert(decrypted == message);
 
 }
@@ -324,40 +323,41 @@ unittest
   assert(crypto_aead_chacha20poly1305_abytes()     == crypto_aead_chacha20poly1305_ABYTES);
 
   auto message         = representation("test");
+  enum message_len = 4;
   auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
     "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
-  ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_chacha20poly1305_ABYTES];
+  ubyte[message_len + crypto_aead_chacha20poly1305_ABYTES] ciphertext1;
   sodium_increment(nonce2);
 
-  assertThrown   (crypto_aead_chacha20poly1305_encrypt(ciphertext[0..$-1],              message, additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext[0..$-message.length], null,    additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext,                      message, null,            nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_encrypt(ciphertext1[0..$-1],              message, additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext1[0..$-message.length], null,    additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_encrypt(ciphertext1,                      message, null,            nonce2, key2));
 
-  assert(crypto_aead_chacha20poly1305_encrypt(ciphertext, message, additional_data, nonce2, key2));
+  assert(crypto_aead_chacha20poly1305_encrypt(ciphertext1, message, additional_data, nonce2, key2));
 
-  ubyte[] decrypted       = new ubyte[message.length];
-  assertThrown   (crypto_aead_chacha20poly1305_decrypt(decrypted,         ciphertext[0..crypto_aead_chacha20poly1305_ABYTES-1], additional_data, nonce2, key2));
-  assertThrown   (crypto_aead_chacha20poly1305_decrypt(decrypted[0..$-1], ciphertext,                                           additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_decrypt(decrypted,         ciphertext,                                           null,            nonce2, key2));
+  ubyte[message_len] decrypted;
+  assertThrown   (crypto_aead_chacha20poly1305_decrypt(decrypted,         ciphertext1[0..crypto_aead_chacha20poly1305_ABYTES-1], additional_data, nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_decrypt(decrypted[0..$-1], ciphertext1,                                           additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_decrypt(decrypted,         ciphertext1,                                           null,            nonce2, key2));
 
-  assert(crypto_aead_chacha20poly1305_decrypt(decrypted, ciphertext, additional_data, nonce2, key2));
+  assert(crypto_aead_chacha20poly1305_decrypt(decrypted, ciphertext1, additional_data, nonce2, key2));
   assert(decrypted == message);
 //
-  ciphertext.length = message.length;
+  ubyte[message_len]  ciphertext2;
   ubyte[crypto_aead_chacha20poly1305_ABYTES] mac;
   sodium_increment(nonce2);
 
-  assertThrown   (crypto_aead_chacha20poly1305_encrypt_detached(ciphertext[0..$-1],              mac, message, additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext[0..$-message.length], mac, null,    additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext,                      mac, message, null,            nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_encrypt_detached(ciphertext2[0..$-1],              mac, message, additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext2[0..$-message.length], mac, null,    additional_data, nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext2,                      mac, message, null,            nonce2, key2));
 
-  assert(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext, mac, message, additional_data, nonce2, key2));
+  assert(crypto_aead_chacha20poly1305_encrypt_detached(ciphertext2, mac, message, additional_data, nonce2, key2));
 
-  assertThrown   (crypto_aead_chacha20poly1305_decrypt_detached(decrypted[0..$-1],              ciphertext, mac, additional_data, nonce2, key2));
+  assertThrown   (crypto_aead_chacha20poly1305_decrypt_detached(decrypted[0..$-1],              ciphertext2, mac, additional_data, nonce2, key2));
   assertNotThrown(crypto_aead_chacha20poly1305_decrypt_detached(decrypted[0..$-message.length], null,       mac, additional_data, nonce2, key2));
-  assertNotThrown(crypto_aead_chacha20poly1305_decrypt_detached(decrypted,                      ciphertext, mac, null,            nonce2, key2));
+  assertNotThrown(crypto_aead_chacha20poly1305_decrypt_detached(decrypted,                      ciphertext2, mac, null,            nonce2, key2));
 
-  assert(crypto_aead_chacha20poly1305_decrypt_detached(decrypted, ciphertext, mac, additional_data, nonce2, key2));
+  assert(crypto_aead_chacha20poly1305_decrypt_detached(decrypted, ciphertext2, mac, additional_data, nonce2, key2));
   assert(decrypted == message);
 }
 

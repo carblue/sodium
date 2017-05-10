@@ -2,7 +2,7 @@ language: d
 d:
   - dmd
   - ldc
-#  - gdc
+  - gdc
 
 sudo: required
 dist: trusty
@@ -21,6 +21,6 @@ install:
 
 script:
   - dub test  sodium:deimos  --compiler=${DC}
-  - dub test  sodium:wrapper --compiler=${DC} --config=travis --build unittest-cov
+  - dub build sodium:wrapper --compiler=${DC} --build release
+  - dub test  sodium:wrapper --compiler=${DC} --build unittest-cov --config=travis
   - ./doveralls
-  - dub build sodium:wrapper --compiler=${DC} --config=travis --build release -v

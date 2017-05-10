@@ -126,14 +126,14 @@ bool crypto_aead_aes256gcm_decrypt_detached(scope ubyte[] m,
 }
 
 /* -- Precomputation interface -- */
-/+
+
 alias crypto_aead_aes256gcm_beforenm = deimos.sodium.crypto_aead_aes256gcm.crypto_aead_aes256gcm_beforenm;
 
 pragma(inline, true)
-bool crypto_aead_aes256gcm_beforenm(ref crypto_aead_aes256gcm_state ctx_,
+bool crypto_aead_aes256gcm_beforenm(ref crypto_aead_aes256gcm_state ctx,
                                     const ubyte[crypto_aead_aes256gcm_KEYBYTES] k) pure @nogc @trusted
 {
-  return  crypto_aead_aes256gcm_beforenm(&ctx_, k.ptr) == 0;
+  return  crypto_aead_aes256gcm_beforenm(&ctx, k.ptr) == 0;
 }
 
 alias crypto_aead_aes256gcm_encrypt_afternm = deimos.sodium.crypto_aead_aes256gcm.crypto_aead_aes256gcm_encrypt_afternm;
@@ -142,14 +142,14 @@ bool crypto_aead_aes256gcm_encrypt_afternm(scope ubyte[] c,
                                            scope const ubyte[] m,
                                            scope const ubyte[] ad,
                                            const ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
-                                           ref const crypto_aead_aes256gcm_state ctx_) @nogc @trusted
+                                           ref const crypto_aead_aes256gcm_state ctx) @nogc @trusted
 {
 //  enforce(m.length, "Error invoking crypto_aead_aes256gcm_encrypt_afternm: m is null"); // not required
   enforce(m.length <= 16UL * ((1UL << 32) - 2));
   const  c_expect_len = m.length + crypto_aead_aes256gcm_ABYTES;
   enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_aead_aes256gcm_ABYTES: ", c_expect_len);
   ulong clen_p;
-  bool result =  crypto_aead_aes256gcm_encrypt_afternm(c.ptr, &clen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, &ctx_) == 0;
+  bool result =  crypto_aead_aes256gcm_encrypt_afternm(c.ptr, &clen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, &ctx) == 0;
   assert(clen_p    == c_expect_len); // okay to be removed in release code
   return  result;
 }
@@ -160,14 +160,14 @@ bool  crypto_aead_aes256gcm_decrypt_afternm(scope ubyte[] m,
                                             scope const ubyte[] c,
                                             scope const ubyte[] ad,
                                             const ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
-                                            ref const crypto_aead_aes256gcm_state ctx_) @nogc @trusted
+                                            ref const crypto_aead_aes256gcm_state ctx) @nogc @trusted
 {
   enforce(c.length <= 16UL * (1UL << 32));
   enforce(c.length >= crypto_aead_aes256gcm_ABYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_aead_aes256gcm_ABYTES: ", crypto_aead_aes256gcm_ABYTES);
   const  m_expect_len = c.length - crypto_aead_aes256gcm_ABYTES;
   enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_aead_aes256gcm_ABYTES: ", m_expect_len);
   ulong mlen_p;
-  bool result =  crypto_aead_aes256gcm_decrypt_afternm(m.ptr, &mlen_p, null, c.ptr, c.length, ad.ptr, ad.length, npub.ptr, &ctx_) == 0;
+  bool result =  crypto_aead_aes256gcm_decrypt_afternm(m.ptr, &mlen_p, null, c.ptr, c.length, ad.ptr, ad.length, npub.ptr, &ctx) == 0;
   if (result)
     assert(mlen_p  == m_expect_len); // okay to be removed in release code
   return  result;
@@ -180,13 +180,13 @@ bool  crypto_aead_aes256gcm_encrypt_detached_afternm(scope ubyte[] c,
                                                      scope const ubyte[] m,
                                                      scope const ubyte[] ad,
                                                      const ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
-                                                     ref const crypto_aead_aes256gcm_state ctx_) @nogc @trusted
+                                                     ref const crypto_aead_aes256gcm_state ctx) @nogc @trusted
 {
 //  enforce(m.length, "Error invoking crypto_aead_aes256gcm_encrypt_detached_afternm: m is null"); // not required
   enforce(m.length <= 16UL * ((1UL << 32) - 2));
   enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
   ulong maclen_p;
-  bool result =  crypto_aead_aes256gcm_encrypt_detached_afternm(c.ptr, mac.ptr, &maclen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, &ctx_) == 0;
+  bool result =  crypto_aead_aes256gcm_encrypt_detached_afternm(c.ptr, mac.ptr, &maclen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, &ctx) == 0;
   assert(maclen_p == crypto_aead_aes256gcm_ABYTES); // okay to be removed in release code
   return  result;
 }
@@ -198,14 +198,14 @@ bool  crypto_aead_aes256gcm_decrypt_detached_afternm(scope ubyte[] m,
                                                      const ubyte[crypto_aead_aes256gcm_ABYTES] mac,
                                                      scope const ubyte[] ad,
                                                      const ubyte[crypto_aead_aes256gcm_NPUBBYTES] npub,
-                                                     ref const crypto_aead_aes256gcm_state ctx_) @nogc @trusted
+                                                     ref const crypto_aead_aes256gcm_state ctx) @nogc @trusted
 {
 //  enforce(c.length, "Error invoking crypto_aead_aes256gcm_decrypt_detached_afternm: c is null"); // not required
   enforce(c.length <= 16UL * (1UL << 32));
   enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
-  return  crypto_aead_aes256gcm_decrypt_detached_afternm(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, &ctx_) == 0;
+  return  crypto_aead_aes256gcm_decrypt_detached_afternm(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, &ctx) == 0;
 }
-+/
+
 
 version(unittest)
 {
@@ -228,19 +228,18 @@ unittest
   import std.stdio : writeln;
   debug writeln("unittest block 1 from sodium.crypto_aead_aes256gcm.d");
 
-  if (crypto_aead_aes256gcm_is_available() == 0)
-    writeln("*** ATTENTION : The current CPU dosn't support the AES256-GCM implementation ! ***");
-  else {
+  if (crypto_aead_aes256gcm_is_available() == 1) {
     auto message         = representation("test");
+    enum message_len = 4UL;
     auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
       "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
-    ubyte[] ciphertext = new ubyte[message.length + crypto_aead_aes256gcm_ABYTES];
+    ubyte[message_len + crypto_aead_aes256gcm_ABYTES]  ciphertext;
     ulong   ciphertext_len;
 
     crypto_aead_aes256gcm_encrypt(ciphertext.ptr, &ciphertext_len, message.ptr, message.length,
       additional_data.ptr, additional_data.length, null, nonce.ptr, key.ptr);
 
-    ubyte[] decrypted = new ubyte[message.length];
+    ubyte[message_len]  decrypted;
     ulong decrypted_len;
     if (ciphertext_len < crypto_aead_aes256gcm_ABYTES ||
       crypto_aead_aes256gcm_decrypt(decrypted.ptr, &decrypted_len, null, ciphertext.ptr, ciphertext_len,
@@ -256,6 +255,10 @@ unittest
       additional_data.ptr, additional_data.length, null, nonce.ptr, key.ptr);
     crypto_aead_aes256gcm_decrypt(decrypted.ptr, null, null, ciphertext.ptr, ciphertext_len,
       additional_data.ptr, additional_data.length, nonce.ptr, key.ptr);
+
+    crypto_aead_aes256gcm_state  ctx;
+//    debug writeln("address of ctx: ", &ctx);
+    crypto_aead_aes256gcm_beforenm(&ctx, key.ptr);
   }
 }
 
@@ -283,83 +286,88 @@ else {
 
   if (crypto_aead_aes256gcm_is_available() == 1) {
     auto message         = representation("test");
+    enum message_len = 4UL;
     auto additional_data = representation("A typical use case for additional data is to store protocol-specific metadata " ~
       "about the message, such as its length and encoding. (non-confidential, non-encrypted data");
-    ubyte[] ciphertext       = new ubyte[message.length + crypto_aead_aes256gcm_ABYTES];
+    ubyte[message_len + crypto_aead_aes256gcm_ABYTES]  ciphertext1;
     sodium_increment(nonce);
 
-    assertThrown   (crypto_aead_aes256gcm_encrypt(ciphertext[0..$-1],              message, additional_data, nonce, key));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt(ciphertext[0..$-message.length], null,    additional_data, nonce, key));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt(ciphertext,                      message, null,            nonce, key));
+    assertThrown   (crypto_aead_aes256gcm_encrypt(ciphertext1[0..$-1],              message, additional_data, nonce, key));
+    assertNotThrown(crypto_aead_aes256gcm_encrypt(ciphertext1[0..$-message.length], null,    additional_data, nonce, key));
+    assertNotThrown(crypto_aead_aes256gcm_encrypt(ciphertext1,                      message, null,            nonce, key));
 
-    assert(crypto_aead_aes256gcm_encrypt(ciphertext, message, additional_data, nonce, key));
+    assert(crypto_aead_aes256gcm_encrypt(ciphertext1, message, additional_data, nonce, key));
 
-    ubyte[] decrypted       = new ubyte[message.length];
-    assertThrown   (crypto_aead_aes256gcm_decrypt(decrypted,         ciphertext[0..crypto_aead_aes256gcm_ABYTES-1], additional_data, nonce, key));
-    assertThrown   (crypto_aead_aes256gcm_decrypt(decrypted[0..$-1], ciphertext,                                    additional_data, nonce, key));
-    assertNotThrown(crypto_aead_aes256gcm_decrypt(decrypted,         ciphertext,                                    null,            nonce, key));
+    ubyte[message_len]  decrypted;
+    assertThrown   (crypto_aead_aes256gcm_decrypt(decrypted,         ciphertext1[0..crypto_aead_aes256gcm_ABYTES-1], additional_data, nonce, key));
+    assertThrown   (crypto_aead_aes256gcm_decrypt(decrypted[0..$-1], ciphertext1,                                    additional_data, nonce, key));
+    assertNotThrown(crypto_aead_aes256gcm_decrypt(decrypted,         ciphertext1,                                    null,            nonce, key));
 
-    assert(crypto_aead_aes256gcm_decrypt(decrypted, ciphertext, additional_data, nonce, key));
+    assert(crypto_aead_aes256gcm_decrypt(decrypted, ciphertext1, additional_data, nonce, key));
     assert(decrypted == message);
 
-    ciphertext.length = message.length;
+    ubyte[message_len]  ciphertext2;
     ubyte[crypto_aead_aes256gcm_ABYTES] mac;
     sodium_increment(nonce);
 
-    assertThrown   (crypto_aead_aes256gcm_encrypt_detached(ciphertext[0..$-1],              mac, message, additional_data, nonce, key));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt_detached(ciphertext[0..$-message.length], mac, null,    additional_data, nonce, key));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt_detached(ciphertext,                      mac, message, null,            nonce, key));
+    assertThrown   (crypto_aead_aes256gcm_encrypt_detached(ciphertext2[0..$-1],              mac, message, additional_data, nonce, key));
+    assertNotThrown(crypto_aead_aes256gcm_encrypt_detached(ciphertext2[0..$-message.length], mac, null,    additional_data, nonce, key));
+    assertNotThrown(crypto_aead_aes256gcm_encrypt_detached(ciphertext2,                      mac, message, null,            nonce, key));
 
-    assert(crypto_aead_aes256gcm_encrypt_detached(ciphertext, mac, message, additional_data, nonce, key));
+    assert(crypto_aead_aes256gcm_encrypt_detached(ciphertext2, mac, message, additional_data, nonce, key));
 
     assertNotThrown(crypto_aead_aes256gcm_decrypt_detached(decrypted[0..$-message.length], null,       mac, additional_data, nonce, key));
-    assertThrown   (crypto_aead_aes256gcm_decrypt_detached(decrypted[0..$-1],              ciphertext, mac, additional_data, nonce, key));
-    assertNotThrown(crypto_aead_aes256gcm_decrypt_detached(decrypted,                      ciphertext, mac, null,            nonce, key));
+    assertThrown   (crypto_aead_aes256gcm_decrypt_detached(decrypted[0..$-1],              ciphertext2, mac, additional_data, nonce, key));
+    assertNotThrown(crypto_aead_aes256gcm_decrypt_detached(decrypted,                      ciphertext2, mac, null,            nonce, key));
 
-    assert(crypto_aead_aes256gcm_decrypt_detached(decrypted, ciphertext, mac, additional_data, nonce, key));
+    assert(crypto_aead_aes256gcm_decrypt_detached(decrypted, ciphertext2, mac, additional_data, nonce, key));
     assert(decrypted == message);
 
     /* -- Precomputation interface -- */
-/+
-    align(16) crypto_aead_aes256gcm_state  ctx_;
-    crypto_aead_aes256gcm_beforenm(ctx_, key);
 
-    ciphertext.length = message.length + crypto_aead_aes256gcm_ABYTES;
+    crypto_aead_aes256gcm_state  ctx;
+    assert(crypto_aead_aes256gcm_beforenm(ctx, key));
+
     sodium_increment(nonce);
+version(GNU) {}
+else {
+    assertThrown   (crypto_aead_aes256gcm_encrypt_afternm(ciphertext1[0..$-1],              message, additional_data, nonce, ctx));
+    assertNotThrown(crypto_aead_aes256gcm_encrypt_afternm(ciphertext1[0..$-message.length], null,    additional_data, nonce, ctx));
+    assertNotThrown(crypto_aead_aes256gcm_encrypt_afternm(ciphertext1,                      message, null,            nonce, ctx));
+}
+    assert(crypto_aead_aes256gcm_encrypt_afternm(ciphertext1, message, additional_data, nonce, ctx));
 
-    assertThrown   (crypto_aead_aes256gcm_encrypt_afternm(ciphertext[0..$-1],              message, additional_data, nonce, ctx_));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt_afternm(ciphertext[0..$-message.length], null,    additional_data, nonce, ctx_));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt_afternm(ciphertext,                      message, null,            nonce, ctx_));
-
-    crypto_aead_aes256gcm_encrypt_afternm(ciphertext, message, additional_data, nonce, ctx_);
-
-    assertThrown   (crypto_aead_aes256gcm_decrypt_afternm(decrypted,         ciphertext[0..crypto_aead_aes256gcm_ABYTES-1], additional_data, nonce, ctx_));
-    assertThrown   (crypto_aead_aes256gcm_decrypt_afternm(decrypted[0..$-1], ciphertext,                                    additional_data, nonce, ctx_));
-    assertNotThrown(crypto_aead_aes256gcm_decrypt_afternm(decrypted,         ciphertext,                                    null,            nonce, ctx_));
-
-    assert(crypto_aead_aes256gcm_decrypt_afternm(decrypted, ciphertext, additional_data, nonce, ctx_));
+version(GNU) {}
+else {
+    assertThrown   (crypto_aead_aes256gcm_decrypt_afternm(decrypted,         ciphertext1[0..crypto_aead_aes256gcm_ABYTES-1], additional_data, nonce, ctx));
+    assertThrown   (crypto_aead_aes256gcm_decrypt_afternm(decrypted[0..$-1], ciphertext1,                                    additional_data, nonce, ctx));
+    assertNotThrown(crypto_aead_aes256gcm_decrypt_afternm(decrypted,         ciphertext1,                                    null,            nonce, ctx));
+}
+    assert(crypto_aead_aes256gcm_decrypt_afternm(decrypted, ciphertext1, additional_data, nonce, ctx));
     assert(decrypted == message);
 
-
-    ciphertext.length = message.length;
     sodium_increment(nonce);
 
-    assertThrown   (crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext[0..$-1],              mac, message, additional_data, nonce, ctx_));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext[0..$-message.length], mac, null,    additional_data, nonce, ctx_));
-    assertNotThrown(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext,                      mac, message, null,            nonce, ctx_));
+version(GNU) {}
+else {
+    assertThrown   (crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext2[0..$-1],              mac, message, additional_data, nonce, ctx));
+    assertNotThrown(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext2[0..$-message.length], mac, null,    additional_data, nonce, ctx));
+    assertNotThrown(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext2,                      mac, message, null,            nonce, ctx));
+}
+    assert(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext2, mac, message, additional_data, nonce, ctx));
 
-    assert(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext, mac, message, additional_data, nonce, ctx_));
-
-    assertThrown   (crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted[0..$-1],              ciphertext, mac, additional_data, nonce, ctx_));
-    assertNotThrown(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted[0..$-message.length], null,       mac, additional_data, nonce, ctx_));
-    assertNotThrown(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted,                      ciphertext, mac, null,            nonce, ctx_));
-
-    assert(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted, ciphertext, mac, additional_data, nonce, ctx_));
+version(GNU) {}
+else {
+    assertThrown   (crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted[0..$-1],              ciphertext2, mac, additional_data, nonce, ctx));
+    assertNotThrown(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted[0..$-message.length], null,       mac, additional_data, nonce, ctx));
+    assertNotThrown(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted,                      ciphertext2, mac, null,            nonce, ctx));
+}
+    assert(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted, ciphertext2, mac, additional_data, nonce, ctx));
     assert(decrypted == message);
-+/
+
     ubyte[crypto_aead_aes256gcm_KEYBYTES] k;
     crypto_aead_aes256gcm_keygen(k);
-  } // if (crypto_aead_aes256gcm_is_available() != 0)
+  } // if (crypto_aead_aes256gcm_is_available() == 1)
 }
 }
 
@@ -388,8 +396,8 @@ unittest
     assert(crypto_aead_aes256gcm_encrypt_detached(ciphertext2, mac, message, additional_data, n, k));
     assert(crypto_aead_aes256gcm_decrypt_detached(decrypted, ciphertext2, mac, additional_data, n, k));
     assert(decrypted == message);
-/*
-    align(16) crypto_aead_aes256gcm_state     ctx;
+
+    crypto_aead_aes256gcm_state  ctx;
     decrypted = decrypted.init;
     ciphertext1 = ciphertext1.init;
     ciphertext2 = ciphertext2.init;
@@ -401,6 +409,6 @@ unittest
     assert(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext2, mac, message, additional_data, n, ctx));
     assert(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted, ciphertext2, mac, additional_data, n, ctx));
     assert(decrypted == message);
-*/
+
   }
 }
