@@ -243,7 +243,7 @@ unittest
     ulong decrypted_len;
     assert(ciphertext_len == ciphertext.length);
     assert(crypto_aead_aes256gcm_decrypt(decrypted.ptr, &decrypted_len, null, ciphertext.ptr, ciphertext_len,
-        additional_data.ptr, additional_data.length, nonce.ptr, key.ptr) != 0);
+        additional_data.ptr, additional_data.length, nonce.ptr, key.ptr) == 0);
     assert(decrypted == message); //writeln("Decrypted message (aead_aes256gcm): ", cast(string)decrypted);
     assert(decrypted_len == decrypted.length);
 
