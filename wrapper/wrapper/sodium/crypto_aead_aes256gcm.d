@@ -241,15 +241,12 @@ unittest
 
     ubyte[message_len]  decrypted;
     ulong decrypted_len;
-    if (ciphertext_len < crypto_aead_aes256gcm_ABYTES ||
-      crypto_aead_aes256gcm_decrypt(decrypted.ptr, &decrypted_len, null, ciphertext.ptr, ciphertext_len,
-        additional_data.ptr, additional_data.length, nonce.ptr, key.ptr) != 0) {
-      writeln("*** ATTENTION : The message has been forged ! ***");
-    }
-    else { // successfull verification of mac
-      assert(decrypted == message); //writeln("Decrypted message (aead_aes256gcm): ", cast(string)decrypted);
-      assert(decrypted_len == decrypted.length);
-    }
+    assert(ciphertext_len == ciphertext.length);
+    assert(crypto_aead_aes256gcm_decrypt(decrypted.ptr, &decrypted_len, null, ciphertext.ptr, ciphertext_len,
+        additional_data.ptr, additional_data.length, nonce.ptr, key.ptr) != 0);
+    assert(decrypted == message); //writeln("Decrypted message (aead_aes256gcm): ", cast(string)decrypted);
+    assert(decrypted_len == decrypted.length);
+
     // test null for &ciphertext_len
     crypto_aead_aes256gcm_encrypt(ciphertext.ptr, null, message.ptr, message.length,
       additional_data.ptr, additional_data.length, null, nonce.ptr, key.ptr);
@@ -396,7 +393,8 @@ unittest
     assert(crypto_aead_aes256gcm_encrypt_detached(ciphertext2, mac, message, additional_data, n, k));
     assert(crypto_aead_aes256gcm_decrypt_detached(decrypted, ciphertext2, mac, additional_data, n, k));
     assert(decrypted == message);
-
+version(Win32) {}
+else {
     align(16) ubyte[512] /*crypto_aead_aes256gcm_state*/  ctx;
     decrypted = decrypted.init;
     ciphertext1 = ciphertext1.init;
@@ -409,6 +407,6 @@ unittest
     assert(crypto_aead_aes256gcm_encrypt_detached_afternm(ciphertext2, mac, message, additional_data, n, ctx));
     assert(crypto_aead_aes256gcm_decrypt_detached_afternm(decrypted, ciphertext2, mac, additional_data, n, ctx));
     assert(decrypted == message);
-
+}
   }
 }
