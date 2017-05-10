@@ -6,7 +6,7 @@ public
 import  deimos.sodium.core;
 
 shared static this() {
-  static import std.exception; // : enforce;
+  static import std.exception;
   std.exception.enforce(sodium_init() == 0, "Initialization of Sodium failed");
 }
 

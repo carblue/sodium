@@ -62,23 +62,23 @@ size_t crypto_pwhash_strbytes() @trusted;
 
 alias crypto_pwhash_STRPREFIX = crypto_pwhash_argon2i_STRPREFIX;
 
-const(char)* crypto_pwhash_strprefix() @system;
+const(char)* crypto_pwhash_strprefix() @trusted;
 
 alias crypto_pwhash_OPSLIMIT_MIN = crypto_pwhash_argon2i_OPSLIMIT_MIN;
 
-size_t crypto_pwhash_opslimit_min() @system;
+size_t crypto_pwhash_opslimit_min() @trusted;
 
 alias crypto_pwhash_OPSLIMIT_MAX = crypto_pwhash_argon2i_OPSLIMIT_MAX;
 
-size_t crypto_pwhash_opslimit_max() @system;
+size_t crypto_pwhash_opslimit_max() @trusted;
 
 alias crypto_pwhash_MEMLIMIT_MIN = crypto_pwhash_argon2i_MEMLIMIT_MIN;
 
-size_t crypto_pwhash_memlimit_min() @system;
+size_t crypto_pwhash_memlimit_min() @trusted;
 
 alias crypto_pwhash_MEMLIMIT_MAX = crypto_pwhash_argon2i_MEMLIMIT_MAX;
 
-size_t crypto_pwhash_memlimit_max() @system;
+size_t crypto_pwhash_memlimit_max() @trusted;
 
 alias crypto_pwhash_OPSLIMIT_INTERACTIVE = crypto_pwhash_argon2i_OPSLIMIT_INTERACTIVE;
 
@@ -107,16 +107,16 @@ size_t crypto_pwhash_memlimit_sensitive() @trusted;
 int crypto_pwhash(ubyte* out_, ulong outlen,
                   const(char*) passwd, ulong passwdlen,
                   const(ubyte*) salt,
-                  ulong opslimit, size_t memlimit, int alg) nothrow @system; // __attribute__ ((warn_unused_result));
+                  ulong opslimit, size_t memlimit, int alg) nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_pwhash_str(ref char[crypto_pwhash_STRBYTES] out_,
                       const(char*) passwd, ulong passwdlen,
-                      ulong opslimit, size_t memlimit) nothrow @system; // __attribute__ ((warn_unused_result));
+                      ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_pwhash_str_verify(ref const(char[crypto_pwhash_STRBYTES]) str,
                              const(char*) passwd,
-                             ulong passwdlen) nothrow @system; // __attribute__ ((warn_unused_result));
+                             ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result));
 
 enum crypto_pwhash_PRIMITIVE = "argon2i";
 
-const(char)* crypto_pwhash_primitive() nothrow @system; // __attribute__ ((warn_unused_result))
+const(char)* crypto_pwhash_primitive() nothrow @trusted; // __attribute__ ((warn_unused_result))

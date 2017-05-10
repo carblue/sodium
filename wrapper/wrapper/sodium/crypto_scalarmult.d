@@ -23,8 +23,6 @@ import wrapper.sodium.crypto_generichash : crypto_generichash_state,
                                            crypto_generichash_BYTES_MAX,
                                            crypto_generichash_multi;
 
-import std.exception : enforce;
-
 
 string crypto_scalarmult_primitive() pure nothrow @nogc @trusted
 {
@@ -43,8 +41,11 @@ string crypto_scalarmult_primitive() pure nothrow @nogc @trusted
  * There is no heap allocation for secrets, yet enforce may require heap memory, thus inhibiting the attribute @nogc.
  * It may throw in error conditions.
  */
-void sharedkey_hashed(scope ubyte[] our_sharedkey, in ubyte[crypto_scalarmult_SCALARBYTES] my_secretkey, in ubyte[crypto_scalarmult_BYTES] my_publickey,
-  in bool my_pubkey_hashed_first, in ubyte[crypto_scalarmult_BYTES] other_publickey) pure @trusted
+void sharedkey_hashed(scope ubyte[] our_sharedkey,
+                      const ubyte[crypto_scalarmult_SCALARBYTES] my_secretkey,
+                      const ubyte[crypto_scalarmult_BYTES] my_publickey,
+                      const bool my_pubkey_hashed_first,
+                      const ubyte[crypto_scalarmult_BYTES] other_publickey) @nogc @trusted
 {
   /* I derive a shared key from my secret key and the other's public key */
   /* shared key = hash(q || client_publickey || server_publickey) */

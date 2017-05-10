@@ -30,34 +30,36 @@ import  deimos.sodium.crypto_sign_ed25519: crypto_sign_ed25519ph_state,
 
 import deimos.sodium.crypto_scalarmult_curve25519 : crypto_scalarmult_curve25519_BYTES;
 
-import std.exception : enforce, assumeWontThrow;
+import std.exception : assumeWontThrow;
 
 
 // overloading functions between module deimos.sodium.crypto_sign_ed25519 and this module
 
 alias crypto_sign_ed25519 = deimos.sodium.crypto_sign_ed25519.crypto_sign_ed25519;
 
-bool  crypto_sign_ed25519(ubyte[] sm,
-                          in ubyte[] m,
-                          in ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure /*@nogc*/ @trusted
+bool  crypto_sign_ed25519(scope ubyte[] sm,
+                          scope const ubyte[] m,
+                          const ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) @nogc @trusted
 {
 //  enforce(m.length, "Error invoking crypto_sign_ed25519: m is null"); // TODO check if m.ptr==null would be okay
-  enforce(sm.length >= m.length + crypto_sign_ed25519_BYTES, "Error invoking crypto_sign_ed25519: out buffer too small");
+  const  sm_expect_len = m.length + crypto_sign_ed25519_BYTES;
+  enforce(sm.length == sm_expect_len, "Expected sm.length: ", sm.length, " to be equal to m.length + crypto_sign_ed25519_BYTES: ", sm_expect_len);
   ulong  smlen_p;
   bool  result = crypto_sign_ed25519(sm.ptr, &smlen_p, m.ptr, m.length, sk.ptr) == 0;
   if (result && smlen_p)
-    assert(smlen_p ==  m.length + crypto_sign_ed25519_BYTES); // okay to be removed in release code
+    assert(smlen_p ==  sm_expect_len); // okay to be removed in release code
   return  result;
 }
 
 alias crypto_sign_ed25519_open = deimos.sodium.crypto_sign_ed25519.crypto_sign_ed25519_open;
 
-bool  crypto_sign_ed25519_open(ubyte[] m,
-                               in ubyte[] sm,
-                               in ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk) pure /*@nogc*/ @trusted //  __attribute__ ((warn_unused_result))
+bool  crypto_sign_ed25519_open(scope ubyte[] m,
+                               scope const ubyte[] sm,
+                               const ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk) @nogc @trusted //  __attribute__ ((warn_unused_result))
 {
-  enforce(sm.length >= crypto_sign_ed25519_BYTES, "Error invoking crypto_sign_ed25519_open: in buffer too small"); // TODO check if m.ptr==null would be okay
-  enforce(m.length >= sm.length - crypto_sign_ed25519_BYTES, "Error invoking crypto_sign_ed25519_open: out buffer too small");
+  enforce(sm.length >= crypto_sign_ed25519_BYTES, "Expected sm.length: ", sm.length, " to be greater_equal to crypto_sign_ed25519_BYTES: ", crypto_sign_ed25519_BYTES);
+  const  m_expect_len = sm.length - crypto_sign_ed25519_BYTES;
+  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to sm.length - crypto_sign_ed25519_BYTES: ", m_expect_len);
   ulong mlen_p;
   bool  result = crypto_sign_ed25519_open(m.ptr, &mlen_p, sm.ptr, sm.length, pk.ptr) == 0;
   if (result)
@@ -69,7 +71,7 @@ alias crypto_sign_ed25519_detached = deimos.sodium.crypto_sign_ed25519.crypto_si
 
 bool  crypto_sign_ed25519_detached(out ubyte[crypto_sign_ed25519_BYTES] sig,
                                    in ubyte[] m,
-                                   in ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure @nogc @trusted
+                                   const ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure @nogc @trusted
 {
   ulong siglen_p;
   bool result = crypto_sign_ed25519_detached(sig.ptr, &siglen_p, m.ptr, m.length, sk.ptr) == 0;
@@ -83,7 +85,7 @@ alias crypto_sign_ed25519_verify_detached = deimos.sodium.crypto_sign_ed25519.cr
 pragma(inline, true)
 bool  crypto_sign_ed25519_verify_detached(in ubyte[crypto_sign_ed25519_BYTES] sig,
                                           in ubyte[] m,
-                                          in ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk) pure nothrow @nogc @trusted //  __attribute__ ((warn_unused_result))
+                                          const ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk) pure nothrow @nogc @trusted //  __attribute__ ((warn_unused_result))
 {
   return  crypto_sign_ed25519_verify_detached(sig.ptr, m.ptr, m.length, pk.ptr) == 0;
 }
@@ -103,7 +105,7 @@ alias crypto_sign_ed25519_seed_keypair = deimos.sodium.crypto_sign_ed25519.crypt
 pragma(inline, true)
 bool  crypto_sign_ed25519_seed_keypair(out ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk,
                                        out ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk,
-                                       in  ubyte[crypto_sign_ed25519_SEEDBYTES] seed) pure @nogc @trusted
+                                       const ubyte[crypto_sign_ed25519_SEEDBYTES] seed) pure @nogc @trusted
 {
   return  crypto_sign_ed25519_seed_keypair(pk.ptr, sk.ptr, seed.ptr) == 0;
 }
@@ -112,7 +114,7 @@ alias crypto_sign_ed25519_pk_to_curve25519 = deimos.sodium.crypto_sign_ed25519.c
 
 pragma(inline, true)
 bool  crypto_sign_ed25519_pk_to_curve25519(out ubyte[crypto_scalarmult_curve25519_BYTES] curve25519_pk,
-                                           in  ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] ed25519_pk) pure nothrow @nogc @trusted //  __attribute__ ((warn_unused_result))
+                                           const ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] ed25519_pk) pure nothrow @nogc @trusted //  __attribute__ ((warn_unused_result))
 {
   return  crypto_sign_ed25519_pk_to_curve25519(curve25519_pk.ptr, ed25519_pk.ptr) == 0;
 }
@@ -121,7 +123,7 @@ alias crypto_sign_ed25519_sk_to_curve25519 = deimos.sodium.crypto_sign_ed25519.c
 
 pragma(inline, true)
 bool  crypto_sign_ed25519_sk_to_curve25519(out ubyte[crypto_scalarmult_curve25519_BYTES] curve25519_sk,
-                                           in  ubyte[crypto_sign_ed25519_SECRETKEYBYTES] ed25519_sk) pure @nogc @trusted
+                                           const ubyte[crypto_sign_ed25519_SECRETKEYBYTES] ed25519_sk) pure @nogc @trusted
 {
   return  crypto_sign_ed25519_sk_to_curve25519(curve25519_sk.ptr, ed25519_sk.ptr) == 0;
 }
@@ -130,7 +132,7 @@ alias crypto_sign_ed25519_sk_to_seed = deimos.sodium.crypto_sign_ed25519.crypto_
 
 pragma(inline, true)
 bool  crypto_sign_ed25519_sk_to_seed(out ubyte[crypto_sign_ed25519_SEEDBYTES] seed,
-                                     in  ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure @nogc @trusted
+                                     const ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure @nogc @trusted
 {
   return  crypto_sign_ed25519_sk_to_seed(seed.ptr, sk.ptr) == 0;
 }
@@ -139,7 +141,7 @@ alias crypto_sign_ed25519_sk_to_pk = deimos.sodium.crypto_sign_ed25519.crypto_si
 
 pragma(inline, true)
 bool  crypto_sign_ed25519_sk_to_pk(out ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk,
-                                   in  ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure @nogc @trusted
+                                   const ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure @nogc @trusted
 {
   return  crypto_sign_ed25519_sk_to_pk(pk.ptr, sk.ptr) == 0;
 }
@@ -166,7 +168,7 @@ alias crypto_sign_ed25519ph_final_create = deimos.sodium.crypto_sign_ed25519.cry
 pragma(inline, true)
 bool  crypto_sign_ed25519ph_final_create(ref crypto_sign_ed25519ph_state state,
                                          out ubyte[crypto_sign_ed25519_BYTES] sig,
-                                         in  ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure @nogc @trusted
+                                         const ubyte[crypto_sign_ed25519_SECRETKEYBYTES] sk) pure @nogc @trusted
 {
   return  crypto_sign_ed25519ph_final_create(&state, sig.ptr, null, sk.ptr) == 0;
 }
@@ -176,7 +178,7 @@ alias crypto_sign_ed25519ph_final_verify = deimos.sodium.crypto_sign_ed25519.cry
 pragma(inline, true)
 bool  crypto_sign_ed25519ph_final_verify(ref crypto_sign_ed25519ph_state state,
                                          out ubyte[crypto_sign_ed25519_BYTES] sig,
-                                         in  ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk) pure nothrow @nogc @trusted
+                                         const ubyte[crypto_sign_ed25519_PUBLICKEYBYTES] pk) pure nothrow @nogc @trusted
 {
   return  crypto_sign_ed25519ph_final_verify(&state, sig.ptr, pk.ptr) == 0;
 }

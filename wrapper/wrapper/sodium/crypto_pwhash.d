@@ -9,12 +9,28 @@ import  deimos.sodium.crypto_pwhash : crypto_pwhash_ALG_ARGON2I13,
                                       crypto_pwhash_alg_argon2i13,
                                       crypto_pwhash_ALG_DEFAULT,
                                       crypto_pwhash_alg_default,
+                                      crypto_pwhash_BYTES_MIN,
+                                      crypto_pwhash_bytes_min,
+                                      crypto_pwhash_BYTES_MAX,
+                                      crypto_pwhash_bytes_max,
+                                      crypto_pwhash_PASSWD_MIN,
+                                      crypto_pwhash_passwd_min,
+                                      crypto_pwhash_PASSWD_MAX,
+                                      crypto_pwhash_passwd_max,
                                       crypto_pwhash_SALTBYTES,
                                       crypto_pwhash_saltbytes,
                                       crypto_pwhash_STRBYTES,
                                       crypto_pwhash_strbytes,
                                       crypto_pwhash_STRPREFIX,
-//                                      crypto_pwhash_strprefix,
+//                                    crypto_pwhash_strprefix,
+                                      crypto_pwhash_OPSLIMIT_MIN,
+                                      crypto_pwhash_opslimit_min,
+                                      crypto_pwhash_OPSLIMIT_MAX,
+                                      crypto_pwhash_opslimit_max,
+                                      crypto_pwhash_MEMLIMIT_MIN,
+                                      crypto_pwhash_memlimit_min,
+                                      crypto_pwhash_MEMLIMIT_MAX,
+                                      crypto_pwhash_memlimit_max,
                                       crypto_pwhash_OPSLIMIT_INTERACTIVE,
                                       crypto_pwhash_opslimit_interactive,
                                       crypto_pwhash_MEMLIMIT_INTERACTIVE,
@@ -27,13 +43,13 @@ import  deimos.sodium.crypto_pwhash : crypto_pwhash_ALG_ARGON2I13,
                                       crypto_pwhash_opslimit_sensitive,
                                       crypto_pwhash_MEMLIMIT_SENSITIVE,
                                       crypto_pwhash_memlimit_sensitive,
-//                                      crypto_pwhash,
-//                                      crypto_pwhash_str,
-                                      crypto_pwhash_str_verify,
+//                                    crypto_pwhash,
+//                                    crypto_pwhash_str,
+//                                    crypto_pwhash_str_verify,
                                       crypto_pwhash_PRIMITIVE;
-//                                      crypto_pwhash_primitive;
+//                                    crypto_pwhash_primitive;
 
-import std.exception : enforce, assertThrown;
+import std.exception : assertThrown;
 
 string crypto_pwhash_strprefix() pure nothrow @nogc @trusted
 {
@@ -66,9 +82,9 @@ alias crypto_pwhash = deimos.sodium.crypto_pwhash.crypto_pwhash;
 bool crypto_pwhash(scope ubyte[] out_,
                    in string passwd,
                    in ubyte[crypto_pwhash_SALTBYTES] salt,
-                   ulong opslimit, size_t memlimit, int alg) pure @trusted
+                   ulong opslimit, size_t memlimit, int alg) @nogc @trusted
 {
-  enforce(out_.length >= 16);
+  enforce(out_.length >= crypto_pwhash_BYTES_MIN, "Expected out_.length: ", out_.length, " to be greater_equal to crypto_pwhash_BYTES_MIN: ", crypto_pwhash_BYTES_MIN);
   return  crypto_pwhash(out_.ptr, out_.length, passwd.ptr, passwd.length, salt.ptr, opslimit, memlimit, alg) == 0;
 }
 
@@ -106,9 +122,17 @@ unittest {
 
   assert(crypto_pwhash_alg_argon2i13()        == crypto_pwhash_ALG_ARGON2I13);
   assert(crypto_pwhash_alg_default()          == crypto_pwhash_ALG_DEFAULT);
+  assert(crypto_pwhash_bytes_min()            == crypto_pwhash_BYTES_MIN);
+  assert(crypto_pwhash_bytes_max()            == crypto_pwhash_BYTES_MAX);
+  assert(crypto_pwhash_passwd_min()           == crypto_pwhash_PASSWD_MIN);
+  assert(crypto_pwhash_passwd_max()           == crypto_pwhash_PASSWD_MAX);
   assert(crypto_pwhash_saltbytes()            == crypto_pwhash_SALTBYTES);
   assert(crypto_pwhash_strbytes()             == crypto_pwhash_STRBYTES);
   assert(crypto_pwhash_strprefix()            == crypto_pwhash_STRPREFIX);
+  assert(crypto_pwhash_opslimit_min()         == crypto_pwhash_OPSLIMIT_MIN);
+  assert(crypto_pwhash_opslimit_max()         == crypto_pwhash_OPSLIMIT_MAX);
+  assert(crypto_pwhash_memlimit_min()         == crypto_pwhash_MEMLIMIT_MIN);
+  assert(crypto_pwhash_memlimit_max()         == crypto_pwhash_MEMLIMIT_MAX);
   assert(crypto_pwhash_opslimit_interactive() == crypto_pwhash_OPSLIMIT_INTERACTIVE);
   assert(crypto_pwhash_memlimit_interactive() == crypto_pwhash_MEMLIMIT_INTERACTIVE);
   assert(crypto_pwhash_opslimit_moderate()    == crypto_pwhash_OPSLIMIT_MODERATE);
