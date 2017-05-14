@@ -7,7 +7,7 @@ For git maintenance (ensure at least one congruent line with originating C heade
 module deimos.sodium.crypto_pwhash_argon2i;
 
 
-extern(C) pure nothrow :
+extern(C) pure @nogc :
 
 
 enum crypto_pwhash_argon2i_ALG_ARGON2I13 = 1;
@@ -40,7 +40,7 @@ size_t crypto_pwhash_argon2i_strbytes() @trusted;
 
 enum crypto_pwhash_argon2i_STRPREFIX = "$argon2i$";
 
-const(char)* crypto_pwhash_argon2i_strprefix() @system;
+const(char)* crypto_pwhash_argon2i_strprefix() @trusted;
 
 enum crypto_pwhash_argon2i_OPSLIMIT_MIN = 3U;
 
@@ -88,13 +88,13 @@ int crypto_pwhash_argon2i(ubyte* out_,
                           ulong passwdlen,
                           const(ubyte*) salt,
                           ulong opslimit, size_t memlimit,
-                          int alg) nothrow @system; // __attribute__ ((warn_unused_result));
+                          int alg) nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_pwhash_argon2i_str(ref char[crypto_pwhash_argon2i_STRBYTES] out_,
                               const(char*) passwd,
                               ulong passwdlen,
-                              ulong opslimit, size_t memlimit) nothrow @system; // __attribute__ ((warn_unused_result));
+                              ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_pwhash_argon2i_str_verify(ref const(char[crypto_pwhash_argon2i_STRBYTES]) str,
                                      const(char*) passwd,
-                                     ulong passwdlen) nothrow @system; // __attribute__ ((warn_unused_result));
+                                     ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result));

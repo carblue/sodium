@@ -65,6 +65,7 @@ alias sodium_memcmp     = deimos.sodium.utils.sodium_memcmp;
  * This function is not designed for lexicographical comparisons.
  * Throws, if  b1_.length != b2_.length
  */
+pragma(inline, true)
 bool  sodium_memcmp(scope const ubyte[] b1_, scope const ubyte[] b2_) /*pure nothrow*/ @nogc @trusted
 {
   // as of DMD 2.0.74, -dip1000 doesn't respect, that in == scope const
@@ -177,11 +178,10 @@ alias sodium_bin2hex     = deimos.sodium.utils.sodium_bin2hex;
  * Throws, if  hex.length != 2*bin.length+1
  * hex will receive a terminating null character
  */
+pragma(inline, true)
 void sodium_bin2hex(scope char[] hex, scope const ubyte[] bin) /*pure nothrow*/ @nogc @trusted
 {
 //  enforce(bin !is null, "bin is null"); // not necessary
-//  if (hex.length < 2*bin.length+1)
-//    assert(false, "Error in sodium_bin2hex: hex.length < 2*bin.length+1");
   enforce(bin.length < size_t.max / 2);
   enforce(hex.length == 2*bin.length+1, "Expected hex.length: ", hex.length, " to be equal to 2*bin.length+1: ", 2*bin.length+1);
   sodium_bin2hex(hex.ptr, hex.length, bin.ptr, bin.length);
@@ -208,7 +208,6 @@ alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
  * within `hex` following the last parsed character.
  * It evaluates in constant time for a given length and format.
  * @see https://download.libsodium.org/libsodium/content/helpers/
- * NOTE: This function uses heap memory for it's string parameters, and for the toStringz and idup calls.
  */
 bool sodium_hex2bin(ubyte[] bin, const char[] hex, const string ignore_nullterminated, out size_t bin_len, out size_t pos_hex_non_parsed) pure nothrow @nogc @trusted
 {
@@ -232,8 +231,7 @@ unittest
   }
 //sodium_memzero
 //sodium_is_zero
-  import wrapper.sodium.core;
-  import std.algorithm.searching : any, all;
+  import std.algorithm.searching : any;
   import std.range : iota, array;
 
   int[8] a = [1,2,3,4,5,6,7,8]; // allocate on the stack
@@ -394,7 +392,7 @@ unittest
     import std.stdio : writeln;
     writeln("unittest block 3 from sodium.utils.d");
   }
-  import std.string : toStringz, fromStringz;
+  import std.string : fromStringz;
 
 //sodium_bin2hex
   ubyte[] a = [1,2,3,4,255];
@@ -514,7 +512,6 @@ unittest // same as before except @safe and wrapping delegates + overloads
 @system
 unittest
 {
-//  import std.stdio; // : writeln;
   debug {
     import std.stdio : writeln;
     writeln("unittest block 7 from sodium.utils.d");

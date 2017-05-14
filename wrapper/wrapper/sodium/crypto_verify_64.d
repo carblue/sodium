@@ -3,20 +3,22 @@ module wrapper.sodium.crypto_verify_64;
 import wrapper.sodium.core; // assure sodium got initialized
 
 public
-import  deimos.sodium.crypto_verify_64;
+import  deimos.sodium.crypto_verify_64 : crypto_verify_64_BYTES,
+                                         crypto_verify_64_bytes;
+//                                       crypto_verify_64;
 
 // overloading a functions between module deimos.sodium.crypto_verify_64 and this module
 
 alias crypto_verify_64 = deimos.sodium.crypto_verify_64.crypto_verify_64;
 
 /** Secrets are always compared in constant time using sodium_memcmp() or crypto_verify_(16|32|64)()
- * @returns 0 if the len bytes pointed to by x match the len bytes pointed to by y.
- * Otherwise, it returns -1.
+ * @returns true, if the content of array `x` matches the content of array `y`.
+ * Otherwise, it returns false.
  */
 pragma(inline, true)
-int crypto_verify_64(in ubyte[crypto_verify_64_BYTES] x, in ubyte[crypto_verify_64_BYTES] y) pure nothrow @nogc @trusted
+bool crypto_verify_64(const ubyte[crypto_verify_64_BYTES] x, const ubyte[crypto_verify_64_BYTES] y) pure nothrow @nogc @trusted
 {
-  return crypto_verify_64(x.ptr, y.ptr);
+  return crypto_verify_64(x.ptr, y.ptr) == 0;
 }
 
 
@@ -55,8 +57,8 @@ else {
     buf1[i] = e;
 }
   ubyte[crypto_verify_64_BYTES] buf2 = buf1;
-  assert(crypto_verify_64(buf1, buf2) ==  0);
+  assert( crypto_verify_64(buf1, buf2));
   buf2[$-1] = 65;
-  assert(crypto_verify_64(buf1, buf2) == -1);
+  assert(!crypto_verify_64(buf1, buf2));
 }
 

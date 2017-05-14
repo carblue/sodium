@@ -10,13 +10,13 @@ import  deimos.sodium.crypto_verify_16;
 alias crypto_verify_16 = deimos.sodium.crypto_verify_16.crypto_verify_16;
 
 /** Secrets are always compared in constant time using sodium_memcmp() or crypto_verify_(16|32|64)()
- * @returns 0 if the len bytes pointed to by x match the len bytes pointed to by y.
- * Otherwise, it returns -1.
+ * @returns true, if the content of array `x` matches the content of array `y`.
+ * Otherwise, it returns false.
  */
 pragma(inline, true)
-int crypto_verify_16(in ubyte[crypto_verify_16_BYTES] x, in ubyte[crypto_verify_16_BYTES] y) pure nothrow @nogc @trusted
+bool  crypto_verify_16(const ubyte[crypto_verify_16_BYTES] x, const ubyte[crypto_verify_16_BYTES] y) pure nothrow @nogc @trusted
 {
-  return  crypto_verify_16(x.ptr, y.ptr);
+  return  crypto_verify_16(x.ptr, y.ptr) == 0;
 }
 
 
@@ -38,7 +38,7 @@ unittest
 pure nothrow @nogc @safe
 unittest
 {
-  import std.range : iota, enumerate; //, array;
+  import std.range : iota, enumerate;
 //crypto_verify_16_bytes
   assert(crypto_verify_16_bytes() == crypto_verify_16_BYTES);
 
@@ -55,7 +55,7 @@ else {
     buf1[i] = e;
 }
   ubyte[crypto_verify_16_BYTES] buf2 = buf1;
-  assert(crypto_verify_16(buf1, buf2) ==  0);
+  assert( crypto_verify_16(buf1, buf2));
   buf2[$-1] = 17;
-  assert(crypto_verify_16(buf1, buf2) == -1);
+  assert(!crypto_verify_16(buf1, buf2));
 }

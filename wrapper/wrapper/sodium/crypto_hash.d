@@ -29,8 +29,7 @@ alias crypto_hash = deimos.sodium.crypto_hash.crypto_hash;
 pragma(inline, true)
 bool crypto_hash(out ubyte[crypto_hash_BYTES] out_, in ubyte[] in_) pure @nogc @trusted
 {
-  static import deimos.sodium.crypto_hash;
-  return  deimos.sodium.crypto_hash.crypto_hash(out_.ptr, in_.ptr, in_.length) == 0;
+  return  crypto_hash(out_.ptr, in_.ptr, in_.length) == 0;
 }
 
 

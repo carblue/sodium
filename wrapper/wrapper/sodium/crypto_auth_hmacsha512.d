@@ -5,14 +5,31 @@ module wrapper.sodium.crypto_auth_hmacsha512;
 import wrapper.sodium.core; // assure sodium got initialized
 
 public
-import  deimos.sodium.crypto_auth_hmacsha512;
+import  deimos.sodium.crypto_auth_hmacsha512 : crypto_auth_hmacsha512_BYTES,
+                                               crypto_auth_hmacsha512_bytes,
+                                               crypto_auth_hmacsha512_KEYBYTES,
+                                               crypto_auth_hmacsha512_keybytes,
+/*                                             crypto_auth_hmacsha512,
+                                               crypto_auth_hmacsha512_verify,  */
+                                               crypto_auth_hmacsha512_state,
+                                               crypto_auth_hmacsha512_statebytes,
+/*                                             crypto_auth_hmacsha512_init,
+                                               crypto_auth_hmacsha512_update,
+                                               crypto_auth_hmacsha512_final,   */
+                                               crypto_auth_hmacsha512_keygen;
 
 
 // overloading some functions between module deimos.sodium.crypto_auth_hmacsha512 and this module
+
+alias  crypto_auth_hmacsha512        = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512;
+alias  crypto_auth_hmacsha512_verify = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_verify;
+alias crypto_auth_hmacsha512_init    = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_init;
+alias crypto_auth_hmacsha512_update  = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_update;
+alias crypto_auth_hmacsha512_final   = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_final;
+
+
 pragma(inline, true)  pure @nogc @trusted
 {
-alias  crypto_auth_hmacsha512        = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512;
-
 /**
  * The crypto_auth_hmacsha512() function authenticates a message `message` using the secret	key skey,
  * and puts the	authenticator	into mac.
@@ -22,10 +39,8 @@ bool crypto_auth_hmacsha512(out ubyte[crypto_auth_hmacsha512_BYTES] mac,
                            in ubyte[] message,
                            in ubyte[crypto_auth_hmacsha512_KEYBYTES] skey)
 {
-  return  deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
+  return  crypto_auth_hmacsha512(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
 }
-
-alias  crypto_auth_hmacsha512_verify = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_verify;
 
 /**
  * The	 	crypto_auth_hmacsha512_verify()	 	function	verifies	in	constant	time	that	 	h	 	is	a	correct
@@ -37,10 +52,8 @@ bool crypto_auth_hmacsha512_verify(in ubyte[crypto_auth_hmacsha512_BYTES] mac,
                                    in ubyte[] message,
                                    in ubyte[crypto_auth_hmacsha512_KEYBYTES] skey) nothrow
 {
-  return  deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_verify(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
+  return  crypto_auth_hmacsha512_verify(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
 }
-
-alias crypto_auth_hmacsha512_init    = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_init;
 
 /**
  * This	alternative	API	supports	a	key	of	arbitrary	length
@@ -48,23 +61,19 @@ alias crypto_auth_hmacsha512_init    = deimos.sodium.crypto_auth_hmacsha512.cryp
 bool crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state,
                                  in ubyte[] skey)
 {
-  return  deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_init(&state, skey.ptr, skey.length) == 0;
+  return  crypto_auth_hmacsha512_init(&state, skey.ptr, skey.length) == 0;
 }
-
-alias crypto_auth_hmacsha512_update  = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_update;
 
 bool crypto_auth_hmacsha512_update(ref crypto_auth_hmacsha512_state state,
                                    in ubyte[] in_)
 {
-  return  deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_update(&state, in_.ptr, in_.length) == 0;
+  return  crypto_auth_hmacsha512_update(&state, in_.ptr, in_.length) == 0;
 }
-
-alias crypto_auth_hmacsha512_final   = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_final;
 
 bool crypto_auth_hmacsha512_final(ref crypto_auth_hmacsha512_state state,
                                   out ubyte[crypto_auth_hmacsha512_BYTES] out_)
 {
-  return  deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_final(&state, out_.ptr) == 0;
+  return  crypto_auth_hmacsha512_final(&state, out_.ptr) == 0;
 }
 } //pragma(inline, true)  pure @nogc @trusted
 

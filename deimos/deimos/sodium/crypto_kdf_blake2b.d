@@ -29,4 +29,4 @@ size_t crypto_kdf_blake2b_keybytes() @trusted;
 int crypto_kdf_blake2b_derive_from_key(ubyte* subkey, size_t subkey_len,
                                        ulong subkey_id,
                                        ref const(char)[crypto_kdf_blake2b_CONTEXTBYTES] ctx,
-                                       ref const(ubyte)[crypto_kdf_blake2b_KEYBYTES] key) @system;
+                                       ref const(ubyte)[crypto_kdf_blake2b_KEYBYTES] key);

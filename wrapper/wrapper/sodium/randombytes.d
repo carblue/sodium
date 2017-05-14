@@ -131,7 +131,7 @@ auto randombytes_range() nothrow @nogc @trusted
 
 version(QRNG_ONLINE) {
   import wrapper.sodium.QRNG;
-  alias QRNG_randombytes_range_singleton = wrapper.sodium.QRNG.QRNG_randombytes_range_singleton;
+  alias QRNG_randombytes_range = wrapper.sodium.QRNG.QRNG_randombytes_range;
 }
 
 @system

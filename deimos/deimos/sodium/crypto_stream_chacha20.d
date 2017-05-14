@@ -15,56 +15,56 @@ module deimos.sodium.crypto_stream_chacha20;
  */
 
 
-extern(C) pure @nogc:
+extern(C) @nogc:
 
 
 enum crypto_stream_chacha20_KEYBYTES = 32U;
 
-size_t crypto_stream_chacha20_keybytes() @trusted;
+size_t crypto_stream_chacha20_keybytes() pure @trusted;
 
 enum crypto_stream_chacha20_NONCEBYTES = 8U;
 
-size_t crypto_stream_chacha20_noncebytes() @trusted;
+size_t crypto_stream_chacha20_noncebytes() pure @trusted;
 
 /* ChaCha20 with a 64-bit nonce and a 64-bit counter, as originally designed */
 
 int crypto_stream_chacha20(ubyte* c, ulong clen,
-                           const(ubyte)* n, const(ubyte)* k) @system;
+                           const(ubyte)* n, const(ubyte)* k) pure;
 
 int crypto_stream_chacha20_xor(ubyte* c, const(ubyte)* m,
                                ulong mlen, const(ubyte)* n,
-                               const(ubyte)* k) @system;
+                               const(ubyte)* k) pure;
 
 int crypto_stream_chacha20_xor_ic(ubyte* c, const(ubyte)* m,
                                   ulong mlen,
                                   const(ubyte)* n, ulong ic,
-                                  const(ubyte)* k) @system;
+                                  const(ubyte)* k) pure;
 
-void crypto_stream_chacha20_keygen(ref ubyte[crypto_stream_chacha20_KEYBYTES] k) @system;
+void crypto_stream_chacha20_keygen(ref ubyte[crypto_stream_chacha20_KEYBYTES] k) nothrow @trusted;
 
 /* ChaCha20 with a 96-bit nonce and a 32-bit counter (IETF) */
 
 enum crypto_stream_chacha20_ietf_KEYBYTES = 32U;
 
-size_t crypto_stream_chacha20_ietf_keybytes() @trusted;
+size_t crypto_stream_chacha20_ietf_keybytes() pure @trusted;
 
 enum crypto_stream_chacha20_ietf_NONCEBYTES = 12U;
 
-size_t crypto_stream_chacha20_ietf_noncebytes() @trusted;
+size_t crypto_stream_chacha20_ietf_noncebytes() pure @trusted;
 
 int crypto_stream_chacha20_ietf(ubyte* c, ulong clen,
-                                const(ubyte)* n, const(ubyte)* k) @system;
+                                const(ubyte)* n, const(ubyte)* k) pure;
 
 int crypto_stream_chacha20_ietf_xor(ubyte* c, const(ubyte)* m,
                                     ulong mlen, const(ubyte)* n,
-                                    const(ubyte)* k) @system;
+                                    const(ubyte)* k) pure;
 
 int crypto_stream_chacha20_ietf_xor_ic(ubyte* c, const(ubyte)* m,
                                        ulong mlen,
                                        const(ubyte)* n, uint ic,
-                                       const(ubyte)* k) @system;
+                                       const(ubyte)* k) pure;
 
-void crypto_stream_chacha20_ietf_keygen(ref ubyte[crypto_stream_chacha20_ietf_KEYBYTES] k) nothrow @system;
+void crypto_stream_chacha20_ietf_keygen(ref ubyte[crypto_stream_chacha20_ietf_KEYBYTES] k) nothrow @trusted;
 
 /* Aliases */
 

@@ -11,38 +11,38 @@ import deimos.sodium.crypto_onetimeauth_poly1305 : crypto_onetimeauth_poly1305_s
                                                    crypto_onetimeauth_poly1305_KEYBYTES;
 
 
-extern(C) pure @nogc :
+extern(C) @nogc :
 
 alias crypto_onetimeauth_state = crypto_onetimeauth_poly1305_state;
 
-size_t  crypto_onetimeauth_statebytes() @trusted;
+size_t  crypto_onetimeauth_statebytes() pure @trusted;
 
 alias crypto_onetimeauth_BYTES = crypto_onetimeauth_poly1305_BYTES;
 
-size_t  crypto_onetimeauth_bytes() @trusted;
+size_t  crypto_onetimeauth_bytes() pure @trusted;
 
 alias crypto_onetimeauth_KEYBYTES = crypto_onetimeauth_poly1305_KEYBYTES;
 
-size_t  crypto_onetimeauth_keybytes() @trusted;
+size_t  crypto_onetimeauth_keybytes() pure @trusted;
 
 enum crypto_onetimeauth_PRIMITIVE = "poly1305";
 
-const(char)* crypto_onetimeauth_primitive() @system;
+const(char)* crypto_onetimeauth_primitive() pure @trusted;
 
 int crypto_onetimeauth(ubyte* out_, const(ubyte)* in_,
-                       ulong inlen, const(ubyte)* k) @system;
+                       ulong inlen, const(ubyte)* k) pure;
 
 int crypto_onetimeauth_verify(const(ubyte)* h, const(ubyte)* in_,
-                              ulong inlen, const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result));
+                              ulong inlen, const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_onetimeauth_init(crypto_onetimeauth_state* state,
-                            const(ubyte)* key) @system;
+                            const(ubyte)* key) pure;
 
 int crypto_onetimeauth_update(crypto_onetimeauth_state* state,
                               const(ubyte)* in_,
-                              ulong inlen) @system;
+                              ulong inlen) pure;
 
 int crypto_onetimeauth_final(crypto_onetimeauth_state* state,
-                             ubyte* out_) @system;
+                             ubyte* out_) pure;
 
-void crypto_onetimeauth_keygen(ref ubyte[crypto_onetimeauth_KEYBYTES] k) nothrow @system;
+void crypto_onetimeauth_keygen(ref ubyte[crypto_onetimeauth_KEYBYTES] k) nothrow @trusted;

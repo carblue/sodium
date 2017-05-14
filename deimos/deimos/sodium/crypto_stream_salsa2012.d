@@ -15,22 +15,22 @@ module deimos.sodium.crypto_stream_salsa2012;
  */
 
 
-extern(C) pure @nogc :
+extern(C) @nogc :
 
 
 enum crypto_stream_salsa2012_KEYBYTES = 32U;
 
-size_t crypto_stream_salsa2012_keybytes() @trusted;
+size_t crypto_stream_salsa2012_keybytes() pure @trusted;
 
 enum crypto_stream_salsa2012_NONCEBYTES = 8U;
 
-size_t crypto_stream_salsa2012_noncebytes() @trusted;
+size_t crypto_stream_salsa2012_noncebytes() pure @trusted;
 
 int crypto_stream_salsa2012(ubyte* c, ulong clen,
-                            const(ubyte)* n, const(ubyte)* k) @system;
+                            const(ubyte)* n, const(ubyte)* k) pure;
 
 int crypto_stream_salsa2012_xor(ubyte* c, const(ubyte)* m,
                                 ulong mlen, const(ubyte)* n,
-                                const(ubyte)* k) @system;
+                                const(ubyte)* k) pure;
 
-void crypto_stream_salsa2012_keygen(ref ubyte[crypto_stream_salsa2012_KEYBYTES] k) nothrow @system;
+void crypto_stream_salsa2012_keygen(ref ubyte[crypto_stream_salsa2012_KEYBYTES] k) nothrow @trusted;

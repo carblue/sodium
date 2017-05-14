@@ -18,7 +18,7 @@ module deimos.sodium.crypto_sign_edwards25519sha512batch;
  */
 
 
-extern(C) pure @nogc :
+extern(C) @nogc :
 
 
 enum crypto_sign_edwards25519sha512batch_BYTES = 64U;
@@ -33,13 +33,13 @@ int crypto_sign_edwards25519sha512batch(ubyte* sm,
                                         ulong* smlen_p,
                                         const(ubyte)* m,
                                         ulong mlen,
-                                        const(ubyte)* sk) @system;
+                                        const(ubyte)* sk) pure;
 
 int crypto_sign_edwards25519sha512batch_open(ubyte* m,
                                              ulong* mlen_p,
                                              const(ubyte)* sm,
                                              ulong smlen,
-                                             const(ubyte)* pk) @system;
+                                             const(ubyte)* pk) pure;
 
 int crypto_sign_edwards25519sha512batch_keypair(ubyte* pk,
-                                                ubyte* sk) @system;
+                                                ubyte* sk) nothrow;

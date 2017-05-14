@@ -13,45 +13,45 @@ import deimos.sodium.crypto_secretbox_xsalsa20poly1305 : crypto_secretbox_xsalsa
                                                          crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES;
 
 
-extern(C) pure @nogc :
+extern(C) @nogc :
 
 
 alias crypto_secretbox_KEYBYTES = crypto_secretbox_xsalsa20poly1305_KEYBYTES;
 
-size_t  crypto_secretbox_keybytes() @trusted;
+size_t  crypto_secretbox_keybytes() pure @trusted;
 
 alias crypto_secretbox_NONCEBYTES = crypto_secretbox_xsalsa20poly1305_NONCEBYTES;
 
-size_t  crypto_secretbox_noncebytes() @trusted;
+size_t  crypto_secretbox_noncebytes() pure @trusted;
 
 alias crypto_secretbox_MACBYTES = crypto_secretbox_xsalsa20poly1305_MACBYTES;
 
-size_t  crypto_secretbox_macbytes() @trusted;
+size_t  crypto_secretbox_macbytes() pure @trusted;
 
 enum crypto_secretbox_PRIMITIVE = "xsalsa20poly1305";
 
-const(char)* crypto_secretbox_primitive() @system;
+const(char)* crypto_secretbox_primitive() pure @trusted;
 
 int crypto_secretbox_easy(ubyte* c, const(ubyte)* m,
                           ulong mlen, const(ubyte)* n,
-                          const(ubyte)* k) @system;
+                          const(ubyte)* k) pure;
 
 int crypto_secretbox_open_easy(ubyte* m, const(ubyte)* c,
                                ulong clen, const(ubyte)* n,
-                               const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result));
+                               const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_secretbox_detached(ubyte* c, ubyte* mac,
                               const(ubyte)* m,
                               ulong mlen,
                               const(ubyte)* n,
-                              const(ubyte)* k) @system;
+                              const(ubyte)* k) pure;
 
 int crypto_secretbox_open_detached(ubyte* m,
                                    const(ubyte)* c,
                                    const(ubyte)* mac,
                                    ulong clen,
                                    const(ubyte)* n,
-                                   const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result));
+                                   const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
 
 void crypto_secretbox_keygen(ref ubyte[crypto_secretbox_KEYBYTES] k) nothrow @trusted;
 
@@ -59,16 +59,16 @@ void crypto_secretbox_keygen(ref ubyte[crypto_secretbox_KEYBYTES] k) nothrow @tr
 
 alias crypto_secretbox_ZEROBYTES = crypto_secretbox_xsalsa20poly1305_ZEROBYTES;
 
-size_t  crypto_secretbox_zerobytes() @trusted;
+size_t  crypto_secretbox_zerobytes() pure @trusted;
 
 alias crypto_secretbox_BOXZEROBYTES = crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES;
 
-size_t  crypto_secretbox_boxzerobytes() @trusted;
+size_t  crypto_secretbox_boxzerobytes() pure @trusted;
 
 int crypto_secretbox(ubyte* c, const(ubyte)* m,
                      ulong mlen, const(ubyte)* n,
-                     const(ubyte)* k) @system;
+                     const(ubyte)* k) pure;
 
 int crypto_secretbox_open(ubyte* m, const(ubyte)* c,
                           ulong clen, const(ubyte)* n,
-                          const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result));
+                          const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));

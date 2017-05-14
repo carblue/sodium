@@ -24,8 +24,8 @@ alias crypto_hash_BYTES = crypto_hash_sha512_BYTES;
 size_t crypto_hash_bytes() @trusted;
 
 int crypto_hash(ubyte* out_, const(ubyte)* in_,
-                ulong inlen) @system;
+                ulong inlen);
 
 enum crypto_hash_PRIMITIVE = "sha512";
 
-const(char)* crypto_hash_primitive() nothrow @system; // __attribute__ ((warn_unused_result));
+const(char)* crypto_hash_primitive() nothrow @trusted; // __attribute__ ((warn_unused_result));

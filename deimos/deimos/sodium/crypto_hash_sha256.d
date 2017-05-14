@@ -30,13 +30,13 @@ enum crypto_hash_sha256_BYTES = 32U;
 size_t crypto_hash_sha256_bytes() @trusted;
 
 int crypto_hash_sha256(ubyte* out_, const(ubyte)* in_,
-                       ulong inlen) @system;
+                       ulong inlen);
 
-int crypto_hash_sha256_init(crypto_hash_sha256_state* state) @system;
+int crypto_hash_sha256_init(crypto_hash_sha256_state* state);
 
 int crypto_hash_sha256_update(crypto_hash_sha256_state* state,
                               const(ubyte)* in_,
-                              ulong inlen) @system;
+                              ulong inlen);
 
 int crypto_hash_sha256_final(crypto_hash_sha256_state* state,
-                             ubyte* out_) @system;
+                             ubyte* out_);

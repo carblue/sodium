@@ -12,18 +12,18 @@ import  deimos.sodium.crypto_secretbox : crypto_secretbox_KEYBYTES,
                                          crypto_secretbox_MACBYTES,
                                          crypto_secretbox_macbytes,
                                          crypto_secretbox_PRIMITIVE,
-//                                         crypto_secretbox_primitive,
-//                                         crypto_secretbox_easy,
-//                                         crypto_secretbox_open_easy,
-//                                         crypto_secretbox_detached,
-//                                         crypto_secretbox_open_detached,
-                                         crypto_secretbox_keygen,
-                                         crypto_secretbox_ZEROBYTES,
+/*                                       crypto_secretbox_primitive,
+                                         crypto_secretbox_easy,
+                                         crypto_secretbox_open_easy,
+                                         crypto_secretbox_detached,
+                                         crypto_secretbox_open_detached,  */
+                                         crypto_secretbox_keygen;
+/*                                       crypto_secretbox_ZEROBYTES,
                                          crypto_secretbox_zerobytes,
                                          crypto_secretbox_BOXZEROBYTES,
                                          crypto_secretbox_boxzerobytes,
                                          crypto_secretbox,
-                                         crypto_secretbox_open;
+                                         crypto_secretbox_open;  */
 
 import std.exception : assertThrown;
 
@@ -92,6 +92,28 @@ bool crypto_secretbox_open_detached(scope ubyte[] m,
 
 /* No overloads for -- NaCl compatibility interface ; Requires padding -- */
 
+@system
+unittest {
+  import std.stdio : writeln;
+  import wrapper.sodium.randombytes : randombytes;
+  import deimos.sodium.crypto_secretbox;
+
+  writeln("unittest block 1 from sodium.crypto_secretbox.d");
+
+  ubyte[crypto_secretbox_NONCEBYTES]  nonce = void;
+  ubyte[crypto_secretbox_KEYBYTES]    key   = void;
+  randombytes(nonce);
+  randombytes(key);
+
+  enum message_len = 4;
+  ubyte[crypto_secretbox_ZEROBYTES + message_len]  message, ciphertext, decrypted;
+  message[crypto_secretbox_ZEROBYTES..crypto_secretbox_ZEROBYTES+message_len] = [116, 101, 115, 116];
+  assert(crypto_secretbox     (ciphertext.ptr, message.ptr,    message.length,    nonce.ptr, key.ptr) == 0);
+  assert(crypto_secretbox_open(decrypted.ptr,  ciphertext.ptr, ciphertext.length, nonce.ptr, key.ptr) == 0);
+  assert(decrypted == message);
+//  writeln("decrypted: ", decrypted[crypto_secretbox_ZEROBYTES..crypto_secretbox_ZEROBYTES+message_len]); // decrypted: [116, 101, 115, 116]
+}
+
 @safe
 unittest {
   import std.string : representation;
@@ -99,7 +121,7 @@ unittest {
   import wrapper.sodium.randombytes : randombytes;
   import wrapper.sodium.utils : sodium_increment;
 
-  debug writeln("unittest block 1 from sodium.crypto_secretbox.d");
+  debug writeln("unittest block 2 from sodium.crypto_secretbox.d");
 
   assert(crypto_secretbox_keybytes()   == crypto_secretbox_KEYBYTES);
   assert(crypto_secretbox_noncebytes() == crypto_secretbox_NONCEBYTES);
@@ -116,7 +138,7 @@ unittest {
   ubyte[CIPHERTEXT_LEN]               ciphertext = void;
 
   randombytes(nonce);
-  randombytes(key);
+  crypto_secretbox_keygen(key);
   assertThrown(crypto_secretbox_easy(ciphertext[0..$-1], message, nonce, key));
   assert(crypto_secretbox_easy(ciphertext, message, nonce, key));
   version(none) {
@@ -154,10 +176,9 @@ Key        (base64): AtN67ZJklRbVVJ7R9QwVbKFpZivWXFHq9YlwVbM9n6s=
   assert(crypto_secretbox_open_easy(decrypted, ciphertext, nonce, key), "message forged!");
   assert(decrypted == message);
 
-//
   ubyte[crypto_secretbox_MACBYTES]  mac = void;
   ubyte[MESSAGE_LEN]  ciphertext2;
-  decrypted  = ubyte.init;
+  decrypted  = decrypted.init;
   sodium_increment(nonce);
   assertThrown(crypto_secretbox_detached(ciphertext2[0..$-1], mac, message, nonce, key));
   assert(crypto_secretbox_detached(ciphertext2, mac, message, nonce, key));
@@ -165,7 +186,4 @@ Key        (base64): AtN67ZJklRbVVJ7R9QwVbKFpZivWXFHq9YlwVbM9n6s=
   assertThrown(crypto_secretbox_open_detached(decrypted[0..$-1], ciphertext2, mac, nonce, key));
   assert(crypto_secretbox_open_detached(decrypted, ciphertext2, mac, nonce, key), "message forged!");
   assert(decrypted == message);
-
-  ubyte[crypto_secretbox_KEYBYTES] k;
-  crypto_secretbox_keygen(k);
 }

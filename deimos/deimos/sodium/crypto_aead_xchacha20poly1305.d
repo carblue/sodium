@@ -10,25 +10,24 @@ module deimos.sodium.crypto_aead_xchacha20poly1305;
 //#include "export.h"
 //
 
-extern(C) pure @nogc :
+extern(C) @nogc :
 
 
 enum crypto_aead_xchacha20poly1305_ietf_KEYBYTES = 32U;
 
-size_t crypto_aead_xchacha20poly1305_ietf_keybytes() @trusted;
+size_t crypto_aead_xchacha20poly1305_ietf_keybytes() pure @trusted;
 
 enum crypto_aead_xchacha20poly1305_ietf_NSECBYTES = 0U;
 
-size_t crypto_aead_xchacha20poly1305_ietf_nsecbytes() @trusted;
+size_t crypto_aead_xchacha20poly1305_ietf_nsecbytes() pure @trusted;
 
 enum crypto_aead_xchacha20poly1305_ietf_NPUBBYTES = 24U;
 
-size_t crypto_aead_xchacha20poly1305_ietf_npubbytes() @trusted;
+size_t crypto_aead_xchacha20poly1305_ietf_npubbytes() pure @trusted;
 
 enum crypto_aead_xchacha20poly1305_ietf_ABYTES = 16U;
 
-size_t crypto_aead_xchacha20poly1305_ietf_abytes() @trusted;
-
+size_t crypto_aead_xchacha20poly1305_ietf_abytes() pure @trusted;
 
 int crypto_aead_xchacha20poly1305_ietf_encrypt(ubyte* c,
                                                ulong* clen_p,
@@ -38,7 +37,7 @@ int crypto_aead_xchacha20poly1305_ietf_encrypt(ubyte* c,
                                                ulong adlen,
                                                const(ubyte)* nsec,
                                                const(ubyte)* npub,
-                                               const(ubyte)* k);
+                                               const(ubyte)* k) pure;
 
 int crypto_aead_xchacha20poly1305_ietf_decrypt(ubyte* m,
                                                ulong* mlen_p,
@@ -48,7 +47,7 @@ int crypto_aead_xchacha20poly1305_ietf_decrypt(ubyte* m,
                                                const(ubyte)* ad,
                                                ulong adlen,
                                                const(ubyte)* npub,
-                                               const(ubyte)* k) nothrow; //  __attribute__ ((warn_unused_result)); //  __attribute__ ((warn_unused_result));
+                                               const(ubyte)* k) pure nothrow; //  __attribute__ ((warn_unused_result)); //  __attribute__ ((warn_unused_result));
 
 int crypto_aead_xchacha20poly1305_ietf_encrypt_detached(ubyte* c,
                                                         ubyte* mac,
@@ -59,7 +58,7 @@ int crypto_aead_xchacha20poly1305_ietf_encrypt_detached(ubyte* c,
                                                         ulong adlen,
                                                         const(ubyte)* nsec,
                                                         const(ubyte)* npub,
-                                                        const(ubyte)* k);
+                                                        const(ubyte)* k) pure;
 
 int crypto_aead_xchacha20poly1305_ietf_decrypt_detached(ubyte* m,
                                                         ubyte* nsec,
@@ -69,9 +68,9 @@ int crypto_aead_xchacha20poly1305_ietf_decrypt_detached(ubyte* m,
                                                         const(ubyte)* ad,
                                                         ulong adlen,
                                                         const(ubyte)* npub,
-                                                        const(ubyte)* k) nothrow; //  __attribute__ ((warn_unused_result));
+                                                        const(ubyte)* k) pure nothrow; //  __attribute__ ((warn_unused_result));
 
-void crypto_aead_xchacha20poly1305_ietf_keygen(out ubyte[crypto_aead_xchacha20poly1305_ietf_KEYBYTES] k) nothrow @trusted;
+void crypto_aead_xchacha20poly1305_ietf_keygen(ref ubyte[crypto_aead_xchacha20poly1305_ietf_KEYBYTES] k) nothrow @trusted;
 
 /* Aliases */
 

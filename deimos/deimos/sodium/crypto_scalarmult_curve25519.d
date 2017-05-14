@@ -19,6 +19,6 @@ enum crypto_scalarmult_curve25519_SCALARBYTES = 32U;
 size_t crypto_scalarmult_curve25519_scalarbytes() @trusted;
 
 int crypto_scalarmult_curve25519(ubyte* q, const(ubyte)* n,
-                                 const(ubyte)* p) nothrow @system; // __attribute__ ((warn_unused_result));
+                                 const(ubyte)* p) nothrow; // __attribute__ ((warn_unused_result));
 
-int crypto_scalarmult_curve25519_base(ubyte* q, const(ubyte)* n) @system;
+int crypto_scalarmult_curve25519_base(ubyte* q, const(ubyte)* n);

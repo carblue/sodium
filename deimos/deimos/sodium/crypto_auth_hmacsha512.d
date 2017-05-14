@@ -9,26 +9,26 @@ module deimos.sodium.crypto_auth_hmacsha512;
 import deimos.sodium.crypto_hash_sha512 : crypto_hash_sha512_state;
 
 
-extern(C) pure @nogc :
+extern(C) @nogc :
 
 
 enum crypto_auth_hmacsha512_BYTES = 64U;
 
-size_t crypto_auth_hmacsha512_bytes() @trusted;
+size_t crypto_auth_hmacsha512_bytes() pure @trusted;
 
 enum crypto_auth_hmacsha512_KEYBYTES = 32U;
 
-size_t crypto_auth_hmacsha512_keybytes() @trusted;
+size_t crypto_auth_hmacsha512_keybytes() pure @trusted;
 
 int crypto_auth_hmacsha512(ubyte* out_,
                            const(ubyte)* in_,
                            ulong inlen,
-                           const(ubyte)* k) @system;
+                           const(ubyte)* k) pure;
 
 int crypto_auth_hmacsha512_verify(const(ubyte)* h,
                                   const(ubyte)* in_,
                                   ulong inlen,
-                                  const(ubyte)* k) nothrow @system; // __attribute__ ((warn_unused_result));
+                                  const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
 
 /* ------------------------------------------------------------------------- */
 
@@ -37,17 +37,17 @@ struct crypto_auth_hmacsha512_state {
     crypto_hash_sha512_state octx;
 }
 
-size_t crypto_auth_hmacsha512_statebytes() @trusted;
+size_t crypto_auth_hmacsha512_statebytes() pure @trusted;
 
 int crypto_auth_hmacsha512_init(crypto_auth_hmacsha512_state* state,
                                 const(ubyte)* key,
-                                size_t keylen) @system;
+                                size_t keylen) pure;
 
 int crypto_auth_hmacsha512_update(crypto_auth_hmacsha512_state* state,
                                   const(ubyte)* in_,
-                                  ulong inlen) @system;
+                                  ulong inlen) pure;
 
 int crypto_auth_hmacsha512_final(crypto_auth_hmacsha512_state* state,
-                                 ubyte* out_) @system;
+                                 ubyte* out_) pure;
 
 void crypto_auth_hmacsha512_keygen(ref ubyte[crypto_auth_hmacsha512_KEYBYTES] k) nothrow @trusted;

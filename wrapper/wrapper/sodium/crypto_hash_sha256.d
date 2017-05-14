@@ -19,8 +19,7 @@ alias crypto_hash_sha256 = deimos.sodium.crypto_hash_sha256.crypto_hash_sha256;
 pragma(inline, true)
 bool crypto_hash_sha256(out ubyte[crypto_hash_sha256_BYTES] out_, in ubyte[] in_) pure @nogc @trusted
 {
-  static import deimos.sodium.crypto_hash_sha256;
-  return  deimos.sodium.crypto_hash_sha256.crypto_hash_sha256(out_.ptr, in_.ptr, in_.length) == 0;
+  return  crypto_hash_sha256(out_.ptr, in_.ptr, in_.length) == 0;
 }
 
 
@@ -29,8 +28,7 @@ alias crypto_hash_sha256_init = deimos.sodium.crypto_hash_sha256.crypto_hash_sha
 pragma(inline, true)
 bool crypto_hash_sha256_init(out crypto_hash_sha256_state state) pure @nogc @trusted
 {
-  static import deimos.sodium.crypto_hash_sha256;
-  return  deimos.sodium.crypto_hash_sha256.crypto_hash_sha256_init(&state) == 0;
+  return  crypto_hash_sha256_init(&state) == 0;
 }
 
 alias crypto_hash_sha256_update = deimos.sodium.crypto_hash_sha256.crypto_hash_sha256_update;
@@ -38,8 +36,7 @@ alias crypto_hash_sha256_update = deimos.sodium.crypto_hash_sha256.crypto_hash_s
 pragma(inline, true)
 bool crypto_hash_sha256_update(ref crypto_hash_sha256_state state, in ubyte[] in_) pure @nogc @trusted
 {
-  static import deimos.sodium.crypto_hash_sha256;
-  return  deimos.sodium.crypto_hash_sha256.crypto_hash_sha256_update(&state, in_.ptr, in_.length) == 0;
+  return  crypto_hash_sha256_update(&state, in_.ptr, in_.length) == 0;
 }
 
 alias crypto_hash_sha256_final = deimos.sodium.crypto_hash_sha256.crypto_hash_sha256_final;
@@ -47,8 +44,7 @@ alias crypto_hash_sha256_final = deimos.sodium.crypto_hash_sha256.crypto_hash_sh
 pragma(inline, true)
 bool crypto_hash_sha256_final(ref crypto_hash_sha256_state state, out ubyte[crypto_hash_sha256_BYTES] out_) pure @nogc @trusted
 {
-  static import deimos.sodium.crypto_hash_sha256;
-  return  deimos.sodium.crypto_hash_sha256.crypto_hash_sha256_final(&state, out_.ptr) == 0;
+  return  crypto_hash_sha256_final(&state, out_.ptr) == 0;
 }
 
 

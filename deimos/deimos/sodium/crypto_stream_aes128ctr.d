@@ -33,18 +33,18 @@ size_t crypto_stream_aes128ctr_beforenmbytes() @trusted;
 deprecated :
 
 int crypto_stream_aes128ctr(ubyte* out_, ulong outlen,
-                            const(ubyte)* n, const(ubyte)* k) @system;
+                            const(ubyte)* n, const(ubyte)* k);
 
 int crypto_stream_aes128ctr_xor(ubyte* out_, const(ubyte)* in_,
                                 ulong inlen, const(ubyte)* n,
-                                const(ubyte)* k) @system;
+                                const(ubyte)* k);
 
-int crypto_stream_aes128ctr_beforenm(ubyte* c, const(ubyte)* k) @system;
+int crypto_stream_aes128ctr_beforenm(ubyte* c, const(ubyte)* k);
 
 int crypto_stream_aes128ctr_afternm(ubyte* out_, ulong len,
-                                    const(ubyte)* nonce, const(ubyte)* c) @system;
+                                    const(ubyte)* nonce, const(ubyte)* c);
 
 int crypto_stream_aes128ctr_xor_afternm(ubyte* out_, const(ubyte)* in_,
                                         ulong len,
                                         const(ubyte)* nonce,
-                                        const(ubyte)* c) @system;
+                                        const(ubyte)* c);

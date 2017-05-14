@@ -27,4 +27,4 @@ enum crypto_core_hchacha20_CONSTBYTES = 16U;
 size_t crypto_core_hchacha20_constbytes() @trusted;
 
 int crypto_core_hchacha20(ubyte* out_, const(ubyte)* in_,
-                          const(ubyte)* k, const(ubyte)* c) @system;
+                          const(ubyte)* k, const(ubyte)* c);

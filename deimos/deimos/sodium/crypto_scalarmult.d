@@ -23,9 +23,9 @@ size_t  crypto_scalarmult_scalarbytes() @trusted;
 
 enum crypto_scalarmult_PRIMITIVE = "curve25519";
 
-const(char)* crypto_scalarmult_primitive() @system;
+const(char)* crypto_scalarmult_primitive() @trusted;
 
-int crypto_scalarmult_base(ubyte* q, const(ubyte)* n) @system;
+int crypto_scalarmult_base(ubyte* q, const(ubyte)* n);
 
 int crypto_scalarmult(ubyte* q, const(ubyte)* n,
-                      const(ubyte)* p) nothrow @system; // __attribute__ ((warn_unused_result));
+                      const(ubyte)* p) nothrow; // __attribute__ ((warn_unused_result));

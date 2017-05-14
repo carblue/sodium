@@ -19,26 +19,26 @@ import deimos.sodium.crypto_stream_xsalsa20 : crypto_stream_xsalsa20_KEYBYTES,
                                               crypto_stream_xsalsa20_NONCEBYTES;
 
 
-extern(C) pure @nogc :
+extern(C) @nogc :
 
 
 alias crypto_stream_KEYBYTES = crypto_stream_xsalsa20_KEYBYTES;
 
-size_t  crypto_stream_keybytes() @trusted;
+size_t  crypto_stream_keybytes() pure @trusted;
 
 alias crypto_stream_NONCEBYTES = crypto_stream_xsalsa20_NONCEBYTES;
 
-size_t  crypto_stream_noncebytes() @trusted;
+size_t  crypto_stream_noncebytes() pure @trusted;
 
 enum crypto_stream_PRIMITIVE = "xsalsa20";
 
-const(char)* crypto_stream_primitive() @system;
+const(char)* crypto_stream_primitive() pure @trusted;
 
 int crypto_stream(ubyte* c, ulong clen,
-                  const(ubyte)* n, const(ubyte)* k) @system;
+                  const(ubyte)* n, const(ubyte)* k) pure;
 
 int crypto_stream_xor(ubyte* c, const(ubyte)* m,
                       ulong mlen, const(ubyte)* n,
-                      const(ubyte)* k) @system;
+                      const(ubyte)* k) pure;
 
 void crypto_stream_keygen(ref ubyte[crypto_stream_KEYBYTES] k) nothrow @trusted;

@@ -5,19 +5,37 @@ module wrapper.sodium.crypto_stream;
 import wrapper.sodium.core; // assure sodium got initialized
 
 public
-import  deimos.sodium.crypto_stream;
+import  deimos.sodium.crypto_stream : crypto_stream_KEYBYTES,
+                                      crypto_stream_keybytes,
+                                      crypto_stream_NONCEBYTES,
+                                      crypto_stream_noncebytes,
+                                      crypto_stream_PRIMITIVE,
+//                                      crypto_stream_primitive,
+                                      crypto_stream,
+//                                      crypto_stream_xor,
+                                      crypto_stream_keygen;
 
 
-alias crypto_stream_xor = deimos.sodium.crypto_stream.crypto_stream_xor;
+string crypto_stream_primitive() pure nothrow @nogc @trusted
+{
+  import std.string : fromStringz;
+  static import deimos.sodium.crypto_stream;
+  const(char)[] c_arr;
+  try
+    c_arr = fromStringz(deimos.sodium.crypto_stream.crypto_stream_primitive()); // strips terminating \0
+  catch (Exception t) { /* known not to throw */ }
+  return c_arr;
+}
+
 
 /* overloaded functions */
 
+alias crypto_stream_xor = deimos.sodium.crypto_stream.crypto_stream_xor;
 
-int crypto_stream_xor(scope ubyte[] ciphertext, in ubyte[] message, in ubyte[crypto_stream_NONCEBYTES] nonce, in ubyte[crypto_stream_KEYBYTES] key) /*pure*/ @nogc @trusted
+
+int crypto_stream_xor(scope ubyte[] ciphertext, scope const ubyte[] message, const ubyte[crypto_stream_NONCEBYTES] nonce, const ubyte[crypto_stream_KEYBYTES] key) /*pure*/ @nogc @trusted
 {
-//  if (ciphertext.length<message.length )
-//    assert(false, "Error in arguments of crypto_stream_xor");
-  enforce(ciphertext.length>=message.length, "ciphertext.length<message.length");
+  enforce(ciphertext.length == message.length, "Expected ciphertext.length: ", ciphertext.length, " to be equal to message.length: ", message.length);
   return  crypto_stream_xor(ciphertext.ptr, message.ptr, message.length, nonce.ptr, key.ptr);
 }
 
@@ -25,6 +43,7 @@ int crypto_stream_xor(scope ubyte[] ciphertext, in ubyte[] message, in ubyte[cry
 @system
 unittest
 {
+  static import deimos.sodium.crypto_stream;
   import std.stdio : writeln, writefln;
   import std.algorithm.comparison : equal;
   import std.string : fromStringz; // @system
@@ -37,7 +56,7 @@ unittest
   assert(crypto_stream_noncebytes() == crypto_stream_NONCEBYTES);
 
 //crypto_stream_primitive
-  assert(equal(fromStringz(crypto_stream_primitive()), crypto_stream_PRIMITIVE));
+  assert(equal(fromStringz(deimos.sodium.crypto_stream.crypto_stream_primitive()), crypto_stream_PRIMITIVE));
 
 // from test/default/stream3.c and test/default/stream4.c :
   ubyte[32] firstkey

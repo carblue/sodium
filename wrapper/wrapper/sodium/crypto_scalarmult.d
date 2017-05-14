@@ -81,8 +81,7 @@ alias crypto_scalarmult_base = deimos.sodium.crypto_scalarmult.crypto_scalarmult
 pragma(inline, true)
 bool crypto_scalarmult_base(out ubyte[crypto_scalarmult_BYTES] q, in ubyte[crypto_scalarmult_SCALARBYTES] n) pure @nogc @trusted
 {
-  static import deimos.sodium.crypto_scalarmult;
-  return  deimos.sodium.crypto_scalarmult.crypto_scalarmult_base(q.ptr, n.ptr) == 0;
+  return  crypto_scalarmult_base(q.ptr, n.ptr) == 0;
 }
 
 alias crypto_scalarmult      = deimos.sodium.crypto_scalarmult.crypto_scalarmult;
@@ -90,8 +89,7 @@ alias crypto_scalarmult      = deimos.sodium.crypto_scalarmult.crypto_scalarmult
 pragma(inline, true)
 bool crypto_scalarmult(out ubyte[crypto_scalarmult_BYTES] q, in ubyte[crypto_scalarmult_SCALARBYTES] n, in ubyte[crypto_scalarmult_BYTES] p) pure nothrow @nogc @trusted
 {
-  static import deimos.sodium.crypto_scalarmult;
-  return  deimos.sodium.crypto_scalarmult.crypto_scalarmult(q.ptr, n.ptr, p.ptr) == 0;
+  return  crypto_scalarmult(q.ptr, n.ptr, p.ptr) == 0;
 }
 
 
@@ -123,10 +121,7 @@ unittest
 
   /* Create client's secret and public keys */
   randombytes(client_secretkey);
-  {
-    static import deimos.sodium.crypto_scalarmult;
-    deimos.sodium.crypto_scalarmult.crypto_scalarmult_base(client_publickey.ptr, client_secretkey.ptr);
-  }
+  crypto_scalarmult_base(client_publickey.ptr, client_secretkey.ptr);
   /* Create server's secret and public keys */
   randombytes(server_secretkey);
   crypto_scalarmult_base(server_publickey, server_secretkey);

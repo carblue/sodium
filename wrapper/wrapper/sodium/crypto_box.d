@@ -31,9 +31,9 @@ import  deimos.sodium.crypto_box : crypto_box_SEEDBYTES,
                                    crypto_box_detached_afternm,
                                    crypto_box_open_detached_afternm, */
                                    crypto_box_SEALBYTES,
-                                   crypto_box_sealbytes,
+                                   crypto_box_sealbytes;
 /*                                 crypto_box_seal,
-                                   crypto_box_seal_open, */
+                                   crypto_box_seal_open,
                                    crypto_box_ZEROBYTES,
                                    crypto_box_zerobytes,
                                    crypto_box_BOXZEROBYTES,
@@ -41,7 +41,7 @@ import  deimos.sodium.crypto_box : crypto_box_SEEDBYTES,
                                    crypto_box,
                                    crypto_box_open,
                                    crypto_box_afternm,
-                                   crypto_box_open_afternm;
+                                   crypto_box_open_afternm;  */
 
 
 import std.exception : assertThrown;
@@ -254,8 +254,6 @@ unittest {
   assert(crypto_box_primitive()      == crypto_box_PRIMITIVE);
   assert(crypto_box_beforenmbytes()  == crypto_box_BEFORENMBYTES);
   assert(crypto_box_sealbytes()      == crypto_box_SEALBYTES);
-  assert(crypto_box_zerobytes()      == crypto_box_ZEROBYTES);
-  assert(crypto_box_boxzerobytes()   == crypto_box_BOXZEROBYTES);
 
   enum MESSAGE_LEN = 4;
   ubyte[MESSAGE_LEN] message  = [116, 101, 115, 116]; //representation("test");

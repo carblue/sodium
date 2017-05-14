@@ -49,34 +49,34 @@ int crypto_box_curve25519xsalsa20poly1305(ubyte* c,
                                           ulong mlen,
                                           const(ubyte)* n,
                                           const(ubyte)* pk,
-                                          const(ubyte)* sk) pure nothrow @system; // __attribute__ ((warn_unused_result));
+                                          const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_box_curve25519xsalsa20poly1305_open(ubyte* m,
                                                const(ubyte)* c,
                                                ulong clen,
                                                const(ubyte)* n,
                                                const(ubyte)* pk,
-                                               const(ubyte)* sk) pure nothrow @system; // __attribute__ ((warn_unused_result));
+                                               const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_box_curve25519xsalsa20poly1305_seed_keypair(ubyte* pk,
                                                        ubyte* sk,
-                                                       const(ubyte)* seed) pure @system;
+                                                       const(ubyte)* seed) pure;
 
 int crypto_box_curve25519xsalsa20poly1305_keypair(ubyte* pk,
-                                                  ubyte* sk) nothrow @system;
+                                                  ubyte* sk) nothrow;
 
 int crypto_box_curve25519xsalsa20poly1305_beforenm(ubyte* k,
                                                    const(ubyte)* pk,
-                                                   const(ubyte)* sk) pure nothrow @system; // __attribute__ ((warn_unused_result));
+                                                   const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result));
 
 int crypto_box_curve25519xsalsa20poly1305_afternm(ubyte* c,
                                                   const(ubyte)* m,
                                                   ulong mlen,
                                                   const(ubyte)* n,
-                                                  const(ubyte)* k) pure @system;
+                                                  const(ubyte)* k) pure;
 
 int crypto_box_curve25519xsalsa20poly1305_open_afternm(ubyte* m,
                                                        const(ubyte)* c,
                                                        ulong clen,
                                                        const(ubyte)* n,
-                                                       const(ubyte)* k) pure nothrow @system; // __attribute__ ((warn_unused_result));
+                                                       const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));

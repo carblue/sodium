@@ -27,16 +27,14 @@ import  deimos.sodium.crypto_generichash : crypto_generichash_BYTES_MIN,
 //                                           crypto_generichash_final;
                                            crypto_generichash_keygen;
 
+import std.string : fromStringz;
 
+
+pragma(inline, true)
 string crypto_generichash_primitive() pure nothrow @nogc @trusted
 {
-  import std.string : fromStringz;
   static import deimos.sodium.crypto_generichash;
-  const(char)[] c_arr;
-  try
-    c_arr = fromStringz(deimos.sodium.crypto_generichash.crypto_generichash_primitive()); // strips terminating \0
-  catch (Exception e) { /* known not to throw */ }
-  return c_arr;
+  return  fromStringz(deimos.sodium.crypto_generichash.crypto_generichash_primitive()); // strips terminating \0 ; compiler infers assumeUnique
 }
 
 void crypto_generichash_multi(scope ubyte[] out_, scope const ubyte[][] in_multi, scope const ubyte[] key = null) @nogc @trusted
@@ -98,7 +96,7 @@ unittest
 {
   import std.stdio : writeln, writefln;
   import std.algorithm.comparison : equal;
-  import std.string : fromStringz, representation;
+  import std.string : representation;
   import wrapper.sodium.randombytes : randombytes;
   debug  writeln("unittest block 1 from sodium.crypto_generichash.d");
 /+
@@ -162,7 +160,7 @@ unittest
 {
   import std.stdio : writeln, writefln;
   import std.algorithm.comparison : equal;
-  import std.string : representation; // @system fromStringz
+  import std.string : representation;
   import wrapper.sodium.randombytes : randombytes;
   debug  writeln("unittest block 2 from sodium.crypto_generichash.d");
 
