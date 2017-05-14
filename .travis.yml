@@ -23,4 +23,5 @@ script:
   - dub test  sodium:deimos  --compiler=${DC}
   - dub build sodium:wrapper --compiler=${DC} --build release
   - dub test  sodium:wrapper --compiler=${DC} --build unittest-cov --config=travis
-  - ./doveralls
+  - scripts/run-doveralls.sh
+# - ./doveralls

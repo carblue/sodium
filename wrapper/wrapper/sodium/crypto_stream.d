@@ -20,11 +20,7 @@ string crypto_stream_primitive() pure nothrow @nogc @trusted
 {
   import std.string : fromStringz;
   static import deimos.sodium.crypto_stream;
-  const(char)[] c_arr;
-  try
-    c_arr = fromStringz(deimos.sodium.crypto_stream.crypto_stream_primitive()); // strips terminating \0
-  catch (Exception t) { /* known not to throw */ }
-  return c_arr;
+  return  fromStringz(deimos.sodium.crypto_stream.crypto_stream_primitive()); // strips terminating \0
 }
 
 
@@ -106,6 +102,7 @@ unittest
 
 @safe
 unittest {
+  assert(crypto_stream_primitive() == crypto_stream_PRIMITIVE);
   ubyte[crypto_stream_KEYBYTES] k;
   crypto_stream_keygen(k);
 }

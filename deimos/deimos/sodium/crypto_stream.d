@@ -32,7 +32,8 @@ size_t  crypto_stream_noncebytes() pure @trusted;
 
 enum crypto_stream_PRIMITIVE = "xsalsa20";
 
-const(char)* crypto_stream_primitive() pure @trusted;
+/* Deviating from C header, in D the following function expresses __attribute__ ((warn_unused_result)) as well (if compiler switch -w is thrown) */
+const(char)* crypto_stream_primitive() pure nothrow @trusted;
 
 int crypto_stream(ubyte* c, ulong clen,
                   const(ubyte)* n, const(ubyte)* k) pure;
