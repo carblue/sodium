@@ -13,6 +13,8 @@ import  deimos.sodium.crypto_aead_chacha20poly1305 : crypto_aead_chacha20poly130
                                                      crypto_aead_chacha20poly1305_ietf_npubbytes,
                                                      crypto_aead_chacha20poly1305_ietf_ABYTES,
                                                      crypto_aead_chacha20poly1305_ietf_abytes,
+                                                     crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX,
+                                                     crypto_aead_chacha20poly1305_ietf_messagebytes_max,
 /*                                                   crypto_aead_chacha20poly1305_ietf_encrypt,
                                                      crypto_aead_chacha20poly1305_ietf_decrypt,
                                                      crypto_aead_chacha20poly1305_ietf_encrypt_detached,
@@ -26,6 +28,8 @@ import  deimos.sodium.crypto_aead_chacha20poly1305 : crypto_aead_chacha20poly130
                                                      crypto_aead_chacha20poly1305_npubbytes,
                                                      crypto_aead_chacha20poly1305_ABYTES,
                                                      crypto_aead_chacha20poly1305_abytes,
+                                                     crypto_aead_chacha20poly1305_MESSAGEBYTES_MAX,
+                                                     crypto_aead_chacha20poly1305_messagebytes_max,
 /*                                                   crypto_aead_chacha20poly1305_encrypt,
                                                      crypto_aead_chacha20poly1305_decrypt,
                                                      crypto_aead_chacha20poly1305_encrypt_detached,
@@ -263,10 +267,11 @@ unittest
   import wrapper.sodium.utils : sodium_increment;
   debug writeln("unittest block 2 from sodium.crypto_aead_chacha20poly1305.d");
 
-  assert(crypto_aead_chacha20poly1305_ietf_keybytes()   == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
-  assert(crypto_aead_chacha20poly1305_ietf_nsecbytes()  == crypto_aead_chacha20poly1305_ietf_NSECBYTES);
-  assert(crypto_aead_chacha20poly1305_ietf_npubbytes()  == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
-  assert(crypto_aead_chacha20poly1305_ietf_abytes()     == crypto_aead_chacha20poly1305_ietf_ABYTES);
+  assert(crypto_aead_chacha20poly1305_ietf_keybytes()         == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+  assert(crypto_aead_chacha20poly1305_ietf_nsecbytes()        == crypto_aead_chacha20poly1305_ietf_NSECBYTES);
+  assert(crypto_aead_chacha20poly1305_ietf_npubbytes()        == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
+  assert(crypto_aead_chacha20poly1305_ietf_abytes()           == crypto_aead_chacha20poly1305_ietf_ABYTES);
+  assert(crypto_aead_chacha20poly1305_ietf_messagebytes_max() == crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX);
 
 
   auto message         = representation("test");
@@ -317,10 +322,11 @@ unittest
   import wrapper.sodium.utils : sodium_increment;
   debug writeln("unittest block 3 from sodium.crypto_aead_chacha20poly1305.d");
 
-  assert(crypto_aead_chacha20poly1305_keybytes()   == crypto_aead_chacha20poly1305_KEYBYTES);
-  assert(crypto_aead_chacha20poly1305_nsecbytes()  == crypto_aead_chacha20poly1305_NSECBYTES);
-  assert(crypto_aead_chacha20poly1305_npubbytes()  == crypto_aead_chacha20poly1305_NPUBBYTES);
-  assert(crypto_aead_chacha20poly1305_abytes()     == crypto_aead_chacha20poly1305_ABYTES);
+  assert(crypto_aead_chacha20poly1305_keybytes()         == crypto_aead_chacha20poly1305_KEYBYTES);
+  assert(crypto_aead_chacha20poly1305_nsecbytes()        == crypto_aead_chacha20poly1305_NSECBYTES);
+  assert(crypto_aead_chacha20poly1305_npubbytes()        == crypto_aead_chacha20poly1305_NPUBBYTES);
+  assert(crypto_aead_chacha20poly1305_abytes()           == crypto_aead_chacha20poly1305_ABYTES);
+  assert(crypto_aead_chacha20poly1305_messagebytes_max() == crypto_aead_chacha20poly1305_MESSAGEBYTES_MAX);
 
   auto message         = representation("test");
   enum message_len = 4;

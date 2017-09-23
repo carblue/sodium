@@ -1,7 +1,6 @@
 
-#ifndef sodium_export_H
-#define sodium_export_H
-
+module deimos.sodium.export_;
+/+
 #ifndef __GNUC__
 # ifdef __attribute__
 #  undef __attribute__
@@ -46,8 +45,9 @@
 #  define CRYPTO_ALIGN(x) __attribute__ ((aligned(x)))
 # endif
 #endif
++/
 
-#define SODIUM_MIN(A, B) ((A) < (B) ? (A) : (B))
-#define SODIUM_SIZE_MAX SODIUM_MIN(UINT64_MAX, SIZE_MAX)
+import std.algorithm.comparison : min;
 
-#endif
+alias SODIUM_MIN = min; //#define SODIUM_MIN(A, B) ((A) < (B) ? (A) : (B))
+enum  SODIUM_SIZE_MAX = SODIUM_MIN(ulong.max, size_t.max);

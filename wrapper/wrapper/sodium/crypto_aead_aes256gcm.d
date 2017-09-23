@@ -16,6 +16,8 @@ import  deimos.sodium.crypto_aead_aes256gcm : crypto_aead_aes256gcm_is_available
                                               crypto_aead_aes256gcm_npubbytes,
                                               crypto_aead_aes256gcm_ABYTES,
                                               crypto_aead_aes256gcm_abytes,
+                                              crypto_aead_aes256gcm_MESSAGEBYTES_MAX,
+                                              crypto_aead_aes256gcm_messagebytes_max,
                                               crypto_aead_aes256gcm_state,
                                               crypto_aead_aes256gcm_statebytes,
 /*                                            crypto_aead_aes256gcm_encrypt,
@@ -274,11 +276,12 @@ version(none/*viWindowsX86*/) {
 else {
   debug writeln("unittest block 2 from sodium.crypto_aead_aes256gcm.d");
 
-  assert(crypto_aead_aes256gcm_keybytes()   == crypto_aead_aes256gcm_KEYBYTES);
-  assert(crypto_aead_aes256gcm_nsecbytes()  == crypto_aead_aes256gcm_NSECBYTES);
-  assert(crypto_aead_aes256gcm_npubbytes()  == crypto_aead_aes256gcm_NPUBBYTES);
-  assert(crypto_aead_aes256gcm_abytes()     == crypto_aead_aes256gcm_ABYTES);
-  assert(crypto_aead_aes256gcm_statebytes() == crypto_aead_aes256gcm_state.sizeof);
+  assert(crypto_aead_aes256gcm_keybytes()         == crypto_aead_aes256gcm_KEYBYTES);
+  assert(crypto_aead_aes256gcm_nsecbytes()        == crypto_aead_aes256gcm_NSECBYTES);
+  assert(crypto_aead_aes256gcm_npubbytes()        == crypto_aead_aes256gcm_NPUBBYTES);
+  assert(crypto_aead_aes256gcm_abytes()           == crypto_aead_aes256gcm_ABYTES);
+  assert(crypto_aead_aes256gcm_messagebytes_max() == crypto_aead_aes256gcm_MESSAGEBYTES_MAX);
+  assert(crypto_aead_aes256gcm_statebytes()       == crypto_aead_aes256gcm_state.sizeof);
 
 
   if (crypto_aead_aes256gcm_is_available() == 1) {

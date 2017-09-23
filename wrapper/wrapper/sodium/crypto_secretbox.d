@@ -28,16 +28,11 @@ import  deimos.sodium.crypto_secretbox : crypto_secretbox_KEYBYTES,
 import std.exception : assertThrown;
 
 
-
 string crypto_secretbox_primitive() pure nothrow @nogc @trusted
 {
   import std.string : fromStringz;
   static import deimos.sodium.crypto_secretbox;
-  const(char)[] c_arr;
-  try
-    c_arr = fromStringz(deimos.sodium.crypto_secretbox.crypto_secretbox_primitive()); // strips terminating \0
-  catch (Exception e) { /* known not to throw */ }
-  return c_arr;
+  return  fromStringz(deimos.sodium.crypto_secretbox.crypto_secretbox_primitive()); // strips terminating \0
 }
 
 // overloading some functions between module deimos.sodium.crypto_secretbox and this module

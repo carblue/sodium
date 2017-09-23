@@ -27,4 +27,12 @@ properly seeded.
 On some Linux systems, this may take some time, especially when called right after a reboot
 of the system.
 */
-extern(C) int sodium_init() nothrow @nogc @trusted; // __attribute__ ((warn_unused_result))
+extern(C) nothrow @nogc:
+
+int sodium_init() @trusted; // __attribute__ ((warn_unused_result))
+
+/* ---- */
+
+int sodium_set_misuse_handler(void function() handler);
+
+void sodium_misuse(); // __attribute__ ((noreturn));

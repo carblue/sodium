@@ -63,6 +63,31 @@ int sodium_hex2bin(ubyte* bin, const size_t bin_maxlen,
                    const(char*) ignore, size_t* bin_len,
                    const(char)** hex_end) pure;
 
+enum sodium_base64_VARIANT_ORIGINAL            = 1;
+enum sodium_base64_VARIANT_ORIGINAL_NO_PADDING = 3;
+enum sodium_base64_VARIANT_URLSAFE             = 5;
+enum sodium_base64_VARIANT_URLSAFE_NO_PADDING  = 7;
+
+/*
+ * Computes the required length to encode BIN_LEN bytes as a base64 string
+ * using the given variant. The computed length includes a trailing \0.
+ * /
+size_t sodium_base64_ENCODED_LEN()(size_t BIN_LEN, int VARIANT) { return
+    (((BIN_LEN) / 3U) * 4U +
+    ((((BIN_LEN) - ((BIN_LEN) / 3U) * 3U) | (((BIN_LEN) - ((BIN_LEN) / 3U) * 3U) >> 1)) & 1U) *
+     (4U - (~((((VARIANT) & 2U) >> 1) - 1U) & (3U - ((BIN_LEN) - ((BIN_LEN) / 3U) * 3U)))) + 1U); }
+*/
+size_t sodium_base64_encoded_len(const size_t bin_len, const int variant) pure nothrow @trusted;
+
+char* sodium_bin2base64(char* b64, const size_t b64_maxlen,
+                        const(ubyte*) bin, const size_t bin_len,
+                        const int variant);
+
+int sodium_base642bin(ubyte* bin, const size_t bin_maxlen,
+                      const(char*) b64, const size_t b64_len,
+                      const(char*) ignore, size_t* bin_len,
+                      const(char)** b64_end, const int variant);
+
 /**
  * The  sodium_mlock()  function locks at least `len` bytes of memory starting at `addr`.
  * This can help avoid swapping sensitive data to disk.
@@ -120,3 +145,10 @@ int sodium_mprotect_noaccess(void* ptr) nothrow;
 int sodium_mprotect_readonly(void* ptr) nothrow;
 
 int sodium_mprotect_readwrite(void* ptr) nothrow;
+
+int sodium_pad(size_t* padded_buflen_p, ubyte* buf,
+               size_t unpadded_buflen, size_t blocksize, size_t max_buflen);
+
+int sodium_unpad(size_t* unpadded_buflen_p, const(ubyte)* buf,
+                 size_t padded_buflen, size_t blocksize);
+

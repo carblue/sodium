@@ -30,7 +30,8 @@ size_t  crypto_secretbox_macbytes() pure @trusted;
 
 enum crypto_secretbox_PRIMITIVE = "xsalsa20poly1305";
 
-const(char)* crypto_secretbox_primitive() pure @trusted;
+/* Deviating from C header, in D the following function expresses __attribute__ ((warn_unused_result)) as well (if compiler switch -w is thrown) */
+const(char)* crypto_secretbox_primitive() pure nothrow @trusted;
 
 int crypto_secretbox_easy(ubyte* c, const(ubyte)* m,
                           ulong mlen, const(ubyte)* n,

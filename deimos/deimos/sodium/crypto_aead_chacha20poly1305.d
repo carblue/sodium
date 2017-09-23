@@ -6,6 +6,8 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.crypto_aead_chacha20poly1305;
 
+import deimos.sodium.export_;
+
 
 extern(C) @nogc :
 
@@ -27,6 +29,12 @@ size_t crypto_aead_chacha20poly1305_ietf_npubbytes() pure @trusted;
 enum crypto_aead_chacha20poly1305_ietf_ABYTES = 16U;
 
 size_t crypto_aead_chacha20poly1305_ietf_abytes() pure @trusted;
+
+enum crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX =
+    SODIUM_MIN(SODIUM_SIZE_MAX - crypto_aead_chacha20poly1305_ietf_ABYTES,
+               (64UL * (1UL << 32) - 64UL) - crypto_aead_chacha20poly1305_ietf_ABYTES);
+
+size_t crypto_aead_chacha20poly1305_ietf_messagebytes_max() pure @trusted;
 
 int crypto_aead_chacha20poly1305_ietf_encrypt(ubyte* c,
                                               ulong* clen_p,
@@ -89,6 +97,11 @@ enum crypto_aead_chacha20poly1305_ABYTES = 16U;
 
 size_t crypto_aead_chacha20poly1305_abytes() pure @trusted;
 
+enum crypto_aead_chacha20poly1305_MESSAGEBYTES_MAX =
+    (SODIUM_SIZE_MAX - crypto_aead_chacha20poly1305_ABYTES);
+
+size_t crypto_aead_chacha20poly1305_messagebytes_max() pure @trusted;
+
 int crypto_aead_chacha20poly1305_encrypt(ubyte* c,
                                          ulong* clen_p,
                                          const(ubyte)* m,
@@ -134,7 +147,8 @@ void crypto_aead_chacha20poly1305_keygen(ref ubyte[crypto_aead_chacha20poly1305_
 
 /* Aliases */
 
-alias crypto_aead_chacha20poly1305_IETF_KEYBYTES  = crypto_aead_chacha20poly1305_ietf_KEYBYTES;
-alias crypto_aead_chacha20poly1305_IETF_NSECBYTES = crypto_aead_chacha20poly1305_ietf_NSECBYTES;
-alias crypto_aead_chacha20poly1305_IETF_NPUBBYTES = crypto_aead_chacha20poly1305_ietf_NPUBBYTES;
-alias crypto_aead_chacha20poly1305_IETF_ABYTES    = crypto_aead_chacha20poly1305_ietf_ABYTES;
+alias crypto_aead_chacha20poly1305_IETF_KEYBYTES         = crypto_aead_chacha20poly1305_ietf_KEYBYTES;
+alias crypto_aead_chacha20poly1305_IETF_NSECBYTES        = crypto_aead_chacha20poly1305_ietf_NSECBYTES;
+alias crypto_aead_chacha20poly1305_IETF_NPUBBYTES        = crypto_aead_chacha20poly1305_ietf_NPUBBYTES;
+alias crypto_aead_chacha20poly1305_IETF_ABYTES           = crypto_aead_chacha20poly1305_ietf_ABYTES;
+alias crypto_aead_chacha20poly1305_IETF_MESSAGEBYTES_MAX = crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX;

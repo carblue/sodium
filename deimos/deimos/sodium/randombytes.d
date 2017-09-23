@@ -6,6 +6,8 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.randombytes;
 
+import deimos.sodium.export_;
+
 
 extern(C) nothrow @nogc :
 
@@ -19,7 +21,7 @@ struct randombytes_implementation {
   int          function()                             close;               /* optional */
 }
 
-
+enum randombytes_BYTES_MAX = SODIUM_MIN(SODIUM_SIZE_MAX, 0xffffffffU);
 
 /* my understanding of the pure attribute in D is, that the following functions (except randombytes_seedbytes and randombytes_buf_deterministic)
    are impure; all depend on hidden global mutable state */

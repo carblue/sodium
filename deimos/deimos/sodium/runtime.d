@@ -23,7 +23,9 @@ int sodium_runtime_has_sse41();
 
 int sodium_runtime_has_avx();
 
-int sodium_runtime_has_avx2();  // not available in version 1.0.8
+int sodium_runtime_has_avx2();  // available since version 1.0.9 ?
+
+int sodium_runtime_has_avx512f(); // available since version 1.0.14
 
 int sodium_runtime_has_pclmul();
 
