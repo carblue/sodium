@@ -9,6 +9,7 @@ module deimos.sodium.crypto_secretbox;
 import deimos.sodium.crypto_secretbox_xsalsa20poly1305 : crypto_secretbox_xsalsa20poly1305_KEYBYTES,
                                                          crypto_secretbox_xsalsa20poly1305_NONCEBYTES,
                                                          crypto_secretbox_xsalsa20poly1305_MACBYTES,
+                                                         crypto_secretbox_xsalsa20poly1305_MESSAGEBYTES_MAX,
                                                          crypto_secretbox_xsalsa20poly1305_ZEROBYTES,
                                                          crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES;
 
@@ -32,6 +33,10 @@ enum crypto_secretbox_PRIMITIVE = "xsalsa20poly1305";
 
 /* Deviating from C header, in D the following function expresses __attribute__ ((warn_unused_result)) as well (if compiler switch -w is thrown) */
 const(char)* crypto_secretbox_primitive() pure nothrow @trusted;
+
+alias crypto_secretbox_MESSAGEBYTES_MAX = crypto_secretbox_xsalsa20poly1305_MESSAGEBYTES_MAX;
+
+size_t crypto_secretbox_messagebytes_max() pure @trusted;
 
 int crypto_secretbox_easy(ubyte* c, const(ubyte)* m,
                           ulong mlen, const(ubyte)* n,

@@ -14,6 +14,8 @@ module deimos.sodium.crypto_stream_salsa2012;
  *  the crypto_box functions.
  */
 
+import deimos.sodium.export_;
+
 
 extern(C) @nogc :
 
@@ -25,6 +27,10 @@ size_t crypto_stream_salsa2012_keybytes() pure @trusted;
 enum crypto_stream_salsa2012_NONCEBYTES = 8U;
 
 size_t crypto_stream_salsa2012_noncebytes() pure @trusted;
+
+alias crypto_stream_salsa2012_MESSAGEBYTES_MAX = SODIUM_SIZE_MAX;
+
+size_t crypto_stream_salsa2012_messagebytes_max() pure @trusted;
 
 int crypto_stream_salsa2012(ubyte* c, ulong clen,
                             const(ubyte)* n, const(ubyte)* k) pure;

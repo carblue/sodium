@@ -25,12 +25,18 @@ import deimos.sodium.crypto_pwhash_argon2i : crypto_pwhash_argon2i_ALG_ARGON2I13
                                              crypto_pwhash_argon2i_OPSLIMIT_SENSITIVE,
                                              crypto_pwhash_argon2i_MEMLIMIT_SENSITIVE;
 
+import deimos.sodium.crypto_pwhash_argon2id: crypto_pwhash_argon2id_ALG_ARGON2ID13;
+
 
 extern(C) pure @nogc :
 
-alias crypto_pwhash_ALG_ARGON2I13 = crypto_pwhash_argon2i_ALG_ARGON2I13;
+alias crypto_pwhash_ALG_ARGON2I13  = crypto_pwhash_argon2i_ALG_ARGON2I13;
 
 int crypto_pwhash_alg_argon2i13() @trusted;
+
+alias crypto_pwhash_ALG_ARGON2ID13 = crypto_pwhash_argon2id_ALG_ARGON2ID13;
+
+int crypto_pwhash_alg_argon2id13() @trusted;
 
 alias crypto_pwhash_ALG_DEFAULT = crypto_pwhash_ALG_ARGON2I13;
 
@@ -104,18 +110,34 @@ alias crypto_pwhash_MEMLIMIT_SENSITIVE = crypto_pwhash_argon2i_MEMLIMIT_SENSITIV
 
 size_t crypto_pwhash_memlimit_sensitive() @trusted;
 
+/*
+ * With this function, do not forget to store all parameters, including the
+ * algorithm identifier in order to produce deterministic output.
+ */
 int crypto_pwhash(ubyte* out_, ulong outlen,
                   const(char*) passwd, ulong passwdlen,
                   const(ubyte*) salt,
                   ulong opslimit, size_t memlimit, int alg) nothrow; // __attribute__ ((warn_unused_result));
 
+/*
+ * The output string already includes all the required parameters, including
+ * the algorithm identifier. The string is all that has to be stored in
+ * order to verify a password.
+ */
 int crypto_pwhash_str(ref char[crypto_pwhash_STRBYTES] out_,
                       const(char*) passwd, ulong passwdlen,
                       ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
 
+int crypto_pwhash_str_alg(ref char[crypto_pwhash_STRBYTES] out_,
+                          const(char*) passwd, ulong passwdlen,
+                          ulong opslimit, size_t memlimit, int alg) nothrow; // __attribute__ ((warn_unused_result));
+
 int crypto_pwhash_str_verify(ref const(char[crypto_pwhash_STRBYTES]) str,
                              const(char*) passwd,
                              ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result));
+
+int crypto_pwhash_str_needs_rehash(ref const(char[crypto_pwhash_STRBYTES]) str,
+                                   ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
 
 enum crypto_pwhash_PRIMITIVE = "argon2i";
 

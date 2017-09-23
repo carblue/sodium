@@ -16,7 +16,8 @@ module deimos.sodium.crypto_stream;
 
 
 import deimos.sodium.crypto_stream_xsalsa20 : crypto_stream_xsalsa20_KEYBYTES,
-                                              crypto_stream_xsalsa20_NONCEBYTES;
+                                              crypto_stream_xsalsa20_NONCEBYTES,
+                                              crypto_stream_xsalsa20_MESSAGEBYTES_MAX;
 
 
 extern(C) @nogc :
@@ -29,6 +30,10 @@ size_t  crypto_stream_keybytes() pure @trusted;
 alias crypto_stream_NONCEBYTES = crypto_stream_xsalsa20_NONCEBYTES;
 
 size_t  crypto_stream_noncebytes() pure @trusted;
+
+alias crypto_stream_MESSAGEBYTES_MAX = crypto_stream_xsalsa20_MESSAGEBYTES_MAX;
+
+size_t  crypto_stream_messagebytes_max() pure @trusted;
 
 enum crypto_stream_PRIMITIVE = "xsalsa20";
 

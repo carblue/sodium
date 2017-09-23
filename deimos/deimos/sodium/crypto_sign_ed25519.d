@@ -7,6 +7,7 @@ For git maintenance (ensure at least one congruent line with originating C heade
 module deimos.sodium.crypto_sign_ed25519;
 
 import deimos.sodium.crypto_hash_sha512;
+import deimos.sodium.export_;
 
 
 extern(C) @nogc :
@@ -33,6 +34,10 @@ size_t crypto_sign_ed25519_publickeybytes() pure @trusted;
 enum crypto_sign_ed25519_SECRETKEYBYTES = (32U + 32U);
 
 size_t crypto_sign_ed25519_secretkeybytes() pure @trusted;
+
+enum crypto_sign_ed25519_MESSAGEBYTES_MAX = (SODIUM_SIZE_MAX - crypto_sign_ed25519_BYTES);
+
+size_t crypto_sign_ed25519_messagebytes_max() pure @trusted;
 
 int crypto_sign_ed25519(ubyte* sm, ulong* smlen_p,
                         const(ubyte)* m, ulong mlen,

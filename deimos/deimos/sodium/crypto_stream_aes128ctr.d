@@ -14,6 +14,8 @@ module deimos.sodium.crypto_stream_aes128ctr;
  *  the crypto_box functions.
  */
 
+import deimos.sodium.export_;
+
 
 extern(C) pure @nogc :
 
@@ -29,6 +31,9 @@ size_t crypto_stream_aes128ctr_noncebytes() @trusted;
 enum crypto_stream_aes128ctr_BEFORENMBYTES = 1408U;
 
 size_t crypto_stream_aes128ctr_beforenmbytes() @trusted;
+
+enum crypto_stream_aes128ctr_SIZE_MAX =
+    SODIUM_MIN(SODIUM_SIZE_MAX, 16UL * (1UL << 32));
 
 deprecated :
 

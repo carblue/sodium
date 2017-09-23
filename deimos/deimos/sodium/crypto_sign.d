@@ -17,6 +17,7 @@ import deimos.sodium.crypto_sign_ed25519 : crypto_sign_ed25519_BYTES,
                                            crypto_sign_ed25519_SEEDBYTES,
                                            crypto_sign_ed25519_PUBLICKEYBYTES,
                                            crypto_sign_ed25519_SECRETKEYBYTES,
+                                           crypto_sign_ed25519_MESSAGEBYTES_MAX,
                                            crypto_sign_ed25519ph_state;
 
 
@@ -41,6 +42,10 @@ size_t  crypto_sign_publickeybytes() pure @trusted;
 alias crypto_sign_SECRETKEYBYTES = crypto_sign_ed25519_SECRETKEYBYTES;
 
 size_t  crypto_sign_secretkeybytes() pure @trusted;
+
+alias crypto_sign_MESSAGEBYTES_MAX = crypto_sign_ed25519_MESSAGEBYTES_MAX;
+
+size_t  crypto_sign_messagebytes_max() pure @trusted;
 
 enum crypto_sign_PRIMITIVE = "ed25519";
 

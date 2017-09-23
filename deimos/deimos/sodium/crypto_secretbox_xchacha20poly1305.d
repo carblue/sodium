@@ -6,6 +6,7 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.crypto_secretbox_xchacha20poly1305;
 
+import deimos.sodium.crypto_stream_xchacha20 : crypto_stream_xchacha20_MESSAGEBYTES_MAX;
 
 extern(C) pure @nogc :
 
@@ -21,6 +22,11 @@ size_t crypto_secretbox_xchacha20poly1305_noncebytes() @trusted;
 enum crypto_secretbox_xchacha20poly1305_MACBYTES = 16U;
 
 size_t crypto_secretbox_xchacha20poly1305_macbytes() @trusted;
+
+enum crypto_secretbox_xchacha20poly1305_MESSAGEBYTES_MAX =
+    (crypto_stream_xchacha20_MESSAGEBYTES_MAX - crypto_secretbox_xchacha20poly1305_MACBYTES);
+
+size_t crypto_secretbox_xchacha20poly1305_messagebytes_max() @trusted;
 
 int crypto_secretbox_xchacha20poly1305_easy(ubyte* c,
                                             const(ubyte)* m,

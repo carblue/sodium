@@ -14,23 +14,29 @@ module deimos.sodium.crypto_stream_salsa208;
  *  the crypto_box functions.
  */
 
+import deimos.sodium.export_;
+
 
 extern(C) @nogc:
 
 
 enum crypto_stream_salsa208_KEYBYTES = 32U;
 
-size_t crypto_stream_salsa208_keybytes() pure @trusted;
+deprecated  size_t crypto_stream_salsa208_keybytes() pure @trusted;
 
 enum crypto_stream_salsa208_NONCEBYTES = 8U;
 
-size_t crypto_stream_salsa208_noncebytes() pure @trusted;
+deprecated  size_t crypto_stream_salsa208_noncebytes() pure @trusted;
 
-int crypto_stream_salsa208(ubyte* c, ulong clen,
-                           const(ubyte)* n, const(ubyte)* k) pure;
+alias crypto_stream_salsa208_MESSAGEBYTES_MAX = SODIUM_SIZE_MAX;
 
-int crypto_stream_salsa208_xor(ubyte* c, const(ubyte)* m,
-                               ulong mlen, const(ubyte)* n,
-                               const(ubyte)* k) pure;
+deprecated  size_t crypto_stream_salsa208_messagebytes_max() pure @trusted;
 
-void crypto_stream_salsa208_keygen(ref ubyte[crypto_stream_salsa208_KEYBYTES] k) nothrow @trusted;
+deprecated  int crypto_stream_salsa208(ubyte* c, ulong clen,
+                                       const(ubyte)* n, const(ubyte)* k) pure;
+
+deprecated  int crypto_stream_salsa208_xor(ubyte* c, const(ubyte)* m,
+                                           ulong mlen, const(ubyte)* n,
+                                           const(ubyte)* k) pure;
+
+deprecated  void crypto_stream_salsa208_keygen(ref ubyte[crypto_stream_salsa208_KEYBYTES] k) nothrow @trusted;

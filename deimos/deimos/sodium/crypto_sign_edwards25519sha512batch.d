@@ -6,6 +6,8 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.crypto_sign_edwards25519sha512batch;
 
+import deimos.sodium.export_;
+
 /*
  * WARNING: This construction was a prototype, which should not be used
  * any more in new projects.
@@ -24,6 +26,7 @@ extern(C) @nogc :
 enum crypto_sign_edwards25519sha512batch_BYTES = 64U;
 enum crypto_sign_edwards25519sha512batch_PUBLICKEYBYTES = 32U;
 enum crypto_sign_edwards25519sha512batch_SECRETKEYBYTES = (32U + 32U);
+enum crypto_sign_edwards25519sha512batch_MESSAGEBYTES_MAX = (SODIUM_SIZE_MAX - crypto_sign_edwards25519sha512batch_BYTES);
 
 
 deprecated("Please use the high-level crypto_sign_*() functions instead in new projects.") :

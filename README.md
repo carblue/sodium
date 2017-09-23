@@ -6,7 +6,7 @@
 
 # sodium
 
-Twofold binding to libsodium, current C-source version 1.0.12, released on Mar 12, 2017 [https://github.com/jedisct1/libsodium]
+Twofold binding to libsodium, current C-source version 1.0.14, released on Sept. 21, 2017 [https://github.com/jedisct1/libsodium]
 
 subPackage 'deimos':  The "import-only" C header's declarations.<br>
 subPackage 'wrapper': 'deimos' + some 'D-friendly' stuff, predominantly overloaded functions and unittests.
@@ -24,7 +24,7 @@ c) all new functions calculating a variable-length output are restrictive referr
 d) No need to explicitely call sodium_init() up-front.<br>
 e) Usage of 'wrapper' isn't possible, if function randombytes_set_implementation shall be used (wrapper.sodium.core:shared static this() calls sodium_init()).
 
-The unittests of subPackage 'wrapper' include a lot of function usage examples, the next is a simple application example based on sodium:deimos, using rdmd:<br>
+The unittests of subPackage 'wrapper' include a lot of function usage examples; the next is a simple application example based on sodium:deimos, using rdmd:<br>
 
 	cd example/source  &&  chmod 775 app.d  &&  ./app.d
 

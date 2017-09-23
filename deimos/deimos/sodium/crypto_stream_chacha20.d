@@ -14,6 +14,8 @@ module deimos.sodium.crypto_stream_chacha20;
  *  the crypto_box functions.
  */
 
+import deimos.sodium.export_;
+
 
 extern(C) @nogc:
 
@@ -25,6 +27,10 @@ size_t crypto_stream_chacha20_keybytes() pure @trusted;
 enum crypto_stream_chacha20_NONCEBYTES = 8U;
 
 size_t crypto_stream_chacha20_noncebytes() pure @trusted;
+
+alias crypto_stream_chacha20_MESSAGEBYTES_MAX = SODIUM_SIZE_MAX;
+
+size_t crypto_stream_chacha20_messagebytes_max() pure @trusted;
 
 /* ChaCha20 with a 64-bit nonce and a 64-bit counter, as originally designed */
 
@@ -52,6 +58,11 @@ enum crypto_stream_chacha20_ietf_NONCEBYTES = 12U;
 
 size_t crypto_stream_chacha20_ietf_noncebytes() pure @trusted;
 
+enum crypto_stream_chacha20_ietf_MESSAGEBYTES_MAX =
+    SODIUM_MIN(SODIUM_SIZE_MAX, 64UL * (1UL << 32));
+
+size_t crypto_stream_chacha20_ietf_messagebytes_max() pure @trusted;
+
 int crypto_stream_chacha20_ietf(ubyte* c, ulong clen,
                                 const(ubyte)* n, const(ubyte)* k) pure;
 
@@ -68,5 +79,6 @@ void crypto_stream_chacha20_ietf_keygen(ref ubyte[crypto_stream_chacha20_ietf_KE
 
 /* Aliases */
 
-alias crypto_stream_chacha20_IETF_KEYBYTES   = crypto_stream_chacha20_ietf_KEYBYTES;
-alias crypto_stream_chacha20_IETF_NONCEBYTES = crypto_stream_chacha20_ietf_NONCEBYTES;
+alias crypto_stream_chacha20_IETF_KEYBYTES         = crypto_stream_chacha20_ietf_KEYBYTES;
+alias crypto_stream_chacha20_IETF_NONCEBYTES       = crypto_stream_chacha20_ietf_NONCEBYTES;
+alias crypto_stream_chacha20_IETF_MESSAGEBYTES_MAX = crypto_stream_chacha20_ietf_MESSAGEBYTES_MAX;

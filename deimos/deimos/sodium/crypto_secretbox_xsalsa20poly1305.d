@@ -6,6 +6,7 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.crypto_secretbox_xsalsa20poly1305;
 
+import deimos.sodium.crypto_stream_xsalsa20 : crypto_stream_xsalsa20_MESSAGEBYTES_MAX;
 
 extern(C) @nogc :
 
@@ -22,15 +23,11 @@ enum crypto_secretbox_xsalsa20poly1305_MACBYTES = 16U;
 
 size_t crypto_secretbox_xsalsa20poly1305_macbytes() pure @trusted;
 
-enum crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES = 16U;
+/* Only for the libsodium API - The NaCl compatibility API would require BOXZEROBYTES extra bytes */
+enum crypto_secretbox_xsalsa20poly1305_MESSAGEBYTES_MAX =
+    (crypto_stream_xsalsa20_MESSAGEBYTES_MAX - crypto_secretbox_xsalsa20poly1305_MACBYTES);
 
-size_t crypto_secretbox_xsalsa20poly1305_boxzerobytes() pure @trusted;
-
-enum crypto_secretbox_xsalsa20poly1305_ZEROBYTES =
-    (crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES +
-     crypto_secretbox_xsalsa20poly1305_MACBYTES);
-
-size_t crypto_secretbox_xsalsa20poly1305_zerobytes() pure @trusted;
+size_t crypto_secretbox_xsalsa20poly1305_messagebytes_max() pure @trusted;
 
 int crypto_secretbox_xsalsa20poly1305(ubyte* c,
                                       const(ubyte)* m,
@@ -45,3 +42,15 @@ int crypto_secretbox_xsalsa20poly1305_open(ubyte* m,
                                            const(ubyte)* k) pure nothrow; //  __attribute__ ((warn_unused_result));
 
 void crypto_secretbox_xsalsa20poly1305_keygen(ref ubyte[crypto_secretbox_xsalsa20poly1305_KEYBYTES] k) nothrow @trusted;
+
+/* -- NaCl compatibility interface ; Requires padding -- */
+
+enum crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES = 16U;
+
+size_t crypto_secretbox_xsalsa20poly1305_boxzerobytes() pure @trusted;
+
+enum crypto_secretbox_xsalsa20poly1305_ZEROBYTES =
+    (crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES +
+     crypto_secretbox_xsalsa20poly1305_MACBYTES);
+
+size_t crypto_secretbox_xsalsa20poly1305_zerobytes() pure @trusted;
