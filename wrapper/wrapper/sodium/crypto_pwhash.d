@@ -129,6 +129,7 @@ unittest {
   assert(crypto_pwhash_saltbytes()            == crypto_pwhash_SALTBYTES);
   assert(crypto_pwhash_strbytes()             == crypto_pwhash_STRBYTES);
   assert(crypto_pwhash_strprefix()            == crypto_pwhash_STRPREFIX);
+/*
   assert(crypto_pwhash_opslimit_min()         == crypto_pwhash_OPSLIMIT_MIN);
   assert(crypto_pwhash_opslimit_max()         == crypto_pwhash_OPSLIMIT_MAX);
   assert(crypto_pwhash_memlimit_min()         == crypto_pwhash_MEMLIMIT_MIN);
@@ -139,6 +140,7 @@ unittest {
   assert(crypto_pwhash_memlimit_moderate()    == crypto_pwhash_MEMLIMIT_MODERATE);
   assert(crypto_pwhash_opslimit_sensitive()   == crypto_pwhash_OPSLIMIT_SENSITIVE);
   assert(crypto_pwhash_memlimit_sensitive()   == crypto_pwhash_MEMLIMIT_SENSITIVE);
+*/
   assert(crypto_pwhash_primitive()            == crypto_pwhash_PRIMITIVE);
 
   enum password = "Correct Horse Battery Staple";
