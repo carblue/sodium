@@ -129,6 +129,21 @@ unittest {
   assert(crypto_pwhash_saltbytes()            == crypto_pwhash_SALTBYTES);
   assert(crypto_pwhash_strbytes()             == crypto_pwhash_STRBYTES);
   assert(crypto_pwhash_strprefix()            == crypto_pwhash_STRPREFIX);
+  debug writefln("crypto_pwhash_opslimit_min(), crypto_pwhash_OPSLIMIT_MIN: %s %s", crypto_pwhash_opslimit_min(), crypto_pwhash_OPSLIMIT_MIN);
+  debug writefln("crypto_pwhash_opslimit_max(), crypto_pwhash_OPSLIMIT_MAX: %s %s", crypto_pwhash_opslimit_max(), crypto_pwhash_OPSLIMIT_MAX);
+  debug writefln("crypto_pwhash_memlimit_min(), crypto_pwhash_MEMLIMIT_MIN: %s %s", crypto_pwhash_memlimit_min(), crypto_pwhash_MEMLIMIT_MIN);
+  debug writefln("crypto_pwhash_memlimit_max(), crypto_pwhash_MEMLIMIT_MAX: %s %s", crypto_pwhash_memlimit_max(), crypto_pwhash_MEMLIMIT_MAX);
+
+  debug writefln("crypto_pwhash_opslimit_interactive(), crypto_pwhash_OPSLIMIT_INTERACTIVE: %s %s", crypto_pwhash_opslimit_interactive(), crypto_pwhash_OPSLIMIT_INTERACTIVE);
+  debug writefln("crypto_pwhash_memlimit_interactive(), crypto_pwhash_MEMLIMIT_INTERACTIVE: %s %s", crypto_pwhash_memlimit_interactive(), crypto_pwhash_MEMLIMIT_INTERACTIVE);
+
+  debug writefln("crypto_pwhash_opslimit_moderate(), crypto_pwhash_OPSLIMIT_MODERATE:       %s %s", crypto_pwhash_opslimit_moderate(), crypto_pwhash_OPSLIMIT_MODERATE);
+  debug writefln("crypto_pwhash_memlimit_moderate(), crypto_pwhash_MEMLIMIT_MODERATE:       %s %s", crypto_pwhash_memlimit_moderate(), crypto_pwhash_MEMLIMIT_MODERATE);
+
+  debug writefln("crypto_pwhash_opslimit_sensitive(), crypto_pwhash_OPSLIMIT_SENSITIVE:     %s %s", crypto_pwhash_opslimit_sensitive(), crypto_pwhash_OPSLIMIT_SENSITIVE);
+  debug writefln("crypto_pwhash_memlimit_sensitive(), crypto_pwhash_MEMLIMIT_SENSITIVE:     %s %s", crypto_pwhash_memlimit_sensitive(), crypto_pwhash_MEMLIMIT_SENSITIVE);
+
+
 /*
   assert(crypto_pwhash_opslimit_min()         == crypto_pwhash_OPSLIMIT_MIN);
   assert(crypto_pwhash_opslimit_max()         == crypto_pwhash_OPSLIMIT_MAX);
