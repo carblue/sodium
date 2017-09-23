@@ -18,6 +18,7 @@ import deimos.sodium.crypto_box_curve25519xsalsa20poly1305 : crypto_box_curve255
                                                              crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES,
                                                              crypto_box_curve25519xsalsa20poly1305_NONCEBYTES,
                                                              crypto_box_curve25519xsalsa20poly1305_MACBYTES,
+                                                             crypto_box_curve25519xsalsa20poly1305_MESSAGEBYTES_MAX,
                                                              crypto_box_curve25519xsalsa20poly1305_BEFORENMBYTES,
                                                              crypto_box_curve25519xsalsa20poly1305_ZEROBYTES,
                                                              crypto_box_curve25519xsalsa20poly1305_BOXZEROBYTES;
@@ -45,6 +46,10 @@ size_t  crypto_box_noncebytes() pure @trusted;
 alias crypto_box_MACBYTES = crypto_box_curve25519xsalsa20poly1305_MACBYTES;
 
 size_t  crypto_box_macbytes() pure @trusted;
+
+alias crypto_box_MESSAGEBYTES_MAX = crypto_box_curve25519xsalsa20poly1305_MESSAGEBYTES_MAX;
+
+size_t  crypto_box_messagebytes_max() pure @trusted;
 
 enum crypto_box_PRIMITIVE = "curve25519xsalsa20poly1305";
 

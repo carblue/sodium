@@ -37,11 +37,11 @@ import deimos.sodium.crypto_onetimeauth;
 import deimos.sodium.crypto_onetimeauth_poly1305;
 import deimos.sodium.crypto_pwhash;
 import deimos.sodium.crypto_pwhash_argon2i;
-import deimos.sodium.crypto_pwhash_scryptsalsa208sha256;
 import deimos.sodium.crypto_scalarmult;
 import deimos.sodium.crypto_scalarmult_curve25519;
 import deimos.sodium.crypto_secretbox;
 import deimos.sodium.crypto_secretbox_xsalsa20poly1305;
+import deimos.sodium.crypto_secretstream_xchacha20poly1305;
 import deimos.sodium.crypto_shorthash;
 import deimos.sodium.crypto_shorthash_siphash24;
 import deimos.sodium.crypto_sign;
@@ -66,6 +66,7 @@ version(SODIUM_LIBRARY_MINIMAL) {}
 else {
 	import deimos.sodium.crypto_box_curve25519xchacha20poly1305;
 	import deimos.sodium.crypto_secretbox_xchacha20poly1305;
+	import deimos.sodium.crypto_pwhash_scryptsalsa208sha256;
 	import deimos.sodium.crypto_stream_aes128ctr;
 	import deimos.sodium.crypto_stream_salsa2012;
 	import deimos.sodium.crypto_stream_salsa208;

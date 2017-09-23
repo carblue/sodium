@@ -14,9 +14,8 @@ module deimos.sodium.crypto_stream_xchacha20;
  *  the crypto_box functions.
  */
 
-//#include <stddef.h>
-//#include <stdint.h>
-//#include "export.h"
+import deimos.sodium.export_;
+
 
 extern(C) @nogc :
 
@@ -28,6 +27,10 @@ size_t crypto_stream_xchacha20_keybytes() pure @trusted;
 enum crypto_stream_xchacha20_NONCEBYTES = 24U;
 
 size_t crypto_stream_xchacha20_noncebytes() pure @trusted;
+
+alias crypto_stream_xchacha20_MESSAGEBYTES_MAX = SODIUM_SIZE_MAX;
+
+size_t crypto_stream_xchacha20_messagebytes_max() pure @trusted;
 
 int crypto_stream_xchacha20(ubyte* c, ulong clen,
                             const(ubyte)* n, const(ubyte)* k) pure;

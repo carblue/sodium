@@ -12,19 +12,19 @@ extern(C) pure @nogc :
 
 enum crypto_core_salsa208_OUTPUTBYTES = 64U;
 
-size_t crypto_core_salsa208_outputbytes() @trusted;
+deprecated  size_t crypto_core_salsa208_outputbytes() @trusted;
 
 enum crypto_core_salsa208_INPUTBYTES = 16U;
 
-size_t crypto_core_salsa208_inputbytes() @trusted;
+deprecated  size_t crypto_core_salsa208_inputbytes() @trusted;
 
 enum crypto_core_salsa208_KEYBYTES = 32U;
 
-size_t crypto_core_salsa208_keybytes() @trusted;
+deprecated  size_t crypto_core_salsa208_keybytes() @trusted;
 
 enum crypto_core_salsa208_CONSTBYTES = 16U;
 
-size_t crypto_core_salsa208_constbytes() @trusted;
+deprecated  size_t crypto_core_salsa208_constbytes() @trusted;
 
 int crypto_core_salsa208(ubyte* out_, const(ubyte)* in_,
                          const(ubyte)* k, const(ubyte)* c);

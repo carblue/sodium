@@ -9,7 +9,7 @@ module deimos.sodium.crypto_generichash_blake2b;
 
 extern(C) @nogc :
 
-
+//typedef struct CRYPTO_ALIGN(64) crypto_generichash_blake2b_state
 align(64) struct crypto_generichash_blake2b_state {
   align(1) :
 

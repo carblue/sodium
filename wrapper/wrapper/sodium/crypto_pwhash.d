@@ -129,33 +129,16 @@ unittest {
   assert(crypto_pwhash_saltbytes()            == crypto_pwhash_SALTBYTES);
   assert(crypto_pwhash_strbytes()             == crypto_pwhash_STRBYTES);
   assert(crypto_pwhash_strprefix()            == crypto_pwhash_STRPREFIX);
-  debug writefln("crypto_pwhash_opslimit_min(), crypto_pwhash_OPSLIMIT_MIN: %s %s", crypto_pwhash_opslimit_min(), crypto_pwhash_OPSLIMIT_MIN);
-  debug writefln("crypto_pwhash_opslimit_max(), crypto_pwhash_OPSLIMIT_MAX: %s %s", crypto_pwhash_opslimit_max(), crypto_pwhash_OPSLIMIT_MAX);
-  debug writefln("crypto_pwhash_memlimit_min(), crypto_pwhash_MEMLIMIT_MIN: %s %s", crypto_pwhash_memlimit_min(), crypto_pwhash_MEMLIMIT_MIN);
-  debug writefln("crypto_pwhash_memlimit_max(), crypto_pwhash_MEMLIMIT_MAX: %s %s", crypto_pwhash_memlimit_max(), crypto_pwhash_MEMLIMIT_MAX);
-
-  debug writefln("crypto_pwhash_opslimit_interactive(), crypto_pwhash_OPSLIMIT_INTERACTIVE: %s %s", crypto_pwhash_opslimit_interactive(), crypto_pwhash_OPSLIMIT_INTERACTIVE);
-  debug writefln("crypto_pwhash_memlimit_interactive(), crypto_pwhash_MEMLIMIT_INTERACTIVE: %s %s", crypto_pwhash_memlimit_interactive(), crypto_pwhash_MEMLIMIT_INTERACTIVE);
-
-  debug writefln("crypto_pwhash_opslimit_moderate(), crypto_pwhash_OPSLIMIT_MODERATE:       %s %s", crypto_pwhash_opslimit_moderate(), crypto_pwhash_OPSLIMIT_MODERATE);
-  debug writefln("crypto_pwhash_memlimit_moderate(), crypto_pwhash_MEMLIMIT_MODERATE:       %s %s", crypto_pwhash_memlimit_moderate(), crypto_pwhash_MEMLIMIT_MODERATE);
-
-  debug writefln("crypto_pwhash_opslimit_sensitive(), crypto_pwhash_OPSLIMIT_SENSITIVE:     %s %s", crypto_pwhash_opslimit_sensitive(), crypto_pwhash_OPSLIMIT_SENSITIVE);
-  debug writefln("crypto_pwhash_memlimit_sensitive(), crypto_pwhash_MEMLIMIT_SENSITIVE:     %s %s", crypto_pwhash_memlimit_sensitive(), crypto_pwhash_MEMLIMIT_SENSITIVE);
-
-
-/*
-  assert(crypto_pwhash_opslimit_min()         == crypto_pwhash_OPSLIMIT_MIN);
-  assert(crypto_pwhash_opslimit_max()         == crypto_pwhash_OPSLIMIT_MAX);
-  assert(crypto_pwhash_memlimit_min()         == crypto_pwhash_MEMLIMIT_MIN);
-  assert(crypto_pwhash_memlimit_max()         == crypto_pwhash_MEMLIMIT_MAX);
-  assert(crypto_pwhash_opslimit_interactive() == crypto_pwhash_OPSLIMIT_INTERACTIVE);
-  assert(crypto_pwhash_memlimit_interactive() == crypto_pwhash_MEMLIMIT_INTERACTIVE);
-  assert(crypto_pwhash_opslimit_moderate()    == crypto_pwhash_OPSLIMIT_MODERATE);
-  assert(crypto_pwhash_memlimit_moderate()    == crypto_pwhash_MEMLIMIT_MODERATE);
-  assert(crypto_pwhash_opslimit_sensitive()   == crypto_pwhash_OPSLIMIT_SENSITIVE);
-  assert(crypto_pwhash_memlimit_sensitive()   == crypto_pwhash_MEMLIMIT_SENSITIVE);
-*/
+  assert(crypto_pwhash_opslimit_min()         == crypto_pwhash_OPSLIMIT_MIN); // 3
+  assert(crypto_pwhash_opslimit_max()         == crypto_pwhash_OPSLIMIT_MAX); // 4294967295
+//assert(crypto_pwhash_memlimit_min()         == crypto_pwhash_MEMLIMIT_MIN); // 8192 1
+  assert(crypto_pwhash_memlimit_max()         == crypto_pwhash_MEMLIMIT_MAX); // 4398046510080
+  assert(crypto_pwhash_opslimit_interactive() == crypto_pwhash_OPSLIMIT_INTERACTIVE); // 4
+  assert(crypto_pwhash_memlimit_interactive() == crypto_pwhash_MEMLIMIT_INTERACTIVE); // 33554432
+  assert(crypto_pwhash_opslimit_moderate()    == crypto_pwhash_OPSLIMIT_MODERATE);    // 6
+  assert(crypto_pwhash_memlimit_moderate()    == crypto_pwhash_MEMLIMIT_MODERATE);    // 134217728
+  assert(crypto_pwhash_opslimit_sensitive()   == crypto_pwhash_OPSLIMIT_SENSITIVE);   // 8
+  assert(crypto_pwhash_memlimit_sensitive()   == crypto_pwhash_MEMLIMIT_SENSITIVE);   // 536870912
   assert(crypto_pwhash_primitive()            == crypto_pwhash_PRIMITIVE);
 
   enum password = "Correct Horse Battery Staple";

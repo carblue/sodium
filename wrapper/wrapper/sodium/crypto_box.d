@@ -15,6 +15,8 @@ import  deimos.sodium.crypto_box : crypto_box_SEEDBYTES,
                                    crypto_box_noncebytes,
                                    crypto_box_MACBYTES,
                                    crypto_box_macbytes,
+                                   crypto_box_MESSAGEBYTES_MAX,
+                                   crypto_box_messagebytes_max,
                                    crypto_box_PRIMITIVE,
 /*                                 crypto_box_primitive,
                                    crypto_box_seed_keypair,
@@ -246,14 +248,15 @@ unittest {
   import wrapper.sodium.randombytes : randombytes;
   import wrapper.sodium.utils : sodium_increment;
 
-  assert(crypto_box_seedbytes()      == crypto_box_SEEDBYTES);
-  assert(crypto_box_publickeybytes() == crypto_box_PUBLICKEYBYTES);
-  assert(crypto_box_secretkeybytes() == crypto_box_SECRETKEYBYTES);
-  assert(crypto_box_noncebytes()     == crypto_box_NONCEBYTES);
-  assert(crypto_box_macbytes()       == crypto_box_MACBYTES);
-  assert(crypto_box_primitive()      == crypto_box_PRIMITIVE);
-  assert(crypto_box_beforenmbytes()  == crypto_box_BEFORENMBYTES);
-  assert(crypto_box_sealbytes()      == crypto_box_SEALBYTES);
+  assert(crypto_box_seedbytes()        == crypto_box_SEEDBYTES);
+  assert(crypto_box_publickeybytes()   == crypto_box_PUBLICKEYBYTES);
+  assert(crypto_box_secretkeybytes()   == crypto_box_SECRETKEYBYTES);
+  assert(crypto_box_noncebytes()       == crypto_box_NONCEBYTES);
+  assert(crypto_box_macbytes()         == crypto_box_MACBYTES);
+  assert(crypto_box_messagebytes_max() == crypto_box_MESSAGEBYTES_MAX);
+  assert(crypto_box_primitive()        == crypto_box_PRIMITIVE);
+  assert(crypto_box_beforenmbytes()    == crypto_box_BEFORENMBYTES);
+  assert(crypto_box_sealbytes()        == crypto_box_SEALBYTES);
 
   enum MESSAGE_LEN = 4;
   ubyte[MESSAGE_LEN] message  = [116, 101, 115, 116]; //representation("test");
