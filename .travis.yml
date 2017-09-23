@@ -1,8 +1,8 @@
 language: d
 d:
   - dmd
-#  - ldc
-#  - gdc
+  - ldc
+  - gdc
 
 sudo: required
 dist: trusty
