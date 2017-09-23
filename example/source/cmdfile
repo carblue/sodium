@@ -1,1 +1,1 @@
--de -w -I../../deimos
+-de -w -I../../deimos -L-lsodium

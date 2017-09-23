@@ -6,7 +6,7 @@
 
 # sodium
 
-Twofold binding to libsodium, current C-source version 1.0.14, released on Sept. 21, 2017 [https://github.com/jedisct1/libsodium]
+Twofold binding to libsodium, current C-source version 1.0.14, released on Sept. 22, 2017 [https://github.com/jedisct1/libsodium]
 
 subPackage 'deimos':  The "import-only" C header's declarations.<br>
 subPackage 'wrapper': 'deimos' + some 'D-friendly' stuff, predominantly overloaded functions and unittests.
@@ -16,7 +16,7 @@ The dependency name is either  sodium:deimos  or  sodium:wrapper
 Some restructuring (subPackages)/changing importPath and sourcePath was done for version 0.1.0 (different from previous 0.08) in order to have the 'wrapper' subPackage sit aside subPackage 'deimos'.<br>
 Thus code that already used versions<0.1.0 needs to replace 'import sodium...' by either 'import deimos.sodium...' or 'import wrapper.sodium...'.
 
-'wrapper' aims at providing at least the same functionality as 'deimos' and provide @trusted @nogc (pure nothrow) 'D-friendly' alternatives that are hard to use in a wrong way; work in progress:<br>
+'wrapper' aims at providing at least the same functionality as 'deimos' and provide @trusted @nogc (pure nothrow) 'D-friendly' alternatives, that are hard to use in a wrong way; work in progress:<br>
 a) 'wrapper' is a superset of 'deimos' in that everything from 'deimos' is reachable, but deliberately not all at your fingertips.<br>
 b) all new functions with 'deimos-functionality' have the same name as their 'deimos'-cousins and call them, building either overload sets to choose from, or for parameter-less functions, 'substituting' their cousins.<br>
 c) all new functions calculating a variable-length output are restrictive referring to the size of the output-buffer offered, if the required size can be easily computed in advance, throwing in case of wrong-sized buffers.<br>
@@ -24,7 +24,7 @@ c) all new functions calculating a variable-length output are restrictive referr
 d) No need to explicitely call sodium_init() up-front.<br>
 e) Usage of 'wrapper' isn't possible, if function randombytes_set_implementation shall be used (wrapper.sodium.core:shared static this() calls sodium_init()).
 
-The unittests of subPackage 'wrapper' include a lot of function usage examples; the next is a simple application example based on sodium:deimos, using rdmd:<br>
+The unittests of subPackage 'wrapper' include a lot of function usage examples; the next is a simple application example based on sodium:deimos, using rdmd and file cmdfile, suitable as is for Linux:<br>
 
 	cd example/source  &&  chmod 775 app.d  &&  ./app.d
 
