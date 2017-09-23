@@ -6,6 +6,8 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.crypto_pwhash_argon2i;
 
+import deimos.sodium.export_;
+
 
 extern(C) pure @nogc :
 
@@ -18,7 +20,7 @@ enum crypto_pwhash_argon2i_BYTES_MIN = 16U;
 
 size_t crypto_pwhash_argon2i_bytes_min() @trusted;
 
-enum crypto_pwhash_argon2i_BYTES_MAX = 4294967295U;
+enum crypto_pwhash_argon2i_BYTES_MAX = SODIUM_MIN(SODIUM_SIZE_MAX, 4294967295U);
 
 size_t crypto_pwhash_argon2i_bytes_max() @trusted;
 
@@ -50,11 +52,12 @@ enum crypto_pwhash_argon2i_OPSLIMIT_MAX = 4294967295U;
 
 size_t crypto_pwhash_argon2i_opslimit_max() @trusted;
 
-enum crypto_pwhash_argon2i_MEMLIMIT_MIN = 1U;
+enum crypto_pwhash_argon2i_MEMLIMIT_MIN = 8192U;
 
 size_t crypto_pwhash_argon2i_memlimit_min() @trusted;
 
-enum crypto_pwhash_argon2i_MEMLIMIT_MAX = ((size_t.max >= 1UL << 48) ? 4398046510080U : (size_t.max >= 1UL << 32) ? 2147483648U : 32768U);
+enum crypto_pwhash_argon2i_MEMLIMIT_MAX =
+    ((size_t.max >= 4398046510080U) ? 4398046510080U : (size_t.max >= 2147483648U) ? 2147483648U : 32768U);
 
 size_t crypto_pwhash_argon2i_memlimit_max() @trusted;
 
@@ -98,3 +101,6 @@ int crypto_pwhash_argon2i_str(ref char[crypto_pwhash_argon2i_STRBYTES] out_,
 int crypto_pwhash_argon2i_str_verify(ref const(char[crypto_pwhash_argon2i_STRBYTES]) str,
                                      const(char*) passwd,
                                      ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result));
+
+int crypto_pwhash_argon2i_str_needs_rehash(ref const(char[crypto_pwhash_argon2i_STRBYTES]) str,
+                                           ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));

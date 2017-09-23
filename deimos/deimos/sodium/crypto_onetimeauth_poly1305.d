@@ -9,7 +9,7 @@ module deimos.sodium.crypto_onetimeauth_poly1305;
 
 extern(C) @nogc :
 
-
+//typedef struct CRYPTO_ALIGN(16) crypto_onetimeauth_poly1305_state
 align(16) struct crypto_onetimeauth_poly1305_state {
     ubyte[256] opaque;
 }

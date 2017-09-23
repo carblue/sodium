@@ -1,5 +1,5 @@
 General Note:
-While I'm not a fan of deploying binaries, I do this here for testing puposes and lazy users,
+While I'm not a fan of deploying binaries, I do this here for testing purposes and lazy users,
 though I recommend to get Your own copies from https://download.libsodium.org/libsodium/releases/ or build from source.
 
 
@@ -10,5 +10,5 @@ At Your option (if You opted for the import library) place the .dll here as well
 will copy the .dll to directory 'targetPath' (in turn for possibly different Windows builds), thus this ensures, that always the
 matching pair of import lib and .dll is used.
 
-The files included are from https://download.libsodium.org/libsodium/releases/libsodium-1.0.12-msvc.zip,
-folder ...\libsodium-1.0.12-msvc\Win32\Release\v140\dynamic  (Visual Studio 2015)
+The files included are from https://download.libsodium.org/libsodium/releases/libsodium-1.0.14-msvc.zip,
+folder ...\libsodium-1.0.14-msvc\Win32\Release\v140\dynamic  (Visual Studio 2015)

@@ -1,119 +1,105 @@
 /*
 Written in the D programming language.
 For git maintenance (ensure at least one congruent line with originating C header):
-#define crypto_secretstream_xchacha20poly1305_H
+#define crypto_pwhash_argon2id_H
 */
 
 module deimos.sodium.crypto_pwhash_argon2id;
 
-//#include <limits.h>
-//#include <stddef.h>
-//#include <stdint.h>
-
-//#include "export.h"
+import deimos.sodium.export_;
 
 extern(C) :
 
 
-/+
-#define crypto_pwhash_argon2id_ALG_ARGON2ID13 2
-SODIUM_EXPORT
-int crypto_pwhash_argon2id_alg_argon2id13(void);
+enum crypto_pwhash_argon2id_ALG_ARGON2ID13 = 2;
 
-#define crypto_pwhash_argon2id_BYTES_MIN 16U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_bytes_min(void);
+int crypto_pwhash_argon2id_alg_argon2id13();
 
-#define crypto_pwhash_argon2id_BYTES_MAX SODIUM_MIN(SODIUM_SIZE_MAX, 4294967295U)
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_bytes_max(void);
+enum crypto_pwhash_argon2id_BYTES_MIN = 16U;
 
-#define crypto_pwhash_argon2id_PASSWD_MIN 0U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_passwd_min(void);
+size_t crypto_pwhash_argon2id_bytes_min();
 
-#define crypto_pwhash_argon2id_PASSWD_MAX 4294967295U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_passwd_max(void);
+enum crypto_pwhash_argon2id_BYTES_MAX = SODIUM_MIN(SODIUM_SIZE_MAX, 4294967295U);
 
-#define crypto_pwhash_argon2id_SALTBYTES 16U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_saltbytes(void);
+size_t crypto_pwhash_argon2id_bytes_max();
 
-#define crypto_pwhash_argon2id_STRBYTES 128U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_strbytes(void);
+enum crypto_pwhash_argon2id_PASSWD_MIN = 0U;
 
-#define crypto_pwhash_argon2id_STRPREFIX "$argon2id$"
-SODIUM_EXPORT
-const char *crypto_pwhash_argon2id_strprefix(void);
+size_t crypto_pwhash_argon2id_passwd_min();
 
-#define crypto_pwhash_argon2id_OPSLIMIT_MIN 1U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_opslimit_min(void);
+enum crypto_pwhash_argon2id_PASSWD_MAX = 4294967295U;
 
-#define crypto_pwhash_argon2id_OPSLIMIT_MAX 4294967295U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_opslimit_max(void);
+size_t crypto_pwhash_argon2id_passwd_max();
 
-#define crypto_pwhash_argon2id_MEMLIMIT_MIN 8192U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_memlimit_min(void);
+enum crypto_pwhash_argon2id_SALTBYTES = 16U;
 
-#define crypto_pwhash_argon2id_MEMLIMIT_MAX \
-    ((SIZE_MAX >= 4398046510080U) ? 4398046510080U : (SIZE_MAX >= 2147483648U) ? 2147483648U : 32768U)
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_memlimit_max(void);
+size_t crypto_pwhash_argon2id_saltbytes();
 
-#define crypto_pwhash_argon2id_OPSLIMIT_INTERACTIVE 2U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_opslimit_interactive(void);
+enum crypto_pwhash_argon2id_STRBYTES = 128U;
 
-#define crypto_pwhash_argon2id_MEMLIMIT_INTERACTIVE 67108864U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_memlimit_interactive(void);
+size_t crypto_pwhash_argon2id_strbytes();
 
-#define crypto_pwhash_argon2id_OPSLIMIT_MODERATE 3U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_opslimit_moderate(void);
+enum crypto_pwhash_argon2id_STRPREFIX = "$argon2id$";
 
-#define crypto_pwhash_argon2id_MEMLIMIT_MODERATE 268435456U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_memlimit_moderate(void);
+const(char)* crypto_pwhash_argon2id_strprefix();
 
-#define crypto_pwhash_argon2id_OPSLIMIT_SENSITIVE 4U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_opslimit_sensitive(void);
+enum crypto_pwhash_argon2id_OPSLIMIT_MIN = 1U;
 
-#define crypto_pwhash_argon2id_MEMLIMIT_SENSITIVE 1073741824U
-SODIUM_EXPORT
-size_t crypto_pwhash_argon2id_memlimit_sensitive(void);
+size_t crypto_pwhash_argon2id_opslimit_min();
 
-SODIUM_EXPORT
-int crypto_pwhash_argon2id(unsigned char * const out,
-                           unsigned long long outlen,
-                           const char * const passwd,
-                           unsigned long long passwdlen,
-                           const unsigned char * const salt,
-                           unsigned long long opslimit, size_t memlimit,
-                           int alg)
-            __attribute__ ((warn_unused_result));
+enum crypto_pwhash_argon2id_OPSLIMIT_MAX = 4294967295U;
 
-SODIUM_EXPORT
-int crypto_pwhash_argon2id_str(char out[crypto_pwhash_argon2id_STRBYTES],
-                               const char * const passwd,
-                               unsigned long long passwdlen,
-                               unsigned long long opslimit, size_t memlimit)
-            __attribute__ ((warn_unused_result));
+size_t crypto_pwhash_argon2id_opslimit_max();
 
-SODIUM_EXPORT
-int crypto_pwhash_argon2id_str_verify(const char str[crypto_pwhash_argon2id_STRBYTES],
-                                      const char * const passwd,
-                                      unsigned long long passwdlen)
-            __attribute__ ((warn_unused_result));
+enum crypto_pwhash_argon2id_MEMLIMIT_MIN = 8192U;
 
-SODIUM_EXPORT
-int crypto_pwhash_argon2id_str_needs_rehash(const char str[crypto_pwhash_argon2id_STRBYTES],
-                                            unsigned long long opslimit, size_t memlimit)
-            __attribute__ ((warn_unused_result));
-+/
+size_t crypto_pwhash_argon2id_memlimit_min();
+
+enum crypto_pwhash_argon2id_MEMLIMIT_MAX =
+    ((size_t.max >= 4398046510080U) ? 4398046510080U : (size_t.max >= 2147483648U) ? 2147483648U : 32768U);
+
+size_t crypto_pwhash_argon2id_memlimit_max();
+
+enum crypto_pwhash_argon2id_OPSLIMIT_INTERACTIVE = 2U;
+
+size_t crypto_pwhash_argon2id_opslimit_interactive();
+
+enum crypto_pwhash_argon2id_MEMLIMIT_INTERACTIVE = 67108864U;
+
+size_t crypto_pwhash_argon2id_memlimit_interactive();
+
+enum crypto_pwhash_argon2id_OPSLIMIT_MODERATE = 3U;
+
+size_t crypto_pwhash_argon2id_opslimit_moderate();
+
+enum crypto_pwhash_argon2id_MEMLIMIT_MODERATE = 268435456U;
+
+size_t crypto_pwhash_argon2id_memlimit_moderate();
+
+enum crypto_pwhash_argon2id_OPSLIMIT_SENSITIVE = 4U;
+
+size_t crypto_pwhash_argon2id_opslimit_sensitive();
+
+enum crypto_pwhash_argon2id_MEMLIMIT_SENSITIVE = 1073741824U;
+
+size_t crypto_pwhash_argon2id_memlimit_sensitive();
+
+int crypto_pwhash_argon2id(ubyte* out_,
+                           ulong outlen,
+                           const(char*) passwd,
+                           ulong passwdlen,
+                           const(ubyte*) salt,
+                           ulong opslimit, size_t memlimit,
+                           int alg) pure nothrow; // __attribute__ ((warn_unused_result));
+
+int crypto_pwhash_argon2id_str(ref char[crypto_pwhash_argon2id_STRBYTES] out_,
+                               const(char*) passwd,
+                               ulong passwdlen,
+                               ulong opslimit, size_t memlimit) pure nothrow; // __attribute__ ((warn_unused_result));
+
+int crypto_pwhash_argon2id_str_verify(ref const(char[crypto_pwhash_argon2id_STRBYTES]) str,
+                                      const(char*) passwd,
+                                      ulong passwdlen) pure nothrow; // __attribute__ ((warn_unused_result));
+
+int crypto_pwhash_argon2id_str_needs_rehash(ref const(char[crypto_pwhash_argon2id_STRBYTES]) str,
+                                            ulong opslimit, size_t memlimit) pure nothrow; // __attribute__ ((warn_unused_result));

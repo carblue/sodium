@@ -131,7 +131,7 @@ unittest {
   assert(crypto_pwhash_strprefix()            == crypto_pwhash_STRPREFIX);
   assert(crypto_pwhash_opslimit_min()         == crypto_pwhash_OPSLIMIT_MIN); // 3
   assert(crypto_pwhash_opslimit_max()         == crypto_pwhash_OPSLIMIT_MAX); // 4294967295
-//assert(crypto_pwhash_memlimit_min()         == crypto_pwhash_MEMLIMIT_MIN); // 8192 1
+  assert(crypto_pwhash_memlimit_min()         == crypto_pwhash_MEMLIMIT_MIN); // 8192
   assert(crypto_pwhash_memlimit_max()         == crypto_pwhash_MEMLIMIT_MAX); // 4398046510080
   assert(crypto_pwhash_opslimit_interactive() == crypto_pwhash_OPSLIMIT_INTERACTIVE); // 4
   assert(crypto_pwhash_memlimit_interactive() == crypto_pwhash_MEMLIMIT_INTERACTIVE); // 33554432
