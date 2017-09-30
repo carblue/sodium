@@ -16,7 +16,8 @@ unittest {
   cast(void) sodium_runtime_has_ssse3();
   cast(void) sodium_runtime_has_sse41();
   cast(void) sodium_runtime_has_avx();
-  cast(void) sodium_runtime_has_avx2();  // not available in version 1.0.8
+  cast(void) sodium_runtime_has_avx2();  // available since version 1.0.9 ?
+  cast(void) sodium_runtime_has_avx512f();  // available since version 1.0.14
   cast(void) sodium_runtime_has_pclmul();
   cast(void) sodium_runtime_has_aesni();
 }
@@ -25,13 +26,14 @@ pure /*nothrow @nogc ; deactivated due to writeln */ @safe
 unittest {
   import std.stdio : writeln; // writeln is not @nogc and not nothrow
   debug writeln("unittest block 1 from sodium.runtime.d");
-  debug writeln("sodium_runtime_has_neon:   ",sodium_runtime_has_neon());
-  debug writeln("sodium_runtime_has_sse2:   ",sodium_runtime_has_sse2());
-  debug writeln("sodium_runtime_has_sse3:   ",sodium_runtime_has_sse3());
-  debug writeln("sodium_runtime_has_ssse3:  ",sodium_runtime_has_ssse3());
-  debug writeln("sodium_runtime_has_sse41:  ",sodium_runtime_has_sse41());
-  debug writeln("sodium_runtime_has_avx:    ",sodium_runtime_has_avx());
-  debug writeln("sodium_runtime_has_avx2:   ",sodium_runtime_has_avx2());  // not available in version 1.0.8
-  debug writeln("sodium_runtime_has_pclmul: ",sodium_runtime_has_pclmul());
-  debug writeln("sodium_runtime_has_aesni:  ",sodium_runtime_has_aesni());
+  debug writeln("sodium_runtime_has_neon:    ",sodium_runtime_has_neon());
+  debug writeln("sodium_runtime_has_sse2:    ",sodium_runtime_has_sse2());
+  debug writeln("sodium_runtime_has_sse3:    ",sodium_runtime_has_sse3());
+  debug writeln("sodium_runtime_has_ssse3:   ",sodium_runtime_has_ssse3());
+  debug writeln("sodium_runtime_has_sse41:   ",sodium_runtime_has_sse41());
+  debug writeln("sodium_runtime_has_avx:     ",sodium_runtime_has_avx());
+  debug writeln("sodium_runtime_has_avx2:    ",sodium_runtime_has_avx2());  // available since version 1.0.9 ?
+  debug writeln("sodium_runtime_has_avx512f: ",sodium_runtime_has_avx512f());  // available since version 1.0.14
+  debug writeln("sodium_runtime_has_pclmul:  ",sodium_runtime_has_pclmul());
+  debug writeln("sodium_runtime_has_aesni:   ",sodium_runtime_has_aesni());
 }
