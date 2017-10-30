@@ -15,6 +15,13 @@ import  deimos.sodium.utils :
                               sodium_add,
                               sodium_bin2hex,
                               sodium_hex2bin, */
+                              sodium_base64_VARIANT_ORIGINAL,
+                              sodium_base64_VARIANT_ORIGINAL_NO_PADDING,
+                              sodium_base64_VARIANT_URLSAFE,
+                              sodium_base64_VARIANT_URLSAFE_NO_PADDING,
+                              sodium_base64_encoded_len,
+//                            sodium_bin2base64,
+//                            sodium_base642bin,
                               sodium_mlock,
                               sodium_munlock,
                               sodium_malloc,
@@ -23,6 +30,8 @@ import  deimos.sodium.utils :
                               sodium_mprotect_noaccess,
                               sodium_mprotect_readonly,
                               sodium_mprotect_readwrite;
+//                            sodium_pad,
+//                            sodium_unpad;
 
 
 /* overloading some functions between module deimos.sodium.utils and this module, "overload-set" */
@@ -221,6 +230,50 @@ bool sodium_hex2bin(ubyte[] bin, const char[] hex, const string ignore_nulltermi
   return result;
 }
 
+alias sodium_bin2base64  = deimos.sodium.utils.sodium_bin2base64;
+
+pragma(inline, true)
+void sodium_bin2base64(scope char[] b64, scope const ubyte[] bin, const int variant) /*pure nothrow*/ @nogc @trusted
+{
+  size_t min_len = sodium_base64_encoded_len(bin.length, variant);
+  enforce(b64.length >= min_len);
+  sodium_bin2base64(b64.ptr, b64.length, bin.ptr, bin.length, variant);
+}
+
+alias sodium_base642bin  = deimos.sodium.utils.sodium_base642bin;
+
+bool sodium_base642bin(ubyte[] bin, const char[] b64, const string ignore_nullterminated, out size_t bin_len, out size_t pos_b64_non_parsed, const int variant) pure nothrow @nogc @trusted
+{
+  import std.algorithm.comparison : clamp;
+  const(char)*  b64_non_parsed_ptr;
+  bool result;
+  try
+    result = sodium_base642bin(bin.ptr, bin.length, b64.ptr, b64.length, ignore_nullterminated.ptr, &bin_len, &b64_non_parsed_ptr, variant) == 0;
+  catch (Exception e) { /* known not to throw */ }
+  pos_b64_non_parsed = cast(size_t) clamp(b64_non_parsed_ptr - b64.ptr, ptrdiff_t(0), ptrdiff_t(b64.length));
+  return result;
+}
+
+alias sodium_pad         = deimos.sodium.utils.sodium_pad;
+
+pragma(inline, true)
+bool sodium_pad(out size_t padded_buflen, scope ubyte[] buf,
+                size_t unpadded_buflen, size_t blocksize)  pure /*nothrow*/ @nogc @trusted
+{
+  return sodium_pad(&padded_buflen, buf.ptr, unpadded_buflen, blocksize, buf.length) == 0;
+}
+
+
+alias sodium_unpad       = deimos.sodium.utils.sodium_unpad;
+
+pragma(inline, true)
+bool sodium_unpad(out size_t unpadded_buflen, scope ubyte[] buf,
+                  size_t padded_buflen, size_t blocksize)  pure /*nothrow*/ @nogc @trusted
+{
+  return sodium_unpad(&unpadded_buflen, buf.ptr, padded_buflen, blocksize) == 0;
+}
+
+
 
 pure @system
 unittest
@@ -280,6 +333,18 @@ version(LittleEndian) {
   sodium_add(u.b.ptr, v.b.ptr, u.b.length);
   assert(u.a == 0x80_00_00_00_00_00_00_01UL);
 }
+  ubyte[100]  buf;
+  size_t      buf_unpadded_len  =  10;
+  size_t      buf_padded_len;
+  size_t      block_size  =  16;
+  /* round the length of the buffer to a multiple of `block_size` by appending
+   * padding data and put the new, total length into `buf_padded_len` */
+  assert(sodium_pad(&buf_padded_len, buf.ptr, buf_unpadded_len, block_size, buf.sizeof) == 0);
+  assert(buf_padded_len == 16); // otherwise  /* overflow!  buf[] is not large enough */
+  buf_unpadded_len = 0;
+  /* compute the original, unpadded length */
+  assert(sodium_unpad(&buf_unpadded_len, buf.ptr, buf_padded_len, block_size) ==  0);
+  assert(buf_unpadded_len == 10); // otherwise  /* incorrect padding */
 }
 
 /*pure*/ @safe
@@ -383,6 +448,18 @@ version(LittleEndian) {
   sodium_add(dummy, null);
   assert(dummy is null);
 } // version(LittleEndian)
+  ubyte[100]  buf;
+  size_t      buf_unpadded_len  =  10;
+  size_t      buf_padded_len;
+  size_t      block_size  =  16;
+  /* round the length of the buffer to a multiple of `block_size` by appending
+   * padding data and put the new, total length into `buf_padded_len` */
+  assert(sodium_pad(buf_padded_len, buf, buf_unpadded_len, block_size));
+  assert(buf_padded_len == 16); // otherwise  /* overflow!  buf[] is not large enough */
+  buf_unpadded_len = 0;
+  /* compute the original, unpadded length */
+  assert(sodium_unpad(buf_unpadded_len, buf, buf_padded_len, block_size));
+  assert(buf_unpadded_len == 10); // otherwise  /* incorrect padding */
 }
 
 pure @system
@@ -420,11 +497,9 @@ unittest
   bin[]   = ubyte.init; // bin.length unchanged; to small now to incorporate all input
   assert(sodium_hex2bin(bin.ptr, bin.length, hex.ptr, hex.length, ignore_nullterminated_ptr, &bin_len, &hex_end) == -1);
   assert(bin == vbuf); // [172, 159, 255, 78, 186]);
-/*
-  assert(bin_len == 5);
+  assert(bin_len == 0);
   assert(*hex_end == 'f');
   assert(*++hex_end == 'a');
-*/
 }
 
 @safe
@@ -462,13 +537,13 @@ unittest // same as before except @safe and wrapping delegates + overloads
 
   --hex.length;
   hex ~= ":fa87";
-  bin.length +=1;
+  bin.length += 1;
   bin[] = ubyte.init;
 
   assert(!sodium_hex2bin(bin, hex, ignore_nullterminated, bin_len, pos_hex_non_parsed));
   assert(bin == vbuf~ubyte(0xfa));
-//  assert(bin_len == 6);
-//  assert(pos_hex_non_parsed == 17);
+  assert(bin_len == 0);
+  assert(pos_hex_non_parsed == 17);
 }
 
 @system
@@ -502,13 +577,29 @@ unittest // same as before except @safe and wrapping delegates + overloads
 //sodium_mlock
 //sodium_munlock
   ubyte[] a = [1,2,3,4,5,6,7,8];
-  assert(sodium_is_zero(a) == 0);
+  assert(!sodium_is_zero(a));
   {
     assert( (() @trusted => sodium_mlock(a.ptr, a.length))() != -1);
     assert(equal(a, [1,2,3,4,5,6,7,8]));
     scope(exit)  (() @trusted => sodium_munlock(a.ptr, a.length))();
   }
-  assert(sodium_is_zero(a) == 1);
+  assert(sodium_is_zero(a));
+
+  a = [65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80]; // QUJDREVGR0hJSktMTU5PUA==
+  size_t min_len = sodium_base64_encoded_len(a.length, sodium_base64_VARIANT_ORIGINAL);
+  char[] b64 = new char[](min_len);
+  sodium_bin2base64(b64, a, sodium_base64_VARIANT_ORIGINAL);
+//  writeln(b64);
+  a[] = ubyte.init;
+  size_t bin_len;
+  size_t pos_b64_non_parsed;
+  assert(sodium_base642bin(a, b64, null, bin_len, pos_b64_non_parsed, sodium_base64_VARIANT_ORIGINAL));
+  assert(equal(a, [65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80]));
+  assert(bin_len == 16);
+//  assert(pos_b64_non_parsed == b64.length); 24  25
+//  writeln(pos_b64_non_parsed);
+//  writeln(b64.length);
+
 }
 
 @system

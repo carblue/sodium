@@ -32,9 +32,12 @@ unittest
 {
   import std.algorithm.comparison : equal;
   import std.stdio : writeln;
+  import core.stdc.string : strlen;
   static import deimos.sodium.version_;
   debug writeln("unittest block 1 from sodium.version_.d");
-  assert(equal(fromStringz(deimos.sodium.version_.sodium_version_string()), sodium_version_string()));
+  const(char)* c_str = deimos.sodium.version_.sodium_version_string();
+  assert(equal(c_str[0 .. strlen(c_str)], sodium_version_string()));
+//  assert(equal( sodium_version_string(),  SODIUM_VERSION_STRING));
 }
 
 pure nothrow @nogc @safe

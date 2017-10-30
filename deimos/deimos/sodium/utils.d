@@ -81,12 +81,12 @@ size_t sodium_base64_encoded_len(const size_t bin_len, const int variant) pure n
 
 char* sodium_bin2base64(char* b64, const size_t b64_maxlen,
                         const(ubyte*) bin, const size_t bin_len,
-                        const int variant);
+                        const int variant) pure;
 
 int sodium_base642bin(ubyte* bin, const size_t bin_maxlen,
                       const(char*) b64, const size_t b64_len,
                       const(char*) ignore, size_t* bin_len,
-                      const(char)** b64_end, const int variant);
+                      const(char)** b64_end, const int variant) pure;
 
 /**
  * The  sodium_mlock()  function locks at least `len` bytes of memory starting at `addr`.
@@ -147,8 +147,8 @@ int sodium_mprotect_readonly(void* ptr) nothrow;
 int sodium_mprotect_readwrite(void* ptr) nothrow;
 
 int sodium_pad(size_t* padded_buflen_p, ubyte* buf,
-               size_t unpadded_buflen, size_t blocksize, size_t max_buflen);
+               size_t unpadded_buflen, size_t blocksize, size_t max_buflen) pure;
 
 int sodium_unpad(size_t* unpadded_buflen_p, const(ubyte)* buf,
-                 size_t padded_buflen, size_t blocksize);
+                 size_t padded_buflen, size_t blocksize) pure;
 
