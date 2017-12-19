@@ -32,7 +32,7 @@
 		{
 			"name": "travis",
 			"buildRequirements": ["disallowDeprecations"],
-			"dflags-dmd": ["-dip1000"]
+			"xtobeignoreddflagsx-dmd": ["-dip1000"]
 		}
 	]
 }
