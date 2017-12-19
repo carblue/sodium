@@ -6,10 +6,10 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.version_;
 
-enum SODIUM_VERSION_STRING = "1.0.15";
+enum SODIUM_VERSION_STRING = "1.0.16";
 
 enum SODIUM_LIBRARY_VERSION_MAJOR = 10;
-enum SODIUM_LIBRARY_VERSION_MINOR = 0;
+enum SODIUM_LIBRARY_VERSION_MINOR = 1;
 
 
 /* Deviating from C header, in D the following functions express __attribute__ ((warn_unused_result)) as well (if compiler switch -w is thrown) */

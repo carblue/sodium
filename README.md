@@ -6,7 +6,7 @@
 
 # sodium
 
-Twofold binding to libsodium, current C-source version 1.0.15, released on Okt. 1, 2017 [https://github.com/jedisct1/libsodium]
+Twofold binding to libsodium, current C-source version 1.0.16, released on Dec. 13, 2017 [https://github.com/jedisct1/libsodium]
 
 subPackage 'deimos':  The "import-only" C header's declarations.<br>
 subPackage 'wrapper': 'deimos' + some 'D-friendly' stuff, predominantly overloaded functions and unittests.

@@ -7,8 +7,9 @@ import std.exception : assertThrown, assertNotThrown;
 
 public
 import  deimos.sodium.utils :
-/*                            sodium_memzero,
-                              sodium_memcmp,
+//                            sodium_memzero,
+                              sodium_stackzero,
+/*                            sodium_memcmp,
                               sodium_compare,
                               sodium_is_zero,
                               sodium_increment,
@@ -283,15 +284,18 @@ unittest
     writeln("unittest block 1 from sodium.utils.d");
   }
 //sodium_memzero
+//sodium_stackzero
 //sodium_is_zero
   import std.algorithm.searching : any;
   import std.range : iota, array;
 
   int[8] a = [1,2,3,4,5,6,7,8]; // allocate on the stack
   sodium_memzero(a.ptr, a.length*int.sizeof);
+
   assert(!any(a[])); // none of a[] evaluate to true
 //  assert( all!"a == 0"(a[]));
 //  assert(all!(x => x == 0)(a[]));
+  sodium_stackzero(8); // TODO check this later
 
   int[] b = array(iota(99)); // allocate on the heap
   assert(sodium_is_zero(cast(ubyte*)b.ptr, b.length*int.sizeof) == 0);

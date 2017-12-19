@@ -20,6 +20,7 @@ unittest {
   cast(void) sodium_runtime_has_avx512f();  // available since version 1.0.14
   cast(void) sodium_runtime_has_pclmul();
   cast(void) sodium_runtime_has_aesni();
+  cast(void) sodium_runtime_has_rdrand(); // available since version 1.0.16
 }
 
 pure /*nothrow @nogc ; deactivated due to writeln */ @safe
@@ -36,4 +37,5 @@ unittest {
   debug writeln("sodium_runtime_has_avx512f: ",sodium_runtime_has_avx512f());  // available since version 1.0.14
   debug writeln("sodium_runtime_has_pclmul:  ",sodium_runtime_has_pclmul());
   debug writeln("sodium_runtime_has_aesni:   ",sodium_runtime_has_aesni());
+  debug writeln("sodium_runtime_has_rdrand:  ",sodium_runtime_has_rdrand()); // available since version 1.0.16
 }

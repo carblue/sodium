@@ -20,6 +20,14 @@ extern(C) /*nothrow*/ @nogc :
 void sodium_memzero(void* pnt, const size_t len) pure nothrow;
 
 /**
+The sodium_stackzero() function clears  len bytes above the current stack pointer, to
+overwrite sensitive values that may have been temporarily stored on the stack.
+Note that these values can still be present in registers.
+This function was introduced in libsodium 1.0.16.
+*/
+void sodium_stackzero(const size_t len) pure nothrow /* @trusted may exceed stack limit */;
+
+/**
  * WARNING: sodium_memcmp() must be used to verify if two secret keys
  * are equal, in constant time.
  * It returns 0 if the keys are equal, and -1 if they differ.

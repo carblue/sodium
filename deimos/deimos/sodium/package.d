@@ -65,6 +65,8 @@ import deimos.sodium.utils;
 version(SODIUM_LIBRARY_MINIMAL) {}
 else {
 	import deimos.sodium.crypto_box_curve25519xchacha20poly1305;
+	import deimos.sodium.crypto_core_ed25519;
+	import deimos.sodium.crypto_scalarmult_ed25519;
 	import deimos.sodium.crypto_secretbox_xchacha20poly1305;
 	import deimos.sodium.crypto_pwhash_scryptsalsa208sha256;
 	import deimos.sodium.crypto_stream_salsa2012;

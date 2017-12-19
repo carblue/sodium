@@ -30,3 +30,5 @@ int sodium_runtime_has_avx512f(); // available since version 1.0.14
 int sodium_runtime_has_pclmul();
 
 int sodium_runtime_has_aesni();
+
+int sodium_runtime_has_rdrand(); // available since version 1.0.16
