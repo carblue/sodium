@@ -4,9 +4,9 @@ environment:
   - DC: dmd
     DVersion: 2.086.0
     arch: x64
-#  - DC: dmd
-#    DVersion: 2.086.0
-#    arch: x86
+  - DC: dmd
+    DVersion: 2.086.0
+    arch: x86
 #  - DC: dmd
 #    DVersion: 2.086.0
 #    arch: x86_mscoff
@@ -14,10 +14,7 @@ environment:
     DVersion: 1.15.0
     arch: x64
 
-skip_tags: false
-branches:
-  only:
-    - master
+skip_tags: true
 
 install:
   - ps: function SetUpDCompiler
@@ -56,7 +53,7 @@ install:
             }
         }
   - ps: SetUpDCompiler
-  - powershell -Command Invoke-WebRequest https://github.com/dlang/dub/releases/download/v1.15.0/dub-v1.15.0-windows-x86_64.zip -OutFile dub.zip
+  - powershell -Command Invoke-WebRequest http://code.dlang.org/files/dub-1.0.0-windows-x86.zip -OutFile dub.zip
   - 7z x dub.zip -odub > nul
   - set PATH=%CD%\%binpath%;%CD%\dub;%PATH%
   - dub --version
