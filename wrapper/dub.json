@@ -31,8 +31,8 @@
 		},
 		{
 			"name": "travis",
-			"buildRequirements": ["disallowDeprecations"],
-			"xtobeignoreddflagsx-dmd": ["-dip1000"]
+			"dflags": ["-dip1000", "-dip1008"],
+			"buildRequirements": ["disallowDeprecations"]
 		}
 	]
 }

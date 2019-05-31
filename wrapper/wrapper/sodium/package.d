@@ -76,6 +76,8 @@ import wrapper.sodium.utils;                       /* unittest + code */
 
 version(SODIUM_LIBRARY_MINIMAL) {}
 else {
+	/* These declarations are accessible from the binary only if not compiled in minimal mode; module version_'s function sodium_library_minimal informs about that.
+	   Conservatively, dub.json assumes a binary compiled in minimal mode and sets version identifier SODIUM_LIBRARY_MINIMAL; Remove at Your own choice */
 	import wrapper.sodium.crypto_box_curve25519xchacha20poly1305;  /* currently mere redirection; TODO v1.0.12 */
 	import wrapper.sodium.crypto_core_ed25519;                     /* currently mere redirection; TODO v1.0.16 */
 	import wrapper.sodium.crypto_scalarmult_ed25519;               /* currently mere redirection; TODO v1.0.16 */

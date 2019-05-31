@@ -6,9 +6,10 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.runtime;
 
+/* Deviating from the C header, in D the following strongly pure (and nothrow) functions express __attribute__ ((warn_unused_result))
+   as well (if compiler warnings are enabled); remove either pure or nothrow from next line to match the C header in this regard. */
 
-/* Deviating from C header, in D the following functions express __attribute__ ((warn_unused_result)) as well (if compiler switch -w is thrown) */
-extern(C) pure nothrow @nogc @trusted :
+extern(C) @nogc nothrow pure @trusted :
 
 
 int sodium_runtime_has_neon();
