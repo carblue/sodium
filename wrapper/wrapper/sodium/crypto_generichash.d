@@ -161,6 +161,7 @@ unittest
   import std.stdio : writeln, writefln;
   import std.algorithm.comparison : equal;
   import std.string : representation;
+  import std.conv : hexString;
   import wrapper.sodium.randombytes : randombytes;
   debug  writeln("unittest block 2 from sodium.crypto_generichash.d");
 
@@ -171,7 +172,7 @@ unittest
   auto MESSAGE = representation("Arbitrary data to hash");
   crypto_generichash(hash, MESSAGE);
 
-  auto hash_output = representation(x"3dc7925e13e4c5f0f8756af2cc71d5624b58833bb92fa989c3e87d734ee5a600"); // the result from invoking the C version
+  auto hash_output = cast(immutable(ubyte)[]) hexString!"3dc7925e13e4c5f0f8756af2cc71d5624b58833bb92fa989c3e87d734ee5a600"; // the result from invoking the C version
   assert(equal(hash[], hash_output));
 
   ubyte[crypto_generichash_KEYBYTES] key32 = void;
@@ -186,10 +187,10 @@ unittest
     representation("Arbitrary data to hash"),
     representation("is longer than expected")
   ];
-  auto key = cast(immutable(ubyte)[]) x"516efcdd0db3fa9ececd98400dbd70df50fbe1ec2cfaf6a9cde509c7b306fcab"; // a key chosen in a run of block 1
+  auto key = cast(immutable(ubyte)[]) hexString!"516efcdd0db3fa9ececd98400dbd70df50fbe1ec2cfaf6a9cde509c7b306fcab"; // a key chosen in a run of block 1
   crypto_generichash_multi(hash, MESSAGE_multi, key);
 
-  hash_output = cast(immutable(ubyte)[]) x"bd4ec735d9b885a60e0a2b1f8e61842795126a77db60e4fa962290f29e63fde7"; // a hash calculated in a run of block 1 for same key and input
+  hash_output = cast(immutable(ubyte)[]) hexString!"bd4ec735d9b885a60e0a2b1f8e61842795126a77db60e4fa962290f29e63fde7"; // a hash calculated in a run of block 1 for same key and input
   assert(equal(hash[], hash_output));
 
   ubyte[crypto_generichash_KEYBYTES] k;

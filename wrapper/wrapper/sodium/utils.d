@@ -474,6 +474,7 @@ unittest
     writeln("unittest block 3 from sodium.utils.d");
   }
   import std.string : fromStringz;
+  import std.conv : hexString;
 
 //sodium_bin2hex
   ubyte[] a = [1,2,3,4,255];
@@ -483,7 +484,7 @@ unittest
   assert("01020304ff".dup  ==result_out[0..$-1]);
 
 //sodium_hex2bin
-  auto    vbuf = cast(immutable(ubyte)[]) x"ac 9f ff 4e ba"; // for comparison
+  auto    vbuf = cast(immutable(ubyte)[]) hexString!"ac 9f ff 4e ba"; // for comparison
   string  hex = "ac:9f:ff:4e:bay";
   const(char)*  ignore_nullterminated_ptr = ":";
   ubyte[] bin = new ubyte[]((hex.length+1)/3);
@@ -511,6 +512,7 @@ unittest // same as before except @safe and wrapping delegates + overloads
 {
   import std.stdio : writeln;
   import std.algorithm.comparison : equal;
+  import std.conv : hexString;
   debug  writeln("unittest block 4 from sodium.utils.d");
 
 //sodium_bin2hex
@@ -527,7 +529,7 @@ unittest // same as before except @safe and wrapping delegates + overloads
   assertThrown(sodium_bin2hex(null, null));
 
 //sodium_hex2bin overload only
-  auto    vbuf = cast(immutable(ubyte)[]) x"ac 9f ff 4e ba"; // for comparison
+  auto    vbuf = cast(immutable(ubyte)[]) hexString!"ac 9f ff 4e ba"; // for comparison
   string  hex = "ac:9f:ff:4e:bay";
   string  ignore_nullterminated = ":\0";
   ubyte[] bin = new ubyte[]((hex.length+1)/3);
