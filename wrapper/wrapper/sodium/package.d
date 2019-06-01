@@ -66,10 +66,7 @@ import wrapper.sodium.crypto_verify_64;  /* unittest + code ; wrapper: @nogc */
 
 /* WARNING: randombytes_set_implementation doesn't get imported by 'wrapper' and shouldn't be used through 'deimos' either, except You exactly know it's interaction with sodium_init() */
 import wrapper.sodium.randombytes;                 /* unittest + code */
-version(__native_client__)
-	import wrapper.sodium.randombytes_nativeclient;    /* unittest not required; mere redirection */
-
-import wrapper.sodium.randombytes_salsa20_random;  /* unittest not required; mere redirection */
+import wrapper.sodium.randombytes_internal_random; /* unittest not required; mere redirection */
 import wrapper.sodium.randombytes_sysrandom;       /* unittest not required; mere redirection */
 import wrapper.sodium.runtime;                     /* unittest (no-GC-alloc profiled) */
 import wrapper.sodium.utils;                       /* unittest + code */
@@ -80,12 +77,14 @@ else {
 	   Conservatively, dub.json assumes a binary compiled in minimal mode and sets version identifier SODIUM_LIBRARY_MINIMAL; Remove at Your own choice */
 	import wrapper.sodium.crypto_box_curve25519xchacha20poly1305;  /* currently mere redirection; TODO v1.0.12 */
 	import wrapper.sodium.crypto_core_ed25519;                     /* currently mere redirection; TODO v1.0.16 */
+	import wrapper.sodium.crypto_core_ristretto255;                /* currently mere redirection; TODO v1.0.18 */
 	import wrapper.sodium.crypto_scalarmult_ed25519;               /* currently mere redirection; TODO v1.0.16 */
+	import wrapper.sodium.crypto_scalarmult_ristretto255;          /* currently mere redirection; TODO v1.0.18 */
 	import wrapper.sodium.crypto_secretbox_xchacha20poly1305;      /* currently mere redirection; TODO v1.0.12 */
-	import wrapper.sodium.crypto_pwhash_scryptsalsa208sha256;  /* currently mere redirection; TODO */
-	import wrapper.sodium.crypto_stream_salsa2012;  /* currently mere redirection; TODO v1.0.12 */
-	import wrapper.sodium.crypto_stream_salsa208;   /* currently mere redirection; TODO v1.0.12 */
-	import wrapper.sodium.crypto_stream_xchacha20;  /* currently mere redirection; TODO v1.0.12 */
+	import wrapper.sodium.crypto_pwhash_scryptsalsa208sha256;      /* currently mere redirection; TODO */
+	import wrapper.sodium.crypto_stream_salsa2012;                 /* currently mere redirection; TODO v1.0.12 */
+	import wrapper.sodium.crypto_stream_salsa208;                  /* currently mere redirection; TODO v1.0.12 */
+	import wrapper.sodium.crypto_stream_xchacha20;                 /* currently mere redirection; TODO v1.0.12 */
 }
 
 /*
