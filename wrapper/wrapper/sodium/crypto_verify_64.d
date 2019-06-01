@@ -16,9 +16,9 @@ alias crypto_verify_64 = deimos.sodium.crypto_verify_64.crypto_verify_64;
  * Otherwise, it returns false.
  */
 pragma(inline, true)
-bool crypto_verify_64(const ubyte[crypto_verify_64_BYTES] x, const ubyte[crypto_verify_64_BYTES] y) pure nothrow @nogc @trusted
+bool crypto_verify_64(const ubyte[crypto_verify_64_BYTES] x, const ubyte[crypto_verify_64_BYTES] y) @nogc nothrow pure @trusted
 {
-  return crypto_verify_64(x.ptr, y.ptr) == 0;
+  return crypto_verify_64(x.ptr, y.ptr) == 0; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 }
 
 
@@ -37,7 +37,7 @@ unittest
   assert(crypto_verify_64(buf1.ptr, buf2.ptr) == -1);
 }
 
-pure nothrow @nogc @safe
+@nogc nothrow pure @safe
 unittest
 {
   import std.range : iota, enumerate; //, array;

@@ -33,15 +33,15 @@ alias crypto_stream_xsalsa20_MESSAGEBYTES_MAX = SODIUM_SIZE_MAX;
 size_t crypto_stream_xsalsa20_messagebytes_max() pure @trusted;
 
 int crypto_stream_xsalsa20(ubyte* c, ulong clen,
-                           const(ubyte)* n, const(ubyte)* k) pure;
+                           const(ubyte)* n, const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
 int crypto_stream_xsalsa20_xor(ubyte* c, const(ubyte)* m,
                                ulong mlen, const(ubyte)* n,
-                               const(ubyte)* k) pure;
+                               const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
 int crypto_stream_xsalsa20_xor_ic(ubyte* c, const(ubyte)* m,
                                   ulong mlen,
                                   const(ubyte)* n, ulong ic,
-                                  const(ubyte)* k) pure;
+                                  const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
-void crypto_stream_xsalsa20_keygen(ref ubyte[crypto_stream_xsalsa20_KEYBYTES] k) nothrow @trusted;
+void crypto_stream_xsalsa20_keygen(ref ubyte[crypto_stream_xsalsa20_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

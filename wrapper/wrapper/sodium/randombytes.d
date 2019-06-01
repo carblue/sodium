@@ -26,7 +26,7 @@ import std.string : fromStringz; // @system
 /*
  We can't trust in general to receive a valid address from randombytes_implementation_name() to be evaluated as a null-terminated C string, except
  randombytes_set_implementation wasn't used or used to reset to a sodium-supplied implementaion or used and a valid implementation_name function supplied.
- Now randombytes_set_implementation is inaccessible !
+ Now randombytes_set_implementation isn't straightaway accessible !
 */
 string randombytes_implementation_name() nothrow @nogc @trusted
 {
@@ -50,7 +50,7 @@ alias randombytes_buf = deimos.sodium.randombytes.randombytes_buf;
 pragma(inline, true)
 void randombytes_buf(scope ubyte[] buf) nothrow @nogc @trusted
 {
-  randombytes_buf(buf.ptr, buf.length);
+  randombytes_buf(buf.ptr, buf.length); // __attribute__ ((nonnull));
 }
 +/
 
@@ -61,7 +61,7 @@ pragma(inline, true)
 void randombytes(scope ubyte[] buf) nothrow @nogc @trusted
 {
 //  enforce(buf !is null, "buf is null"); // not necessary
-  randombytes(buf.ptr, buf.length);
+  randombytes(buf.ptr, buf.length); // __attribute__ ((nonnull));
 }
 
 alias randombytes_buf_deterministic  = deimos.sodium.randombytes.randombytes_buf_deterministic;
@@ -70,7 +70,7 @@ pragma(inline, true)
 void randombytes_buf_deterministic(ubyte[] buf, const ubyte[randombytes_SEEDBYTES] seed) pure nothrow @nogc @trusted
 {
 //  enforce(buf !is null, "buf is null"); // not necessary
-  randombytes_buf_deterministic(buf.ptr, buf.length, seed);
+  randombytes_buf_deterministic(buf.ptr, buf.length, seed); // __attribute__ ((nonnull));
 }
 
 // InputRange interface
@@ -181,7 +181,7 @@ unittest
 	immutable ubyte[randombytes_SEEDBYTES] seed = array(iota(ubyte(0), randombytes_SEEDBYTES))[];
 	randombytes_buf_deterministic(buf.ptr, buf.length, seed);
 
-debug(none/*TRAVIS_TEST*/)
+debug(TRAVIS_TEST)
 {
 /*
   This block runs successfully but is disabled in regular builds as it does dubious actions; only for a test run by travis/code coverage):
@@ -201,7 +201,7 @@ debug(none/*TRAVIS_TEST*/)
     return 1234567890;
   }
 
-  extern(C) void dummy_buf(void* buf, in size_t size)
+  extern(C) void dummy_buf(void* buf, const size_t size)
   {
     import core.stdc.string : memcpy;
     size_t len_remaining = size;
@@ -219,16 +219,10 @@ debug(none/*TRAVIS_TEST*/)
   randombytes_dummy_implementation.random              = &dummy_random;
   randombytes_dummy_implementation.buf                 = &dummy_buf;
   {
-    deimos.sodium.randombytes.randombytes_set_implementation(&randombytes_dummy_implementation);
+    deimos.sodium.randombytes.randombytes_set_implementation(&randombytes_dummy_implementation);// __attribute__ ((nonnull));
     scope(exit) { // reestablish the default
-      version (__native_client__) {
-        import wrapper.sodium.randombytes_nativeclient;
-        randombytes_set_implementation(&randombytes_nativeclient_implementation);
-      }
-      else {
         import wrapper.sodium.randombytes_sysrandom;
         deimos.sodium.randombytes.randombytes_set_implementation(&randombytes_sysrandom_implementation);
-      }
     }
     // test our non-random number generator being set and working as expected
     ubyte[] buffer = new ubyte[8];
@@ -263,10 +257,10 @@ unittest
   assert(randombytes_SEEDBYTES == randombytes_seedbytes());
 
 //randombytes_random
-  writeln("Unpredictable uint: ", randombytes_random());
+  debug  writeln("Unpredictable uint: ", randombytes_random());
 
 //randombytes_uniform
-  writeln("Unpredictable uint between 0 and 48: ", randombytes_uniform(49));
+  debug  writeln("Unpredictable uint between 0 and 48: ", randombytes_uniform(49));
 /*
   uint[] six_outof_49;
   do {
@@ -286,9 +280,7 @@ unittest
 //randombytes_implementation_name
   string impl_name = randombytes_implementation_name();
   writeln("wrapper.sodium.randombytes.randombytes_implementation_name(): ", impl_name);
-  version (__native_client__) {}
-  else
-    assert(impl_name == "sysrandom");
+  assert(impl_name == "sysrandom");
 
 //randombytes
   ubyte[] buf = new ubyte[8];
@@ -296,7 +288,7 @@ unittest
 
   randombytes(buf);
   assert( any(buf));
-  randombytes(null);
+  randombytes(null); // whether randombytes accepts null though it's attributed __attribute__ ((nonnull));
 
 //randombytes_buf_deterministic
 	immutable ubyte[randombytes_SEEDBYTES] seed = array(iota(ubyte(0), randombytes_SEEDBYTES))[];

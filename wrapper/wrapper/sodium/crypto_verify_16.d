@@ -3,7 +3,10 @@ module wrapper.sodium.crypto_verify_16;
 import wrapper.sodium.core; // assure sodium got initialized
 
 public
-import  deimos.sodium.crypto_verify_16;
+import  deimos.sodium.crypto_verify_16 : crypto_verify_16_BYTES,
+                                         crypto_verify_16_bytes;
+//                                       crypto_verify_16
+
 
 // overloading a functions between module deimos.sodium.crypto_verify_16 and this module
 
@@ -14,9 +17,9 @@ alias crypto_verify_16 = deimos.sodium.crypto_verify_16.crypto_verify_16;
  * Otherwise, it returns false.
  */
 pragma(inline, true)
-bool  crypto_verify_16(const ubyte[crypto_verify_16_BYTES] x, const ubyte[crypto_verify_16_BYTES] y) pure nothrow @nogc @trusted
+bool  crypto_verify_16(const ubyte[crypto_verify_16_BYTES] x, const ubyte[crypto_verify_16_BYTES] y) @nogc nothrow pure @trusted
 {
-  return  crypto_verify_16(x.ptr, y.ptr) == 0;
+  return  crypto_verify_16(x.ptr, y.ptr) == 0; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 }
 
 
@@ -35,7 +38,7 @@ unittest
   assert(crypto_verify_16(buf1.ptr, buf2.ptr) == -1);
 }
 
-pure nothrow @nogc @safe
+@nogc nothrow pure @safe
 unittest
 {
   import std.range : iota, enumerate;
@@ -44,16 +47,16 @@ unittest
 
 //crypto_verify_16 overload
   ubyte[crypto_verify_16_BYTES] buf1 = void; // = array(iota(ubyte(1), cast(ubyte)(1+crypto_verify_16_BYTES)))[];
-version(GNU) // 	GDC (GNU D Compiler) is the compiler ; there, enumerate is not @nogc
-{
-  size_t idx;
-  foreach (e; iota(ubyte(1), cast(ubyte)(1+crypto_verify_16_BYTES)))
-    buf1[idx++] = e;
-}
-else {
+//version(GNU) // 	GDC (GNU D Compiler) is the compiler ; there, enumerate is not @nogc
+//{
+//  size_t idx;
+//  foreach (e; iota(ubyte(1), cast(ubyte)(1+crypto_verify_16_BYTES)))
+//    buf1[idx++] = e;
+//}
+//else {
   foreach (i, e; iota(ubyte(1), cast(ubyte)(1+crypto_verify_16_BYTES)).enumerate)
     buf1[i] = e;
-}
+//}
   ubyte[crypto_verify_16_BYTES] buf2 = buf1;
   assert( crypto_verify_16(buf1, buf2));
   buf2[$-1] = 17;

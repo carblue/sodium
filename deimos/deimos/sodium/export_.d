@@ -1,7 +1,13 @@
+/*
+Written in the D programming language.
+For git maintenance (ensure at least one congruent line with originating C header):
+#define sodium_export_H
+*/
 
 module deimos.sodium.export_;
+
 /+
-#ifndef __GNUC__
+#if !defined(__clang__) && !defined(__GNUC__)
 # ifdef __attribute__
 #  undef __attribute__
 # endif
@@ -49,5 +55,5 @@ module deimos.sodium.export_;
 
 import std.algorithm.comparison : min;
 
-alias SODIUM_MIN = min; //#define SODIUM_MIN(A, B) ((A) < (B) ? (A) : (B))
+alias SODIUM_MIN = min;
 enum  SODIUM_SIZE_MAX = SODIUM_MIN(ulong.max, size_t.max);
