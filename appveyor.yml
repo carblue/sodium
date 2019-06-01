@@ -4,15 +4,15 @@ environment:
   - DC: dmd
     DVersion: 2.086.0
     arch: x64
-  - DC: dmd
-    DVersion: 2.086.0
-    arch: x86
+#  - DC: dmd
+#    DVersion: 2.086.0
+#    arch: x86
 #  - DC: dmd
 #    DVersion: 2.086.0
 #    arch: x86_mscoff
-  - DC: ldc
-    DVersion: 1.15.0
-    arch: x64
+#  - DC: ldc
+#    DVersion: 1.15.0
+#    arch: x64
 
 skip_tags: true
 

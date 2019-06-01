@@ -54,10 +54,7 @@ import deimos.sodium.crypto_verify_16;
 import deimos.sodium.crypto_verify_32;
 import deimos.sodium.crypto_verify_64;
 import deimos.sodium.randombytes;
-version (__native_client__)
-	import deimos.sodium.randombytes_nativeclient;
-
-import deimos.sodium.randombytes_salsa20_random;
+import deimos.sodium.randombytes_internal_random;
 import deimos.sodium.randombytes_sysrandom;
 import deimos.sodium.runtime;
 import deimos.sodium.utils;
@@ -66,7 +63,9 @@ version(SODIUM_LIBRARY_MINIMAL) {}
 else {
 	import deimos.sodium.crypto_box_curve25519xchacha20poly1305;
 	import deimos.sodium.crypto_core_ed25519;
+	import deimos.sodium.crypto_core_ristretto255;
 	import deimos.sodium.crypto_scalarmult_ed25519;
+	import deimos.sodium.crypto_scalarmult_ristretto255;
 	import deimos.sodium.crypto_secretbox_xchacha20poly1305;
 	import deimos.sodium.crypto_pwhash_scryptsalsa208sha256;
 	import deimos.sodium.crypto_stream_salsa2012;
