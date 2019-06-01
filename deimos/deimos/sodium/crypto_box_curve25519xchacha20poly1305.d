@@ -6,6 +6,9 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.crypto_box_curve25519xchacha20poly1305;
 
+version(SODIUM_LIBRARY_MINIMAL) {}
+else {
+
 import deimos.sodium.crypto_stream_xchacha20;
 
 
@@ -43,24 +46,24 @@ size_t crypto_box_curve25519xchacha20poly1305_messagebytes_max() @trusted;
 
 int crypto_box_curve25519xchacha20poly1305_seed_keypair(ubyte* pk,
                                                         ubyte* sk,
-                                                        const(ubyte)* seed);
+                                                        const(ubyte)* seed); // __attribute__ ((nonnull));
 
 int crypto_box_curve25519xchacha20poly1305_keypair(ubyte* pk,
-                                                   ubyte* sk);
+                                                   ubyte* sk); // __attribute__ ((nonnull));
 
 int crypto_box_curve25519xchacha20poly1305_easy(ubyte* c,
                                                 const(ubyte)* m,
                                                 ulong mlen,
                                                 const(ubyte)* n,
                                                 const(ubyte)* pk,
-                                                const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result));
+                                                const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(1, 4, 5, 6)));
 
 int crypto_box_curve25519xchacha20poly1305_open_easy(ubyte* m,
                                                      const(ubyte)* c,
                                                      ulong clen,
                                                      const(ubyte)* n,
                                                      const(ubyte)* pk,
-                                                     const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result));
+                                                     const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 4, 5, 6)));
 
 int crypto_box_curve25519xchacha20poly1305_detached(ubyte* c,
                                                     ubyte* mac,
@@ -68,7 +71,7 @@ int crypto_box_curve25519xchacha20poly1305_detached(ubyte* c,
                                                     ulong mlen,
                                                     const(ubyte)* n,
                                                     const(ubyte)* pk,
-                                                    const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result));
+                                                    const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(1, 2, 5, 6, 7)));
 
 int crypto_box_curve25519xchacha20poly1305_open_detached(ubyte* m,
                                                          const(ubyte)* c,
@@ -76,39 +79,39 @@ int crypto_box_curve25519xchacha20poly1305_open_detached(ubyte* m,
                                                          ulong clen,
                                                          const(ubyte)* n,
                                                          const(ubyte)* pk,
-                                                         const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result));
+                                                         const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 3, 5, 6, 7)));
 
 /* -- Precomputation interface -- */
 
 int crypto_box_curve25519xchacha20poly1305_beforenm(ubyte* k,
                                                     const(ubyte)* pk,
-                                                    const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result));
+                                                    const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 int crypto_box_curve25519xchacha20poly1305_easy_afternm(ubyte* c,
                                                         const(ubyte)* m,
                                                         ulong mlen,
                                                         const(ubyte)* n,
-                                                        const(ubyte)* k);
+                                                        const(ubyte)* k); // __attribute__ ((nonnull(1, 4, 5)));
 
 int crypto_box_curve25519xchacha20poly1305_open_easy_afternm(ubyte* m,
                                                              const(ubyte)* c,
                                                              ulong clen,
                                                              const(ubyte)* n,
-                                                             const(ubyte)* k) nothrow; // __attribute__ ((warn_unused_result));
+                                                             const(ubyte)* k) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 4, 5)));
 
 int crypto_box_curve25519xchacha20poly1305_detached_afternm(ubyte* c,
                                                             ubyte* mac,
                                                             const(ubyte)* m,
                                                             ulong mlen,
                                                             const(ubyte)* n,
-                                                            const(ubyte)* k);
+                                                            const(ubyte)* k); // __attribute__ ((nonnull(1, 2, 5, 6)));
 
 int crypto_box_curve25519xchacha20poly1305_open_detached_afternm(ubyte* m,
                                                                  const(ubyte)* c,
                                                                  const(ubyte)* mac,
                                                                  ulong clen,
                                                                  const(ubyte)* n,
-                                                                 const(ubyte)* k) nothrow; // __attribute__ ((warn_unused_result));
+                                                                 const(ubyte)* k) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 3, 5, 6)));
 
 
 /* -- Ephemeral SK interface -- */
@@ -122,10 +125,12 @@ size_t crypto_box_curve25519xchacha20poly1305_sealbytes() @trusted;
 int crypto_box_curve25519xchacha20poly1305_seal(ubyte* c,
                                                 const(ubyte)* m,
                                                 ulong mlen,
-                                                const(ubyte)* pk);
+                                                const(ubyte)* pk); // __attribute__ ((nonnull(1, 4)));
 
 int crypto_box_curve25519xchacha20poly1305_seal_open(ubyte* m,
                                                      const(ubyte)* c,
                                                      ulong clen,
                                                      const(ubyte)* pk,
-                                                     const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result));
+                                                     const(ubyte)* sk) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 4, 5)));
+
+}

@@ -6,6 +6,9 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.crypto_pwhash_scryptsalsa208sha256;
 
+version(SODIUM_LIBRARY_MINIMAL) {}
+else {
+
 import deimos.sodium.export_;
 
 
@@ -79,24 +82,25 @@ int crypto_pwhash_scryptsalsa208sha256(ubyte* out_,
                                        ulong passwdlen,
                                        const(ubyte*) salt,
                                        ulong opslimit,
-                                       size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
+                                       size_t memlimit) nothrow; // __attribute__ ((warn_unused_result))  __attribute__ ((nonnull));
 
 int crypto_pwhash_scryptsalsa208sha256_str(ref char[crypto_pwhash_scryptsalsa208sha256_STRBYTES] out_,
                                            const(char*) passwd,
                                            ulong passwdlen,
                                            ulong opslimit,
-                                           size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
+                                           size_t memlimit) nothrow; // __attribute__ ((warn_unused_result))  __attribute__ ((nonnull));
 
 int crypto_pwhash_scryptsalsa208sha256_str_verify(ref const(char[crypto_pwhash_scryptsalsa208sha256_STRBYTES]) str,
                                                   const(char*) passwd,
-                                                  ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result));
+                                                  ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result))  __attribute__ ((nonnull));
 
 int crypto_pwhash_scryptsalsa208sha256_ll(const(ubyte)* passwd, size_t passwdlen,
                                           const(ubyte)* salt, size_t saltlen,
                                           ulong N, uint r, uint p,
-                                          ubyte* buf, size_t buflen) nothrow; // __attribute__ ((warn_unused_result));
+                                          ubyte* buf, size_t buflen) nothrow; // __attribute__ ((warn_unused_result))  __attribute__ ((nonnull));
 
 int crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(ref const(char[crypto_pwhash_scryptsalsa208sha256_STRBYTES]) str,
                                                         ulong opslimit,
-                                                        size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
+                                                        size_t memlimit) nothrow; // __attribute__ ((warn_unused_result))  __attribute__ ((nonnull));
 
+}

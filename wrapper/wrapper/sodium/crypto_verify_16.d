@@ -47,16 +47,16 @@ unittest
 
 //crypto_verify_16 overload
   ubyte[crypto_verify_16_BYTES] buf1 = void; // = array(iota(ubyte(1), cast(ubyte)(1+crypto_verify_16_BYTES)))[];
-//version(GNU) // 	GDC (GNU D Compiler) is the compiler ; there, enumerate is not @nogc
-//{
-//  size_t idx;
-//  foreach (e; iota(ubyte(1), cast(ubyte)(1+crypto_verify_16_BYTES)))
-//    buf1[idx++] = e;
-//}
-//else {
+version(GNU) // 	GDC (GNU D Compiler) is the compiler ; there, enumerate is not @nogc
+{
+  size_t idx;
+  foreach (e; iota(ubyte(1), cast(ubyte)(1+crypto_verify_16_BYTES)))
+    buf1[idx++] = e;
+}
+else {
   foreach (i, e; iota(ubyte(1), cast(ubyte)(1+crypto_verify_16_BYTES)).enumerate)
     buf1[i] = e;
-//}
+}
   ubyte[crypto_verify_16_BYTES] buf2 = buf1;
   assert( crypto_verify_16(buf1, buf2));
   buf2[$-1] = 17;

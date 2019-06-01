@@ -41,10 +41,10 @@ enum crypto_stream_PRIMITIVE = "xsalsa20";
 const(char)* crypto_stream_primitive() pure nothrow @trusted;
 
 int crypto_stream(ubyte* c, ulong clen,
-                  const(ubyte)* n, const(ubyte)* k) pure;
+                  const(ubyte)* n, const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
 int crypto_stream_xor(ubyte* c, const(ubyte)* m,
                       ulong mlen, const(ubyte)* n,
-                      const(ubyte)* k) pure;
+                      const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
-void crypto_stream_keygen(ref ubyte[crypto_stream_KEYBYTES] k) nothrow @trusted;
+void crypto_stream_keygen(ref ubyte[crypto_stream_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));
