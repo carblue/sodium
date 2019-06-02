@@ -35,18 +35,18 @@ size_t crypto_stream_chacha20_messagebytes_max() pure @trusted;
 /* ChaCha20 with a 64-bit nonce and a 64-bit counter, as originally designed */
 
 int crypto_stream_chacha20(ubyte* c, ulong clen,
-                           const(ubyte)* n, const(ubyte)* k) pure;
+                           const(ubyte)* n, const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
 int crypto_stream_chacha20_xor(ubyte* c, const(ubyte)* m,
                                ulong mlen, const(ubyte)* n,
-                               const(ubyte)* k) pure;
+                               const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
 int crypto_stream_chacha20_xor_ic(ubyte* c, const(ubyte)* m,
                                   ulong mlen,
                                   const(ubyte)* n, ulong ic,
-                                  const(ubyte)* k) pure;
+                                  const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
-void crypto_stream_chacha20_keygen(ref ubyte[crypto_stream_chacha20_KEYBYTES] k) nothrow @trusted;
+void crypto_stream_chacha20_keygen(ref ubyte[crypto_stream_chacha20_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));
 
 /* ChaCha20 with a 96-bit nonce and a 32-bit counter (IETF) */
 
@@ -64,18 +64,18 @@ enum crypto_stream_chacha20_ietf_MESSAGEBYTES_MAX =
 size_t crypto_stream_chacha20_ietf_messagebytes_max() pure @trusted;
 
 int crypto_stream_chacha20_ietf(ubyte* c, ulong clen,
-                                const(ubyte)* n, const(ubyte)* k) pure;
+                                const(ubyte)* n, const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
 int crypto_stream_chacha20_ietf_xor(ubyte* c, const(ubyte)* m,
                                     ulong mlen, const(ubyte)* n,
-                                    const(ubyte)* k) pure;
+                                    const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
 int crypto_stream_chacha20_ietf_xor_ic(ubyte* c, const(ubyte)* m,
                                        ulong mlen,
                                        const(ubyte)* n, uint ic,
-                                       const(ubyte)* k) pure;
+                                       const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
-void crypto_stream_chacha20_ietf_keygen(ref ubyte[crypto_stream_chacha20_ietf_KEYBYTES] k) nothrow @trusted;
+void crypto_stream_chacha20_ietf_keygen(ref ubyte[crypto_stream_chacha20_ietf_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));
 
 /* Aliases */
 

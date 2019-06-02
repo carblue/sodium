@@ -33,15 +33,15 @@ int crypto_secretbox_xsalsa20poly1305(ubyte* c,
                                       const(ubyte)* m,
                                       ulong mlen,
                                       const(ubyte)* n,
-                                      const(ubyte)* k) pure;
+                                      const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4, 5)));
 
 int crypto_secretbox_xsalsa20poly1305_open(ubyte* m,
                                            const(ubyte)* c,
                                            ulong clen,
                                            const(ubyte)* n,
-                                           const(ubyte)* k) pure nothrow; //  __attribute__ ((warn_unused_result));
+                                           const(ubyte)* k) pure nothrow; //  __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 4, 5)));
 
-void crypto_secretbox_xsalsa20poly1305_keygen(ref ubyte[crypto_secretbox_xsalsa20poly1305_KEYBYTES] k) nothrow @trusted;
+void crypto_secretbox_xsalsa20poly1305_keygen(ref ubyte[crypto_secretbox_xsalsa20poly1305_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));
 
 /* -- NaCl compatibility interface ; Requires padding -- */
 

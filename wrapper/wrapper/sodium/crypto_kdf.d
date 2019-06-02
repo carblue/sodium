@@ -36,8 +36,11 @@ bool  crypto_kdf_derive_from_key(scope ubyte[] subkey,
                                  const char[crypto_kdf_CONTEXTBYTES] ctx,
                                  const ubyte[crypto_kdf_KEYBYTES] key) @nogc @trusted
 {
+    import nogc.exception: enforce;
+//  enforce(subkey.length>=crypto_kdf_BYTES_MIN && subkey.length<=crypto_kdf_BYTES_MAX,
+//    "Expected subkey.length: ", subkey.length, " to be greater-equal to crypto_kdf_BYTES_MIN: ", crypto_kdf_BYTES_MIN, " and less-equal to crypto_kdf_BYTES_MAX: ", crypto_kdf_BYTES_MAX);
   enforce(subkey.length>=crypto_kdf_BYTES_MIN && subkey.length<=crypto_kdf_BYTES_MAX,
-    "Expected subkey.length: ", subkey.length, " to be greater-equal to crypto_kdf_BYTES_MIN: ", crypto_kdf_BYTES_MIN, " and less-equal to crypto_kdf_BYTES_MAX: ", crypto_kdf_BYTES_MAX);
+    "Expected subkey.length is not greater-equal to crypto_kdf_BYTES_MIN and not less-equal to crypto_kdf_BYTES_MAX");
   return  crypto_kdf_derive_from_key(subkey.ptr, subkey.length, subkey_id, ctx, key) == 0;
 }
 

@@ -47,23 +47,27 @@ enum crypto_generichash_PRIMITIVE = "blake2b";
 /* Deviating from C header, in D the following function expresses __attribute__ ((warn_unused_result)) as well (if compiler switch -w is thrown) */
 const(char)* crypto_generichash_primitive() pure nothrow @trusted;
 
+/*
+ * Important when writing bindings for other programming languages:
+ * the state address should be 64-bytes aligned.
+ */
 alias crypto_generichash_state = crypto_generichash_blake2b_state;
 
 size_t  crypto_generichash_statebytes() pure @trusted;
 
 int crypto_generichash(ubyte* out_, size_t outlen,
                        const(ubyte)* in_, ulong inlen,
-                       const(ubyte)* key, size_t keylen) pure;
+                       const(ubyte)* key, size_t keylen) pure; // __attribute__ ((nonnull(1)));
 
 int crypto_generichash_init(crypto_generichash_state* state,
                             const(ubyte)* key,
-                            const size_t keylen, const size_t outlen) pure;
+                            const size_t keylen, const size_t outlen) pure; // __attribute__ ((nonnull(1)));
 
 int crypto_generichash_update(crypto_generichash_state* state,
                               const(ubyte)* in_,
-                              ulong inlen) pure;
+                              ulong inlen) pure; // __attribute__ ((nonnull(1)));
 
 int crypto_generichash_final(crypto_generichash_state* state,
-                             ubyte* out_, const size_t outlen) pure;
+                             ubyte* out_, const size_t outlen) pure; // __attribute__ ((nonnull));
 
-void crypto_generichash_keygen(ref ubyte[crypto_generichash_KEYBYTES] k) nothrow @trusted;
+void crypto_generichash_keygen(ref ubyte[crypto_generichash_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

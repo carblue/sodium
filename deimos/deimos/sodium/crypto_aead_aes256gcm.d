@@ -48,13 +48,23 @@ enum crypto_aead_aes256gcm_ABYTES   = 16U;
 
 size_t crypto_aead_aes256gcm_abytes() pure @trusted;
 
+version(bin_v1_0_16)
 enum crypto_aead_aes256gcm_MESSAGEBYTES_MAX =
     SODIUM_MIN(SODIUM_SIZE_MAX - crypto_aead_aes256gcm_ABYTES,
                (16UL * ((1UL << 32) - 2UL)) - crypto_aead_aes256gcm_ABYTES);
+else
+enum crypto_aead_aes256gcm_MESSAGEBYTES_MAX =
+    SODIUM_MIN(SODIUM_SIZE_MAX - crypto_aead_aes256gcm_ABYTES,
+               (16UL * ((1UL << 32) - 2UL)));
 
 size_t crypto_aead_aes256gcm_messagebytes_max() pure @trusted;
 
-alias  crypto_aead_aes256gcm_state = align(16) ubyte[512]; // typedef CRYPTO_ALIGN(16) unsigned char crypto_aead_aes256gcm_state[512];
+version(bin_v1_0_16)
+    alias  crypto_aead_aes256gcm_state = align(16) ubyte[512]; // typedef CRYPTO_ALIGN(16) unsigned char crypto_aead_aes256gcm_state[512];
+else
+    align(16) struct crypto_aead_aes256gcm_state { // typedef CRYPTO_ALIGN(16) struct crypto_aead_aes256gcm_state_ {...}
+        ubyte[512] opaque;
+    }
 
 size_t crypto_aead_aes256gcm_statebytes() pure @trusted;
 
@@ -66,7 +76,7 @@ int crypto_aead_aes256gcm_encrypt(ubyte* c,
                                   ulong adlen,
                                   const(ubyte)* nsec,
                                   const(ubyte)* npub,
-                                  const(ubyte)* k) pure;
+                                  const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 8, 9)));
 
 int crypto_aead_aes256gcm_decrypt(ubyte* m,
                                   ulong* mlen_p,
@@ -76,7 +86,7 @@ int crypto_aead_aes256gcm_decrypt(ubyte* m,
                                   const(ubyte)* ad,
                                   ulong adlen,
                                   const(ubyte)* npub,
-                                  const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result))
+                                  const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(4, 8, 9)));
 
 int crypto_aead_aes256gcm_encrypt_detached(ubyte* c,
                                            ubyte* mac,
@@ -87,7 +97,7 @@ int crypto_aead_aes256gcm_encrypt_detached(ubyte* c,
                                            ulong adlen,
                                            const(ubyte)* nsec,
                                            const(ubyte)* npub,
-                                           const(ubyte)* k) pure;
+                                           const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 2, 9, 10)));
 
 int crypto_aead_aes256gcm_decrypt_detached(ubyte *m,
                                            ubyte *nsec,
@@ -97,12 +107,12 @@ int crypto_aead_aes256gcm_decrypt_detached(ubyte *m,
                                            const(ubyte)* ad,
                                            ulong adlen,
                                            const(ubyte)* npub,
-                                           const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result))
+                                           const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(3, 5, 8, 9)));
 
 /* -- Precomputation interface -- */
 
 int crypto_aead_aes256gcm_beforenm(crypto_aead_aes256gcm_state* ctx_,
-                                   const(ubyte)* k) pure;
+                                   const(ubyte)* k) pure; // __attribute__ ((nonnull));
 
 int crypto_aead_aes256gcm_encrypt_afternm(ubyte* c,
                                           ulong* clen_p,
@@ -112,7 +122,7 @@ int crypto_aead_aes256gcm_encrypt_afternm(ubyte* c,
                                           ulong adlen,
                                           const(ubyte)* nsec,
                                           const(ubyte)* npub,
-                                          const(crypto_aead_aes256gcm_state)* ctx_) pure;
+                                          const(crypto_aead_aes256gcm_state)* ctx_) pure; // __attribute__ ((nonnull(1, 8, 9)));
 
 int crypto_aead_aes256gcm_decrypt_afternm(ubyte* m,
                                           ulong* mlen_p,
@@ -122,7 +132,7 @@ int crypto_aead_aes256gcm_decrypt_afternm(ubyte* m,
                                           const(ubyte)* ad,
                                           ulong adlen,
                                           const(ubyte)* npub,
-                                          const(crypto_aead_aes256gcm_state)* ctx_) pure nothrow; // __attribute__ ((warn_unused_result))
+                                          const(crypto_aead_aes256gcm_state)* ctx_) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(4, 8, 9)));
 
 int crypto_aead_aes256gcm_encrypt_detached_afternm(ubyte* c,
                                                    ubyte* mac,
@@ -133,7 +143,7 @@ int crypto_aead_aes256gcm_encrypt_detached_afternm(ubyte* c,
                                                    ulong adlen,
                                                    const(ubyte)* nsec,
                                                    const(ubyte)* npub,
-                                                   const(crypto_aead_aes256gcm_state)* ctx_) pure;
+                                                   const(crypto_aead_aes256gcm_state)* ctx_) pure; // __attribute__ ((nonnull(1, 2, 9, 10)));
 
 int crypto_aead_aes256gcm_decrypt_detached_afternm(ubyte* m,
                                                    ubyte* nsec,
@@ -143,6 +153,6 @@ int crypto_aead_aes256gcm_decrypt_detached_afternm(ubyte* m,
                                                    const(ubyte)* ad,
                                                    ulong adlen,
                                                    const(ubyte)* npub,
-                                                   const(crypto_aead_aes256gcm_state)* ctx_) pure nothrow; // __attribute__ ((warn_unused_result))
+                                                   const(crypto_aead_aes256gcm_state)* ctx_) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(3, 5, 8, 9)));
 
-void crypto_aead_aes256gcm_keygen(ref ubyte[crypto_aead_aes256gcm_KEYBYTES] k) nothrow @trusted;
+void crypto_aead_aes256gcm_keygen(ref ubyte[crypto_aead_aes256gcm_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

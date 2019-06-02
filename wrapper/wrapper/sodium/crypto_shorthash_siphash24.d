@@ -28,14 +28,16 @@ unittest {
   crypto_shorthash_siphash24(hash_sip24.ptr, short_data.ptr, short_data.length, key.ptr);
 //  writefln("shorthash: 0x%(%X%)", hash_sip24); // shorthash: 0xB4E48C88341DF46
 
-  if (!sodium_library_minimal) {
+version(SODIUM_LIBRARY_MINIMAL) {}
+else if (!sodium_library_minimal) {
     /* -- 128-bit output -- */
     assert(crypto_shorthash_siphashx24_bytes()    == crypto_shorthash_siphashx24_BYTES);
     assert(crypto_shorthash_siphashx24_keybytes() == crypto_shorthash_siphashx24_KEYBYTES);
     ubyte[crypto_shorthash_siphashx24_KEYBYTES] keyx24 = void;
-	  randombytes(keyx24);
+    randombytes(keyx24);
     ubyte[crypto_shorthash_siphashx24_BYTES] rcv_bub;
     auto msg = representation("so what");
     crypto_shorthash_siphashx24(rcv_bub.ptr, msg.ptr, msg.length, keyx24.ptr);
-	}
 }
+
+} // unittest

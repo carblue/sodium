@@ -20,7 +20,7 @@ enum crypto_shorthash_siphash24_KEYBYTES = 16U;
 size_t crypto_shorthash_siphash24_keybytes() @trusted;
 
 int crypto_shorthash_siphash24(ubyte* out_, const(ubyte)* in_,
-                               ulong inlen, const(ubyte)* k);
+                               ulong inlen, const(ubyte)* k); // __attribute__ ((nonnull(1, 4)));
 
 version(SODIUM_LIBRARY_MINIMAL) {}
 else {
@@ -35,5 +35,5 @@ enum crypto_shorthash_siphashx24_KEYBYTES = 16U;
 size_t crypto_shorthash_siphashx24_keybytes() @trusted;
 
 int crypto_shorthash_siphashx24(ubyte* out_, const(ubyte)* in_,
-                                ulong inlen, const(ubyte)* k);
+                                ulong inlen, const(ubyte)* k); // __attribute__ ((nonnull(1, 4)));
 }

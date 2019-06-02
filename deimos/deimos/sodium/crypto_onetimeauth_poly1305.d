@@ -27,21 +27,21 @@ size_t crypto_onetimeauth_poly1305_keybytes() pure @trusted;
 int crypto_onetimeauth_poly1305(ubyte* out_,
                                 const(ubyte)* in_,
                                 ulong inlen,
-                                const(ubyte)* k) pure;
+                                const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4)));
 
 int crypto_onetimeauth_poly1305_verify(const(ubyte)* h,
                                        const(ubyte)* in_,
                                        ulong inlen,
-                                       const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
+                                       const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(1, 4)));
 
 int crypto_onetimeauth_poly1305_init(crypto_onetimeauth_poly1305_state* state,
-                                     const(ubyte)* key) pure;
+                                     const(ubyte)* key) pure; // __attribute__ ((nonnull));
 
 int crypto_onetimeauth_poly1305_update(crypto_onetimeauth_poly1305_state* state,
                                        const(ubyte)* in_,
-                                       ulong inlen) pure;
+                                       ulong inlen) pure; // __attribute__ ((nonnull(1)));
 
 int crypto_onetimeauth_poly1305_final(crypto_onetimeauth_poly1305_state* state,
-                                      ubyte* out_) pure;
+                                      ubyte* out_) pure; // __attribute__ ((nonnull));
 
-void crypto_onetimeauth_poly1305_keygen(ref ubyte[crypto_onetimeauth_poly1305_KEYBYTES] k) nothrow @trusted;
+void crypto_onetimeauth_poly1305_keygen(ref ubyte[crypto_onetimeauth_poly1305_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

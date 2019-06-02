@@ -36,13 +36,13 @@ int crypto_sign_edwards25519sha512batch(ubyte* sm,
                                         ulong* smlen_p,
                                         const(ubyte)* m,
                                         ulong mlen,
-                                        const(ubyte)* sk) pure;
+                                        const(ubyte)* sk) pure; // __attribute__ ((nonnull(1, 5)));
 
 int crypto_sign_edwards25519sha512batch_open(ubyte* m,
                                              ulong* mlen_p,
                                              const(ubyte)* sm,
                                              ulong smlen,
-                                             const(ubyte)* pk) pure;
+                                             const(ubyte)* pk) pure; // __attribute__ ((nonnull(3, 5)));
 
 int crypto_sign_edwards25519sha512batch_keypair(ubyte* pk,
-                                                ubyte* sk) nothrow;
+                                                ubyte* sk) nothrow; // __attribute__ ((nonnull));

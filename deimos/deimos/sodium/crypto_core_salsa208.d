@@ -27,4 +27,4 @@ enum crypto_core_salsa208_CONSTBYTES = 16U;
 deprecated  size_t crypto_core_salsa208_constbytes() @trusted;
 
 int crypto_core_salsa208(ubyte* out_, const(ubyte)* in_,
-                         const(ubyte)* k, const(ubyte)* c);
+                         const(ubyte)* k, const(ubyte)* c); // __attribute__ ((nonnull(1, 2, 3)));

@@ -27,7 +27,7 @@ properly seeded.
 On some Linux systems, this may take some time, especially when called right after a reboot
 of the system.
 */
-extern(C) nothrow @nogc:
+extern(C) @nogc nothrow:
 
 int sodium_init() @trusted; // __attribute__ ((warn_unused_result))
 

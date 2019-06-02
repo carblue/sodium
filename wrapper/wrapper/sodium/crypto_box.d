@@ -47,10 +47,11 @@ import  deimos.sodium.crypto_box : crypto_box_SEEDBYTES,
 
 
 import std.exception : assertThrown;
+import nogc.exception: enforce;
 
 
 
-string crypto_box_primitive() pure nothrow @nogc @trusted
+string crypto_box_primitive() @nogc nothrow pure @trusted
 {
   import std.string : fromStringz;
   static import deimos.sodium.crypto_box;
@@ -96,7 +97,8 @@ bool crypto_box_easy(scope ubyte[] c, scope const ubyte[] m, const ubyte[crypto_
                      const ubyte[crypto_box_PUBLICKEYBYTES] pkey, const ubyte[crypto_box_SECRETKEYBYTES] skey) @nogc @trusted
 {
   const  c_expect_len = m.length + crypto_box_MACBYTES;
-  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_box_MACBYTES: ", c_expect_len);
+//  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_box_MACBYTES: ", c_expect_len);
+  enforce(c.length == c_expect_len, "Expected c.length is not equal to m.length + crypto_box_MACBYTES");
   return  crypto_box_easy(c.ptr, m.ptr, m.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
@@ -107,9 +109,11 @@ alias crypto_box_open_easy      = deimos.sodium.crypto_box.crypto_box_open_easy;
 bool crypto_box_open_easy(scope ubyte[] m, scope const ubyte[] c, const ubyte[crypto_box_NONCEBYTES] n,
                           const ubyte[crypto_box_PUBLICKEYBYTES] pkey, const ubyte[crypto_box_SECRETKEYBYTES] skey) @nogc @trusted
 {
-  enforce(c.length >= crypto_box_MACBYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_box_MACBYTES: ", crypto_box_MACBYTES);
+//  enforce(c.length >= crypto_box_MACBYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_box_MACBYTES: ", crypto_box_MACBYTES);
+  enforce(c.length >= crypto_box_MACBYTES, "Expected c.length is not greater_equal to crypto_box_MACBYTES");
   const  m_expect_len = c.length - crypto_box_MACBYTES;
-  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_box_MACBYTES: ", m_expect_len);
+//  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_box_MACBYTES: ", m_expect_len);
+  enforce(m.length == m_expect_len, "Expected m.length is not equal to c.length - crypto_box_MACBYTES");
   return  crypto_box_open_easy(m.ptr, c.ptr, c.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
@@ -120,7 +124,8 @@ alias crypto_box_detached       = deimos.sodium.crypto_box.crypto_box_detached;
 bool crypto_box_detached(scope ubyte[] c, out ubyte[crypto_box_MACBYTES] mac, scope const ubyte[] m, const ubyte[crypto_box_NONCEBYTES] n,
                          const ubyte[crypto_box_PUBLICKEYBYTES] pkey, const ubyte[crypto_box_SECRETKEYBYTES] skey) @nogc @trusted
 {
-  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+//  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+  enforce(c.length == m.length, "Expected c.length is not equal to m.length");
   return  crypto_box_detached(c.ptr, mac.ptr, m.ptr, m.length, n.ptr, pkey.ptr, skey.ptr) == 0;
 }
 
@@ -158,7 +163,8 @@ bool  crypto_box_easy_afternm(scope ubyte[] c,
                               const ubyte[crypto_box_BEFORENMBYTES] k) @nogc @trusted
 {
   const  c_expect_len = m.length + crypto_box_MACBYTES;
-  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_box_MACBYTES: ", c_expect_len);
+//  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_box_MACBYTES: ", c_expect_len);
+  enforce(c.length == c_expect_len, "Expected c.length is not equal to m.length + crypto_box_MACBYTES");
   return  crypto_box_easy_afternm(c.ptr, m.ptr, m.length, n.ptr, k.ptr) == 0;
 }
 
@@ -170,9 +176,11 @@ bool  crypto_box_open_easy_afternm(scope ubyte[] m,
                                    const ubyte[crypto_box_NONCEBYTES] n,
                                    const ubyte[crypto_box_BEFORENMBYTES] k) @nogc @trusted // __attribute__ ((warn_unused_result));
 {
-  enforce(c.length >= crypto_box_MACBYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_box_MACBYTES: ", crypto_box_MACBYTES);
+//  enforce(c.length >= crypto_box_MACBYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_box_MACBYTES: ", crypto_box_MACBYTES);
+  enforce(c.length >= crypto_box_MACBYTES, "Expected c.length is not greater_equal to crypto_box_MACBYTES");
   const  m_expect_len = c.length - crypto_box_MACBYTES;
-  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_box_MACBYTES: ", m_expect_len);
+//  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_box_MACBYTES: ", m_expect_len);
+  enforce(m.length == m_expect_len, "Expected m.length is not equal to c.length - crypto_box_MACBYTES");
   return  crypto_box_open_easy_afternm(m.ptr, c.ptr, c.length, n.ptr, k.ptr) == 0;
 }
 
@@ -185,7 +193,8 @@ bool  crypto_box_detached_afternm(scope ubyte[] c,
                                   const ubyte[crypto_box_NONCEBYTES] n,
                                   const ubyte[crypto_box_BEFORENMBYTES] k) @nogc @trusted
 {
-  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+//  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+  enforce(c.length == m.length, "Expected c.length is not equal to m.length");
   return  crypto_box_detached_afternm(c.ptr, mac.ptr, m.ptr, m.length, n.ptr, k.ptr) == 0;
 }
 
@@ -198,7 +207,8 @@ bool  crypto_box_open_detached_afternm(scope ubyte[] m,
                                        const ubyte[crypto_box_NONCEBYTES] n,
                                        const ubyte[crypto_box_BEFORENMBYTES] k) @nogc @trusted // __attribute__ ((warn_unused_result));
 {
-  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
+//  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
+  enforce(m.length == c.length, "Expected m.length is not equal to c.length");
   return  crypto_box_open_detached_afternm(m.ptr, c.ptr, mac.ptr, c.length, n.ptr, k.ptr) == 0;
 }
 
@@ -216,7 +226,8 @@ alias crypto_box_seal           = deimos.sodium.crypto_box.crypto_box_seal;
 bool crypto_box_seal(scope ubyte[] c, scope const ubyte[] m, const ubyte[crypto_box_PUBLICKEYBYTES] pkey) @nogc @trusted
 {
   const  c_expect_len = m.length + crypto_box_SEALBYTES;
-  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_box_SEALBYTES: ", c_expect_len);
+//  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_box_SEALBYTES: ", c_expect_len);
+  enforce(c.length == c_expect_len, "Expected c.length is not equal to m.length + crypto_box_SEALBYTES");
   return  crypto_box_seal(c.ptr, m.ptr, m.length, pkey.ptr) == 0;
 }
 
@@ -227,9 +238,11 @@ alias crypto_box_seal_open      = deimos.sodium.crypto_box.crypto_box_seal_open;
 bool crypto_box_seal_open(scope ubyte[] m, scope const ubyte[] c,
                           const ubyte[crypto_box_PUBLICKEYBYTES] pkey, const ubyte[crypto_box_SECRETKEYBYTES] skey) @nogc @trusted
 {
-  enforce(c.length >= crypto_box_SEALBYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_box_SEALBYTES: ", crypto_box_SEALBYTES);
+//  enforce(c.length >= crypto_box_SEALBYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_box_SEALBYTES: ", crypto_box_SEALBYTES);
+  enforce(c.length >= crypto_box_SEALBYTES, "Expected c.length is not greater_equal to crypto_box_SEALBYTES");
   const  m_expect_len = c.length - crypto_box_SEALBYTES;
-  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_box_SEALBYTES: ", m_expect_len);
+//  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_box_SEALBYTES: ", m_expect_len);
+  enforce(m.length == m_expect_len, "Expected m.length is not equal to c.length - crypto_box_SEALBYTES");
   return  crypto_box_seal_open(m.ptr, c.ptr, c.length, pkey.ptr, skey.ptr) == 0;
 }
 

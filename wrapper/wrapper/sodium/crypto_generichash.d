@@ -28,18 +28,18 @@ import  deimos.sodium.crypto_generichash : crypto_generichash_BYTES_MIN,
                                            crypto_generichash_keygen;
 
 import std.string : fromStringz;
+import nogc.exception: enforce;
 
 
 pragma(inline, true)
-string crypto_generichash_primitive() pure nothrow @nogc @trusted
+string crypto_generichash_primitive() @nogc nothrow pure @trusted
 {
   static import deimos.sodium.crypto_generichash;
   return  fromStringz(deimos.sodium.crypto_generichash.crypto_generichash_primitive()); // strips terminating \0 ; compiler infers assumeUnique
 }
 
-void crypto_generichash_multi(scope ubyte[] out_, scope const ubyte[][] in_multi, scope const ubyte[] key = null) /*@nogc*/ @trusted
+void crypto_generichash_multi(scope ubyte[] out_, scope const ubyte[][] in_multi, scope const ubyte[] key = null) @nogc @trusted
 {
-  import std.exception: enforce;
   enforce(out_.length >= crypto_generichash_BYTES_MIN && out_.length <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   if (key.length)
     enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX, "wrong length of key: Must be either 0 or 16<=length<=64");
@@ -55,9 +55,8 @@ void crypto_generichash_multi(scope ubyte[] out_, scope const ubyte[][] in_multi
 
 alias crypto_generichash = deimos.sodium.crypto_generichash.crypto_generichash;
 
-bool  crypto_generichash(scope ubyte[] out_, scope const ubyte[] in_, scope const ubyte[] key = null) /*@nogc*/ @trusted
+bool  crypto_generichash(scope ubyte[] out_, scope const ubyte[] in_, scope const ubyte[] key = null) @nogc @trusted
 {
-  import std.exception: enforce;
   enforce(out_.length >= crypto_generichash_BYTES_MIN && out_.length <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   if (key.length)
     enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX, "wrong length of key: Must be either 0 or 16<=length<=64");
@@ -67,9 +66,8 @@ bool  crypto_generichash(scope ubyte[] out_, scope const ubyte[] in_, scope cons
 alias crypto_generichash_init = deimos.sodium.crypto_generichash.crypto_generichash_init;
 
 bool crypto_generichash_init(out crypto_generichash_state state,
-                             in ubyte[] key, const size_t outlen) /*@nogc*/ @trusted
+                             scope const ubyte[] key, const size_t outlen) @nogc @trusted
 {
-  import std.exception: enforce;
   enforce(outlen     >= crypto_generichash_BYTES_MIN    && outlen     <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   if (key.length)
     enforce(key.length >= crypto_generichash_KEYBYTES_MIN && key.length <= crypto_generichash_KEYBYTES_MAX, "wrong length allocated for key");
@@ -80,7 +78,7 @@ alias crypto_generichash_update = deimos.sodium.crypto_generichash.crypto_generi
 
 //pragma(inline, true)
 bool crypto_generichash_update(ref crypto_generichash_state state,
-                               in ubyte[] in_) pure @nogc @trusted
+                               scope const ubyte[] in_) @nogc pure @trusted
 {
   return  crypto_generichash_update(&state, in_.ptr, in_.length) == 0;
 }
@@ -88,9 +86,8 @@ bool crypto_generichash_update(ref crypto_generichash_state state,
 alias crypto_generichash_final = deimos.sodium.crypto_generichash.crypto_generichash_final;
 
 bool crypto_generichash_final(ref crypto_generichash_state state,
-                              scope ubyte[] out_) /*@nogc*/ @trusted
+                              scope ubyte[] out_) @nogc @trusted
 {
-  import std.exception: enforce;
   enforce(out_.length >= crypto_generichash_BYTES_MIN && out_.length  <= crypto_generichash_BYTES_MAX, "wrong length allocated for hash");
   return  crypto_generichash_final(&state, out_.ptr, out_.length) == 0;
 }

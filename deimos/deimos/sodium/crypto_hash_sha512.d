@@ -31,13 +31,13 @@ enum crypto_hash_sha512_BYTES = 64U;
 size_t crypto_hash_sha512_bytes() @trusted;
 
 int crypto_hash_sha512(ubyte* out_, const(ubyte)* in_,
-                       ulong inlen);
+                       ulong inlen); //  __attribute__ ((nonnull(1)));
 
-int crypto_hash_sha512_init(crypto_hash_sha512_state* state);
+int crypto_hash_sha512_init(crypto_hash_sha512_state* state); // __attribute__ ((nonnull));
 
 int crypto_hash_sha512_update(crypto_hash_sha512_state* state,
                               const(ubyte)* in_,
-                              ulong inlen);
+                              ulong inlen); //  __attribute__ ((nonnull(1)));
 
 int crypto_hash_sha512_final(crypto_hash_sha512_state* state,
-                             ubyte* out_);
+                             ubyte* out_); // __attribute__ ((nonnull));

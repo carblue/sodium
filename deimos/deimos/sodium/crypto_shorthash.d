@@ -26,6 +26,6 @@ enum crypto_shorthash_PRIMITIVE = "siphash24";
 const(char)* crypto_shorthash_primitive() pure @trusted;
 
 int crypto_shorthash(ubyte* out_, const(ubyte)* in_,
-                     ulong inlen, const(ubyte)* k) pure;
+                     ulong inlen, const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4)));
 
-void crypto_shorthash_keygen(ref ubyte[crypto_shorthash_KEYBYTES] k) nothrow @trusted;
+void crypto_shorthash_keygen(ref ubyte[crypto_shorthash_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

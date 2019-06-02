@@ -12,7 +12,7 @@ import  deimos.sodium.crypto_hash : crypto_hash_BYTES,
                                     crypto_hash; */
 
 
-string crypto_hash_primitive() pure nothrow @nogc @trusted
+string crypto_hash_primitive() @nogc nothrow pure @trusted
 {
   import std.string : fromStringz;
   static import deimos.sodium.crypto_hash;
@@ -27,7 +27,7 @@ string crypto_hash_primitive() pure nothrow @nogc @trusted
 alias crypto_hash = deimos.sodium.crypto_hash.crypto_hash;
 
 pragma(inline, true)
-bool crypto_hash(out ubyte[crypto_hash_BYTES] out_, in ubyte[] in_) pure @nogc @trusted
+bool crypto_hash(out ubyte[crypto_hash_BYTES] out_, scope const ubyte[] in_) @nogc pure @trusted
 {
   return  crypto_hash(out_.ptr, in_.ptr, in_.length) == 0;
 }

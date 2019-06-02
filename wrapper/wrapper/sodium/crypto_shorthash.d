@@ -4,15 +4,23 @@ module wrapper.sodium.crypto_shorthash;
 
 import wrapper.sodium.core; // assure sodium got initialized
 
-public import  deimos.sodium.crypto_shorthash;
-
+public import  deimos.sodium.crypto_shorthash: crypto_shorthash_BYTES,
+                                               crypto_shorthash_bytes,
+                                               crypto_shorthash_KEYBYTES,
+                                               crypto_shorthash_keybytes,
+                                               crypto_shorthash_PRIMITIVE,
+                                               crypto_shorthash_primitive,
+//                                             crypto_shorthash,
+                                               crypto_shorthash_keygen;
+import deimos.sodium.crypto_shorthash_siphash24 : crypto_shorthash_siphash24_BYTES,
+                                                  crypto_shorthash_siphash24_KEYBYTES;
 
 alias crypto_shorthash = deimos.sodium.crypto_shorthash.crypto_shorthash;
 
 pragma(inline, true)
-int crypto_shorthash(out ubyte[crypto_shorthash_BYTES] hash, in ubyte[] data, in ubyte[crypto_shorthash_KEYBYTES] key) pure @nogc @trusted
+int crypto_shorthash(out ubyte[crypto_shorthash_BYTES] hash, scope const ubyte[] data, const ubyte[crypto_shorthash_KEYBYTES] key) @nogc pure @trusted
 {
-  return deimos.sodium.crypto_shorthash.crypto_shorthash(hash.ptr, data.ptr, data.length, key.ptr);
+  return crypto_shorthash(hash.ptr, data.ptr, data.length, key.ptr); // __attribute__ ((nonnull(1, 4)));
 }
 
 
@@ -39,7 +47,7 @@ unittest {
   ubyte[crypto_shorthash_BYTES]    hash_saved = hash;
 
 // overload
-//  hash[] = ubyte.init;
+  hash = hash.init;
   crypto_shorthash(hash, short_data, key);
 //  writefln("shorthash: 0x%(%02x%)", hash);
   assert(hash == hash_saved);

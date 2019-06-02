@@ -43,14 +43,14 @@ size_t crypto_box_curve25519xsalsa20poly1305_messagebytes_max() pure @trusted;
 
 int crypto_box_curve25519xsalsa20poly1305_seed_keypair(ubyte* pk,
                                                        ubyte* sk,
-                                                       const(ubyte)* seed) pure;
+                                                       const(ubyte)* seed) pure; // __attribute__ ((nonnull));
 
 int crypto_box_curve25519xsalsa20poly1305_keypair(ubyte* pk,
-                                                  ubyte* sk) nothrow;
+                                                  ubyte* sk) nothrow; // __attribute__ ((nonnull));
 
 int crypto_box_curve25519xsalsa20poly1305_beforenm(ubyte* k,
                                                    const(ubyte)* pk,
-                                                   const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result));
+                                                   const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result))  __attribute__ ((nonnull));
 
 /* -- NaCl compatibility interface ; Requires padding -- */
 
@@ -69,23 +69,23 @@ int crypto_box_curve25519xsalsa20poly1305(ubyte* c,
                                           ulong mlen,
                                           const(ubyte)* n,
                                           const(ubyte)* pk,
-                                          const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result));
+                                          const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result))  __attribute__ ((nonnull(1, 4, 5, 6)));
 
 int crypto_box_curve25519xsalsa20poly1305_open(ubyte* m,
                                                const(ubyte)* c,
                                                ulong clen,
                                                const(ubyte)* n,
                                                const(ubyte)* pk,
-                                               const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result));
+                                               const(ubyte)* sk) pure nothrow; // __attribute__ ((warn_unused_result))  __attribute__ ((nonnull(2, 4, 5, 6)));
 
 int crypto_box_curve25519xsalsa20poly1305_afternm(ubyte* c,
                                                   const(ubyte)* m,
                                                   ulong mlen,
                                                   const(ubyte)* n,
-                                                  const(ubyte)* k) pure;
+                                                  const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4, 5)));
 
 int crypto_box_curve25519xsalsa20poly1305_open_afternm(ubyte* m,
                                                        const(ubyte)* c,
                                                        ulong clen,
                                                        const(ubyte)* n,
-                                                       const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
+                                                       const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 4, 5)));

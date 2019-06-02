@@ -16,15 +16,14 @@ module deimos.sodium.crypto_hash;
 import deimos.sodium.crypto_hash_sha512 : crypto_hash_sha512_BYTES;
 
 
-extern(C) pure @nogc :
+extern(C) @nogc pure :
 
 
 alias crypto_hash_BYTES = crypto_hash_sha512_BYTES;
 
 size_t crypto_hash_bytes() @trusted;
 
-int crypto_hash(ubyte* out_, const(ubyte)* in_,
-                ulong inlen);
+int crypto_hash(ubyte* out_, const(ubyte)* in_, ulong inlen); // __attribute__ ((nonnull(1)));
 
 enum crypto_hash_PRIMITIVE = "sha512";
 

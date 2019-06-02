@@ -120,7 +120,7 @@ size_t crypto_pwhash_memlimit_sensitive() @trusted;
 int crypto_pwhash(ubyte* out_, ulong outlen,
                   const(char*) passwd, ulong passwdlen,
                   const(ubyte*) salt,
-                  ulong opslimit, size_t memlimit, int alg) nothrow; // __attribute__ ((warn_unused_result));
+                  ulong opslimit, size_t memlimit, int alg) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 /*
  * The output string already includes all the required parameters, including
@@ -129,18 +129,18 @@ int crypto_pwhash(ubyte* out_, ulong outlen,
  */
 int crypto_pwhash_str(ref char[crypto_pwhash_STRBYTES] out_,
                       const(char*) passwd, ulong passwdlen,
-                      ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
+                      ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 int crypto_pwhash_str_alg(ref char[crypto_pwhash_STRBYTES] out_,
                           const(char*) passwd, ulong passwdlen,
-                          ulong opslimit, size_t memlimit, int alg) nothrow; // __attribute__ ((warn_unused_result));
+                          ulong opslimit, size_t memlimit, int alg) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 int crypto_pwhash_str_verify(ref const(char[crypto_pwhash_STRBYTES]) str,
                              const(char*) passwd,
-                             ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result));
+                             ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 int crypto_pwhash_str_needs_rehash(ref const(char[crypto_pwhash_STRBYTES]) str,
-                                   ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
+                                   ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 enum crypto_pwhash_PRIMITIVE = "argon2i";
 

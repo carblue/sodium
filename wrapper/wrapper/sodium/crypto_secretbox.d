@@ -26,6 +26,7 @@ import  deimos.sodium.crypto_secretbox : crypto_secretbox_KEYBYTES,
                                          crypto_secretbox_open;  */
 
 import std.exception : assertThrown;
+import nogc.exception: enforce;
 
 
 string crypto_secretbox_primitive() pure nothrow @nogc @trusted
@@ -45,8 +46,9 @@ bool crypto_secretbox_easy(scope ubyte[] c,
                            const ubyte[crypto_secretbox_KEYBYTES] key) @nogc @trusted
 {
   const  c_expect_len = m.length + crypto_secretbox_MACBYTES;
-  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_secretbox_MACBYTES: ", c_expect_len);
-  return  crypto_secretbox_easy(c.ptr, m.ptr, m.length, nonce.ptr, key.ptr) == 0;
+//  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_secretbox_MACBYTES: ", c_expect_len);
+  enforce(c.length == c_expect_len, "Expected c.length is not equal to m.length + crypto_secretbox_MACBYTES");
+  return  crypto_secretbox_easy(c.ptr, m.ptr, m.length, nonce.ptr, key.ptr) == 0; // __attribute__ ((nonnull(1, 4, 5)));
 }
 
 alias crypto_secretbox_open_easy     = deimos.sodium.crypto_secretbox.crypto_secretbox_open_easy;
@@ -56,10 +58,12 @@ bool crypto_secretbox_open_easy(scope ubyte[] m,
                                 const ubyte[crypto_secretbox_NONCEBYTES] nonce,
                                 const ubyte[crypto_secretbox_KEYBYTES] key) @nogc @trusted
 {
-  enforce(c.length >= crypto_secretbox_MACBYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_secretbox_MACBYTES: ", crypto_secretbox_MACBYTES);
+//  enforce(c.length >= crypto_secretbox_MACBYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_secretbox_MACBYTES: ", crypto_secretbox_MACBYTES);
+  enforce(c.length >= crypto_secretbox_MACBYTES, "Expected c.length is not greater_equal to crypto_secretbox_MACBYTES");
   const  m_expect_len = c.length - crypto_secretbox_MACBYTES;
-  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_secretbox_MACBYTES: ", m_expect_len);
-  return  crypto_secretbox_open_easy(m.ptr, c.ptr, c.length, nonce.ptr, key.ptr) == 0;
+//  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_secretbox_MACBYTES: ", m_expect_len);
+  enforce(m.length == m_expect_len, "Expected m.length is not equal to c.length - crypto_secretbox_MACBYTES");
+  return  crypto_secretbox_open_easy(m.ptr, c.ptr, c.length, nonce.ptr, key.ptr) == 0; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 4, 5)));
 }
 
 alias crypto_secretbox_detached      = deimos.sodium.crypto_secretbox.crypto_secretbox_detached;
@@ -67,10 +71,11 @@ alias crypto_secretbox_detached      = deimos.sodium.crypto_secretbox.crypto_sec
 bool crypto_secretbox_detached(scope ubyte[] c,
                                out ubyte[crypto_secretbox_MACBYTES] mac,
                                scope const ubyte[] m,
-                               const ubyte[crypto_secretbox_NONCEBYTES] nonce, in ubyte[crypto_secretbox_KEYBYTES] key) @nogc @trusted
+                               const ubyte[crypto_secretbox_NONCEBYTES] nonce, const ubyte[crypto_secretbox_KEYBYTES] key) @nogc @trusted
 {
-  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
-  return  crypto_secretbox_detached(c.ptr, mac.ptr, m.ptr, m.length, nonce.ptr, key.ptr) == 0;
+//  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+  enforce(c.length == m.length, "Expected c.length is not equal to m.length");
+  return  crypto_secretbox_detached(c.ptr, mac.ptr, m.ptr, m.length, nonce.ptr, key.ptr) == 0; // __attribute__ ((nonnull(1, 2, 5, 6)));
 }
 
 alias crypto_secretbox_open_detached = deimos.sodium.crypto_secretbox.crypto_secretbox_open_detached;
@@ -81,8 +86,9 @@ bool crypto_secretbox_open_detached(scope ubyte[] m,
                                     const ubyte[crypto_secretbox_NONCEBYTES] nonce,
                                     const ubyte[crypto_secretbox_KEYBYTES] key) @nogc @trusted
 {
-  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
-  return  crypto_secretbox_open_detached(m.ptr, c.ptr, mac.ptr, c.length, nonce.ptr, key.ptr) == 0;
+//  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
+  enforce(m.length == c.length, "Expected m.length is not equal to c.length");
+  return  crypto_secretbox_open_detached(m.ptr, c.ptr, mac.ptr, c.length, nonce.ptr, key.ptr) == 0; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 3, 5, 6)));
 }
 
 /* No overloads for -- NaCl compatibility interface ; Requires padding -- */

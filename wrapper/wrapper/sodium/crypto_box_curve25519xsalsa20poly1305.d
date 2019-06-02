@@ -44,7 +44,7 @@ bool  crypto_box_curve25519xsalsa20poly1305_seed_keypair(out   ubyte[crypto_box_
                                                          out   ubyte[crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES] sk,
                                                          const ubyte[crypto_box_curve25519xsalsa20poly1305_SEEDBYTES] seed) pure @nogc @trusted
 {
-  return  crypto_box_curve25519xsalsa20poly1305_seed_keypair(pk.ptr, sk.ptr, seed.ptr) == 0;
+  return  crypto_box_curve25519xsalsa20poly1305_seed_keypair(pk.ptr, sk.ptr, seed.ptr) == 0; // __attribute__ ((nonnull));
 }
 
 alias crypto_box_curve25519xsalsa20poly1305_keypair      = deimos.sodium.crypto_box_curve25519xsalsa20poly1305.crypto_box_curve25519xsalsa20poly1305_keypair;
@@ -53,7 +53,7 @@ pragma(inline, true)
 bool  crypto_box_curve25519xsalsa20poly1305_keypair(out ubyte[crypto_box_curve25519xsalsa20poly1305_PUBLICKEYBYTES] pk,
                                                     out ubyte[crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES] sk) nothrow @nogc @trusted
 {
-  return  crypto_box_curve25519xsalsa20poly1305_keypair(pk.ptr, sk.ptr) == 0;
+  return  crypto_box_curve25519xsalsa20poly1305_keypair(pk.ptr, sk.ptr) == 0; // __attribute__ ((nonnull));
 }
 
 /* -- Precomputation interface -- */
@@ -65,7 +65,7 @@ bool  crypto_box_curve25519xsalsa20poly1305_beforenm(out   ubyte[crypto_box_curv
                                                      const ubyte[crypto_box_curve25519xsalsa20poly1305_PUBLICKEYBYTES] pk,
                                                      const ubyte[crypto_box_curve25519xsalsa20poly1305_SECRETKEYBYTES] sk) pure nothrow @nogc @trusted // __attribute__ ((warn_unused_result));
 {
-  return  crypto_box_curve25519xsalsa20poly1305_beforenm(k.ptr, pk.ptr, sk.ptr) == 0;
+  return  crypto_box_curve25519xsalsa20poly1305_beforenm(k.ptr, pk.ptr, sk.ptr) == 0;// __attribute__ ((warn_unused_result))  __attribute__ ((nonnull));
 }
 
 

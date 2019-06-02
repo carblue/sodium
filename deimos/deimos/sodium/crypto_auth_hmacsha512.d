@@ -23,12 +23,12 @@ size_t crypto_auth_hmacsha512_keybytes() pure @trusted;
 int crypto_auth_hmacsha512(ubyte* out_,
                            const(ubyte)* in_,
                            ulong inlen,
-                           const(ubyte)* k) pure;
+                           const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4)));
 
 int crypto_auth_hmacsha512_verify(const(ubyte)* h,
                                   const(ubyte)* in_,
                                   ulong inlen,
-                                  const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
+                                  const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(1, 4)));
 
 /* ------------------------------------------------------------------------- */
 
@@ -41,13 +41,13 @@ size_t crypto_auth_hmacsha512_statebytes() pure @trusted;
 
 int crypto_auth_hmacsha512_init(crypto_auth_hmacsha512_state* state,
                                 const(ubyte)* key,
-                                size_t keylen) pure;
+                                size_t keylen) pure; // __attribute__ ((nonnull));
 
 int crypto_auth_hmacsha512_update(crypto_auth_hmacsha512_state* state,
                                   const(ubyte)* in_,
-                                  ulong inlen) pure;
+                                  ulong inlen) pure; // __attribute__ ((nonnull(1)));
 
 int crypto_auth_hmacsha512_final(crypto_auth_hmacsha512_state* state,
-                                 ubyte* out_) pure;
+                                 ubyte* out_) pure; // __attribute__ ((nonnull));
 
-void crypto_auth_hmacsha512_keygen(ref ubyte[crypto_auth_hmacsha512_KEYBYTES] k) nothrow @trusted;
+void crypto_auth_hmacsha512_keygen(ref ubyte[crypto_auth_hmacsha512_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

@@ -19,7 +19,7 @@ import  deimos.sodium.crypto_auth : crypto_auth_BYTES,
  deimos.sodium.crypto_auth.crypto_auth_primitive() gets trusted to return a valid (program lifetime) address, to be evaluated as a null-terminated C string
  added nothrow again for D, i.e. return value must be used
 */
-string crypto_auth_primitive() pure nothrow @nogc @trusted
+string crypto_auth_primitive() @nogc nothrow pure @trusted
 {
   import std.string : fromStringz; // @system
   static import deimos.sodium.crypto_auth;
@@ -37,7 +37,7 @@ alias crypto_auth        = deimos.sodium.crypto_auth.crypto_auth;
 /**
  */
 pragma(inline, true)
-bool crypto_auth(out ubyte[crypto_auth_BYTES] mac, in ubyte[] message, const ubyte[crypto_auth_KEYBYTES] skey) pure nothrow @nogc @trusted
+bool crypto_auth(out ubyte[crypto_auth_BYTES] mac, scope const ubyte[] message, const ubyte[crypto_auth_KEYBYTES] skey) @nogc nothrow pure @trusted
 {
   bool result;
   try
@@ -51,7 +51,7 @@ alias crypto_auth_verify = deimos.sodium.crypto_auth.crypto_auth_verify;
 /**
  */
 pragma(inline, true)
-bool crypto_auth_verify(const ubyte[crypto_auth_BYTES] mac, in ubyte[] message, const ubyte[crypto_auth_KEYBYTES] skey) pure nothrow @nogc @trusted
+bool crypto_auth_verify(const ubyte[crypto_auth_BYTES] mac, scope const ubyte[] message, const ubyte[crypto_auth_KEYBYTES] skey) @nogc nothrow pure @trusted
 {
   return  crypto_auth_verify(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
 }

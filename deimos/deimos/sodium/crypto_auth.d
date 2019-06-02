@@ -26,9 +26,9 @@ enum crypto_auth_PRIMITIVE = "hmacsha512256";
 const(char)* crypto_auth_primitive() pure @trusted;
 
 int crypto_auth(ubyte* out_, const(ubyte)* in_,
-                ulong inlen, const(ubyte)* k) pure;
+                ulong inlen, const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4)));
 
 int crypto_auth_verify(const(ubyte)* h, const(ubyte)* in_,
-                       ulong inlen, const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
+                       ulong inlen, const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(1, 4)));
 
-void crypto_auth_keygen(ref ubyte[crypto_auth_KEYBYTES] k) nothrow @trusted;
+void crypto_auth_keygen(ref ubyte[crypto_auth_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

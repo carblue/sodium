@@ -38,6 +38,7 @@ import  deimos.sodium.crypto_aead_chacha20poly1305 : crypto_aead_chacha20poly130
 
 
 import std.exception : assertThrown, assertNotThrown;
+import nogc.exception: enforce;
 
 // overloading some functions between module deimos.sodium.crypto_aead_chacha20poly1305 and this module
 
@@ -56,15 +57,16 @@ alias crypto_aead_chacha20poly1305_ietf_encrypt = deimos.sodium.crypto_aead_chac
  * randombytes_buf() for the first message, and then to increment it for each subsequent message using the same key.
  */
 bool crypto_aead_chacha20poly1305_ietf_encrypt(scope ubyte[] c,
-                                               scope const ubyte[] m,
-                                               scope const ubyte[] ad,
+                                               const scope ubyte[] m,
+                                               const scope ubyte[] ad,
                                                const ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
                                                const ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) @nogc @trusted
 {
 //  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_ietf_encrypt: m is null"); // TODO check if m.ptr==null would be okay
   enforce(m.length <=  ulong.max - crypto_aead_chacha20poly1305_ietf_ABYTES);
   const  c_expect_len = m.length + crypto_aead_chacha20poly1305_ietf_ABYTES;
-  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_aead_chacha20poly1305_ietf_ABYTES: ", c_expect_len);
+//  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_aead_chacha20poly1305_ietf_ABYTES: ", c_expect_len);
+  enforce(c.length == c_expect_len, "Expected c.length is not equal to m.length + crypto_aead_chacha20poly1305_ietf_ABYTES");
   ulong clen_p;
   bool result = crypto_aead_chacha20poly1305_ietf_encrypt(c.ptr, &clen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, k.ptr) == 0;
   if (result)
@@ -86,14 +88,16 @@ alias crypto_aead_chacha20poly1305_ietf_decrypt = deimos.sodium.crypto_aead_chac
  * At most c.length - crypto_aead_chacha20poly1305_ietf_ABYTES bytes will be put into m.
  */
 bool crypto_aead_chacha20poly1305_ietf_decrypt(scope ubyte[] m,
-                                               scope const ubyte[] c,
-                                               scope const ubyte[] ad,
+                                               const scope ubyte[] c,
+                                               const scope ubyte[] ad,
                                                const ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
                                                const ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) @nogc @trusted
 {
-  enforce(c.length >= crypto_aead_chacha20poly1305_ietf_ABYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_aead_chacha20poly1305_ietf_ABYTES: ", crypto_aead_chacha20poly1305_ietf_ABYTES);
+//  enforce(c.length >= crypto_aead_chacha20poly1305_ietf_ABYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_aead_chacha20poly1305_ietf_ABYTES: ", crypto_aead_chacha20poly1305_ietf_ABYTES);
+  enforce(c.length >= crypto_aead_chacha20poly1305_ietf_ABYTES, "Expected c.length is not greater_equal to crypto_aead_chacha20poly1305_ietf_ABYTES");
   const  m_expect_len = c.length - crypto_aead_chacha20poly1305_ietf_ABYTES;
-  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_aead_chacha20poly1305_ietf_ABYTES: ", m_expect_len);
+//  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_aead_chacha20poly1305_ietf_ABYTES: ", m_expect_len);
+  enforce(m.length == m_expect_len, "Expected m.length is not equal to c.length - crypto_aead_chacha20poly1305_ietf_ABYTES");
   ulong mlen_p;
   bool result = crypto_aead_chacha20poly1305_ietf_decrypt(m.ptr, &mlen_p, null, c.ptr, c.length, ad.ptr, ad.length, npub.ptr, k.ptr) == 0;
   if (result)
@@ -105,13 +109,14 @@ alias crypto_aead_chacha20poly1305_ietf_encrypt_detached = deimos.sodium.crypto_
 
 bool  crypto_aead_chacha20poly1305_ietf_encrypt_detached(scope ubyte[] c,
                                                          out ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac,
-                                                         scope const ubyte[] m,
-                                                         scope const ubyte[] ad,
+                                                         const scope ubyte[] m,
+                                                         const scope ubyte[] ad,
                                                          const ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
                                                          const ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) @nogc @trusted
 {
 //  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_ietf_encrypt_detached: m is null"); // TODO check if m.ptr==null would be okay
-  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+//  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+  enforce(c.length == m.length, "Expected c.length is not equal to m.length");
   ulong maclen_p;
   bool result = crypto_aead_chacha20poly1305_ietf_encrypt_detached(c.ptr, mac.ptr, &maclen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, k.ptr) == 0;
   assert(maclen_p == crypto_aead_chacha20poly1305_ietf_ABYTES); // okay to be removed in release code
@@ -121,14 +126,15 @@ bool  crypto_aead_chacha20poly1305_ietf_encrypt_detached(scope ubyte[] c,
 alias crypto_aead_chacha20poly1305_ietf_decrypt_detached = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_ietf_decrypt_detached;
 
 bool  crypto_aead_chacha20poly1305_ietf_decrypt_detached(scope ubyte[] m,
-                                                         scope const ubyte[] c,
+                                                         const scope ubyte[] c,
                                                          const ubyte[crypto_aead_chacha20poly1305_ietf_ABYTES] mac,
-                                                         scope const ubyte[] ad,
+                                                         const scope ubyte[] ad,
                                                          const ubyte[crypto_aead_chacha20poly1305_ietf_NPUBBYTES] npub,
                                                          const ubyte[crypto_aead_chacha20poly1305_ietf_KEYBYTES] k) @nogc @trusted
 {
 //  enforce(c.length, "Error invoking crypto_aead_chacha20poly1305_ietf_decrypt_detached: c is null"); // TODO check if c.ptr==null would be okay
-  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
+//  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
+  enforce(m.length == c.length, "Expected m.length is not equal to c.length");
   return  crypto_aead_chacha20poly1305_ietf_decrypt_detached(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, k.ptr) == 0;
 }
 
@@ -137,14 +143,15 @@ bool  crypto_aead_chacha20poly1305_ietf_decrypt_detached(scope ubyte[] m,
 alias crypto_aead_chacha20poly1305_encrypt = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_encrypt;
 
 bool  crypto_aead_chacha20poly1305_encrypt(scope ubyte[] c,
-                                           scope const ubyte[] m,
-                                           scope const ubyte[] ad,
+                                           const scope ubyte[] m,
+                                           const scope ubyte[] ad,
                                            const ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
                                            const ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) @nogc @trusted
 {
 //  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_encrypt: m is null"); // TODO check if m.ptr==null would be okay
   const  c_expect_len = m.length + crypto_aead_chacha20poly1305_ABYTES;
-  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_aead_chacha20poly1305_ABYTES: ", c_expect_len);
+//  enforce(c.length == c_expect_len, "Expected c.length: ", c.length, " to be equal to m.length + crypto_aead_chacha20poly1305_ABYTES: ", c_expect_len);
+  enforce(c.length == c_expect_len, "Expected c.length is not equal to m.length + crypto_aead_chacha20poly1305_ABYTES");
   ulong clen_p;
   bool result = crypto_aead_chacha20poly1305_encrypt(c.ptr, &clen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, k.ptr) == 0;
   if (result)
@@ -155,14 +162,16 @@ bool  crypto_aead_chacha20poly1305_encrypt(scope ubyte[] c,
 alias crypto_aead_chacha20poly1305_decrypt = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_decrypt;
 
 bool  crypto_aead_chacha20poly1305_decrypt(scope ubyte[] m,
-                                           scope const ubyte[] c,
-                                           scope const ubyte[] ad,
+                                           const scope ubyte[] c,
+                                           const scope ubyte[] ad,
                                            const ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
                                            const ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) @nogc @trusted
 {
-  enforce(c.length >= crypto_aead_chacha20poly1305_ABYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_aead_chacha20poly1305_ABYTES: ", crypto_aead_chacha20poly1305_ABYTES);
+//  enforce(c.length >= crypto_aead_chacha20poly1305_ABYTES, "Expected c.length: ", c.length, " to be greater_equal to crypto_aead_chacha20poly1305_ABYTES: ", crypto_aead_chacha20poly1305_ABYTES);
+  enforce(c.length >= crypto_aead_chacha20poly1305_ABYTES, "Expected c.length is not greater_equal to crypto_aead_chacha20poly1305_ABYTES");
   const  m_expect_len = c.length - crypto_aead_chacha20poly1305_ABYTES;
-  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_aead_chacha20poly1305_ABYTES: ", m_expect_len);
+//  enforce(m.length == m_expect_len, "Expected m.length: ", m.length, " to be equal to c.length - crypto_aead_chacha20poly1305_ABYTES: ", m_expect_len);
+  enforce(m.length == m_expect_len, "Expected m.length is not equal to c.length - crypto_aead_chacha20poly1305_ABYTES");
   ulong mlen_p;
   bool result = crypto_aead_chacha20poly1305_decrypt(m.ptr, &mlen_p, null, c.ptr, c.length, ad.ptr, ad.length, npub.ptr, k.ptr) == 0;
   if (result)
@@ -174,13 +183,14 @@ alias crypto_aead_chacha20poly1305_encrypt_detached = deimos.sodium.crypto_aead_
 
 bool  crypto_aead_chacha20poly1305_encrypt_detached(scope ubyte[] c,
                                                     out ubyte[crypto_aead_chacha20poly1305_ABYTES] mac,
-                                                    scope const ubyte[] m,
-                                                    scope const ubyte[] ad,
+                                                    const scope ubyte[] m,
+                                                    const scope ubyte[] ad,
                                                     const ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
                                                     const ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) @nogc @trusted
 {
 //  enforce(m.length, "Error invoking crypto_aead_chacha20poly1305_encrypt_detached: m is null"); // TODO check if m.ptr==null would be okay
-  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+//  enforce(c.length == m.length, "Expected c.length: ", c.length, " to be equal to m.length: ", m.length);
+  enforce(c.length == m.length, "Expected c.length is not equal to m.length");
   ulong maclen_p;
   bool result = crypto_aead_chacha20poly1305_encrypt_detached(c.ptr, mac.ptr, &maclen_p, m.ptr, m.length, ad.ptr, ad.length, null, npub.ptr, k.ptr) == 0;
   assert(maclen_p == crypto_aead_chacha20poly1305_ABYTES); // okay to be removed in release code
@@ -190,14 +200,15 @@ bool  crypto_aead_chacha20poly1305_encrypt_detached(scope ubyte[] c,
 alias crypto_aead_chacha20poly1305_decrypt_detached = deimos.sodium.crypto_aead_chacha20poly1305.crypto_aead_chacha20poly1305_decrypt_detached;
 
 bool  crypto_aead_chacha20poly1305_decrypt_detached(scope ubyte[] m,
-                                                    scope const ubyte[] c,
+                                                    const scope ubyte[] c,
                                                     const ubyte[crypto_aead_chacha20poly1305_ABYTES] mac,
-                                                    scope const ubyte[] ad,
+                                                    const scope ubyte[] ad,
                                                     const ubyte[crypto_aead_chacha20poly1305_NPUBBYTES] npub,
                                                     const ubyte[crypto_aead_chacha20poly1305_KEYBYTES] k) @nogc @trusted
 {
 //  enforce(c.length, "Error invoking crypto_aead_chacha20poly1305_decrypt_detached: c is null"); // TODO check if c.ptr==null would be okay
-  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
+//  enforce(m.length == c.length, "Expected m.length: ", m.length, " to be equal to c.length: ", c.length);
+  enforce(m.length == c.length, "Expected m.length is not equal to c.length");
   return  crypto_aead_chacha20poly1305_decrypt_detached(m.ptr, null, c.ptr, c.length, mac.ptr, ad.ptr, ad.length, npub.ptr, k.ptr) == 0;
 }
 
@@ -272,7 +283,8 @@ unittest
   assert(crypto_aead_chacha20poly1305_ietf_npubbytes()        == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
   assert(crypto_aead_chacha20poly1305_ietf_abytes()           == crypto_aead_chacha20poly1305_ietf_ABYTES);
 ////  assert(crypto_aead_chacha20poly1305_ietf_messagebytes_max() == crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX); // see travis Build #74
-
+  debug writeln("crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX:   ", crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX);
+  debug writeln("crypto_aead_chacha20poly1305_ietf_messagebytes_max(): ", crypto_aead_chacha20poly1305_ietf_messagebytes_max());
 
   auto message         = representation("test");
   enum message_len = 4;

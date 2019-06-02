@@ -17,7 +17,7 @@ import  deimos.sodium.crypto_hash_sha512 : crypto_hash_sha512_state,
 alias crypto_hash_sha512 = deimos.sodium.crypto_hash_sha512.crypto_hash_sha512;
 
 pragma(inline, true)
-bool crypto_hash_sha512(out ubyte[crypto_hash_sha512_BYTES] out_, in ubyte[] in_) pure @nogc @trusted
+bool crypto_hash_sha512(out ubyte[crypto_hash_sha512_BYTES] out_, scope const ubyte[] in_) @nogc pure @trusted
 {
   return  crypto_hash_sha512(out_.ptr, in_.ptr, in_.length) == 0;
 }
@@ -26,7 +26,7 @@ bool crypto_hash_sha512(out ubyte[crypto_hash_sha512_BYTES] out_, in ubyte[] in_
 alias crypto_hash_sha512_init = deimos.sodium.crypto_hash_sha512.crypto_hash_sha512_init;
 
 pragma(inline, true)
-bool crypto_hash_sha512_init(out crypto_hash_sha512_state state) pure @nogc @trusted
+bool crypto_hash_sha512_init(out crypto_hash_sha512_state state) @nogc pure @trusted
 {
   return  crypto_hash_sha512_init(&state) == 0;
 }
@@ -34,7 +34,7 @@ bool crypto_hash_sha512_init(out crypto_hash_sha512_state state) pure @nogc @tru
 alias crypto_hash_sha512_update = deimos.sodium.crypto_hash_sha512.crypto_hash_sha512_update;
 
 pragma(inline, true)
-bool crypto_hash_sha512_update(ref crypto_hash_sha512_state state, in ubyte[] in_) pure @nogc @trusted
+bool crypto_hash_sha512_update(ref crypto_hash_sha512_state state, scope const ubyte[] in_) @nogc pure @trusted
 {
   return  crypto_hash_sha512_update(&state, in_.ptr, in_.length) == 0;
 }
@@ -42,7 +42,7 @@ bool crypto_hash_sha512_update(ref crypto_hash_sha512_state state, in ubyte[] in
 alias crypto_hash_sha512_final = deimos.sodium.crypto_hash_sha512.crypto_hash_sha512_final;
 
 pragma(inline, true)
-bool crypto_hash_sha512_final(ref crypto_hash_sha512_state state, out ubyte[crypto_hash_sha512_BYTES] out_) pure @nogc @trusted
+bool crypto_hash_sha512_final(ref crypto_hash_sha512_state state, out ubyte[crypto_hash_sha512_BYTES] out_) @nogc pure @trusted
 {
   return  crypto_hash_sha512_final(&state, out_.ptr) == 0;
 }

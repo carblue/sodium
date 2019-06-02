@@ -9,14 +9,16 @@ import  deimos.sodium.crypto_stream : crypto_stream_KEYBYTES,
                                       crypto_stream_keybytes,
                                       crypto_stream_NONCEBYTES,
                                       crypto_stream_noncebytes,
+                                      crypto_stream_MESSAGEBYTES_MAX,
+                                      crypto_stream_messagebytes_max,
                                       crypto_stream_PRIMITIVE,
-//                                      crypto_stream_primitive,
+//                                    crypto_stream_primitive,
                                       crypto_stream,
-//                                      crypto_stream_xor,
+//                                    crypto_stream_xor,
                                       crypto_stream_keygen;
 
 
-string crypto_stream_primitive() pure nothrow @nogc @trusted
+string crypto_stream_primitive() @nogc nothrow pure @trusted
 {
   import std.string : fromStringz;
   static import deimos.sodium.crypto_stream;
@@ -29,10 +31,15 @@ string crypto_stream_primitive() pure nothrow @nogc @trusted
 alias crypto_stream_xor = deimos.sodium.crypto_stream.crypto_stream_xor;
 
 
-int crypto_stream_xor(scope ubyte[] ciphertext, scope const ubyte[] message, const ubyte[crypto_stream_NONCEBYTES] nonce, const ubyte[crypto_stream_KEYBYTES] key) /*pure*/ @nogc @trusted
+int crypto_stream_xor(scope ubyte[] ciphertext,
+                      scope const ubyte[] message,
+                      const ubyte[crypto_stream_NONCEBYTES] nonce,
+                      const ubyte[crypto_stream_KEYBYTES] key) @nogc /*pure*/ @trusted
 {
-  enforce(ciphertext.length == message.length, "Expected ciphertext.length: ", ciphertext.length, " to be equal to message.length: ", message.length);
-  return  crypto_stream_xor(ciphertext.ptr, message.ptr, message.length, nonce.ptr, key.ptr);
+    import nogc.exception: enforce;
+//  enforce(ciphertext.length == message.length, "Expected ciphertext.length: ", ciphertext.length, " to be equal to message.length: ", message.length);
+  enforce(ciphertext.length == message.length, "Expected ciphertext.length is not equal to message.length");
+  return  crypto_stream_xor(ciphertext.ptr, message.ptr, message.length, nonce.ptr, key.ptr); // __attribute__ ((nonnull));
 }
 
 

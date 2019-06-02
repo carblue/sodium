@@ -30,19 +30,19 @@ enum crypto_onetimeauth_PRIMITIVE = "poly1305";
 const(char)* crypto_onetimeauth_primitive() pure @trusted;
 
 int crypto_onetimeauth(ubyte* out_, const(ubyte)* in_,
-                       ulong inlen, const(ubyte)* k) pure;
+                       ulong inlen, const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4)));
 
 int crypto_onetimeauth_verify(const(ubyte)* h, const(ubyte)* in_,
-                              ulong inlen, const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
+                              ulong inlen, const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(1, 4)));
 
 int crypto_onetimeauth_init(crypto_onetimeauth_state* state,
-                            const(ubyte)* key) pure;
+                            const(ubyte)* key) pure; // __attribute__ ((nonnull));
 
 int crypto_onetimeauth_update(crypto_onetimeauth_state* state,
                               const(ubyte)* in_,
-                              ulong inlen) pure;
+                              ulong inlen) pure; // __attribute__ ((nonnull(1)));
 
 int crypto_onetimeauth_final(crypto_onetimeauth_state* state,
-                             ubyte* out_) pure;
+                             ubyte* out_) pure; // __attribute__ ((nonnull));
 
-void crypto_onetimeauth_keygen(ref ubyte[crypto_onetimeauth_KEYBYTES] k) nothrow @trusted;
+void crypto_onetimeauth_keygen(ref ubyte[crypto_onetimeauth_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

@@ -23,12 +23,12 @@ import  deimos.sodium.crypto_auth_hmacsha512256 : crypto_auth_hmacsha512256_BYTE
 
 alias  crypto_auth_hmacsha512256        = deimos.sodium.crypto_auth_hmacsha512256.crypto_auth_hmacsha512256;
 alias  crypto_auth_hmacsha512256_verify = deimos.sodium.crypto_auth_hmacsha512256.crypto_auth_hmacsha512256_verify;
-alias crypto_auth_hmacsha512256_init    = deimos.sodium.crypto_auth_hmacsha512256.crypto_auth_hmacsha512256_init;
-alias crypto_auth_hmacsha512256_update  = deimos.sodium.crypto_auth_hmacsha512256.crypto_auth_hmacsha512256_update;
-alias crypto_auth_hmacsha512256_final   = deimos.sodium.crypto_auth_hmacsha512256.crypto_auth_hmacsha512256_final;
+alias  crypto_auth_hmacsha512256_init   = deimos.sodium.crypto_auth_hmacsha512256.crypto_auth_hmacsha512256_init;
+alias  crypto_auth_hmacsha512256_update = deimos.sodium.crypto_auth_hmacsha512256.crypto_auth_hmacsha512256_update;
+alias  crypto_auth_hmacsha512256_final  = deimos.sodium.crypto_auth_hmacsha512256.crypto_auth_hmacsha512256_final;
 
 
-pragma(inline, true)  pure @nogc @trusted
+pragma(inline, true)  @nogc pure @trusted
 {
 
 /**
@@ -37,8 +37,8 @@ pragma(inline, true)  pure @nogc @trusted
  * Returns 0? on success.
  */
 bool crypto_auth_hmacsha512256(out ubyte[crypto_auth_hmacsha512256_BYTES] mac,
-                               in ubyte[] message,
-                               in ubyte[crypto_auth_hmacsha512256_KEYBYTES] skey)
+                               scope const ubyte[] message,
+                               scope const ubyte[crypto_auth_hmacsha512256_KEYBYTES] skey)
 {
   return  crypto_auth_hmacsha512256(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
 }
@@ -49,9 +49,9 @@ authenticator for the message   in  whose length is   inlen   under a secret key
 It returns   -1  if the verification fails, and   0  on success.
 
  */
-bool crypto_auth_hmacsha512256_verify(in ubyte[crypto_auth_hmacsha512256_BYTES] mac,
-                                      in ubyte[] message,
-                                      in ubyte[crypto_auth_hmacsha512256_KEYBYTES] skey) nothrow
+bool crypto_auth_hmacsha512256_verify(const ubyte[crypto_auth_hmacsha512256_BYTES] mac,
+                                      scope const ubyte[] message,
+                                      const ubyte[crypto_auth_hmacsha512256_KEYBYTES] skey) nothrow
 {
   return  crypto_auth_hmacsha512256_verify(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
 }
@@ -60,13 +60,13 @@ bool crypto_auth_hmacsha512256_verify(in ubyte[crypto_auth_hmacsha512256_BYTES] 
  * This alternative API supports a key of arbitrary length
  */
 bool crypto_auth_hmacsha512256_init(out crypto_auth_hmacsha512256_state state,
-                                    in ubyte[] skey)
+                                    scope const ubyte[] skey)
 {
   return  crypto_auth_hmacsha512256_init(&state, skey.ptr, skey.length) == 0;
 }
 
 bool crypto_auth_hmacsha512256_update(ref crypto_auth_hmacsha512256_state state,
-                                      in ubyte[] in_)
+                                      scope const ubyte[] in_)
 {
   return  crypto_auth_hmacsha512256_update(&state, in_.ptr, in_.length) == 0;
 }

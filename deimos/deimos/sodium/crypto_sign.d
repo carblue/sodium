@@ -52,35 +52,35 @@ enum crypto_sign_PRIMITIVE = "ed25519";
 const(char)* crypto_sign_primitive() pure @trusted;
 
 int crypto_sign_seed_keypair(ubyte* pk, ubyte* sk,
-                             const(ubyte)* seed) pure;
+                             const(ubyte)* seed) pure; //__attribute__ ((nonnull));
 
-int crypto_sign_keypair(ubyte* pk, ubyte* sk) nothrow;
+int crypto_sign_keypair(ubyte* pk, ubyte* sk) nothrow; //__attribute__ ((nonnull));
 
 int crypto_sign(ubyte* sm, ulong* smlen_p,
                 const(ubyte)* m, ulong mlen,
-                const(ubyte)* sk) pure;
+                const(ubyte)* sk) pure; // __attribute__ ((nonnull(1, 5)));
 
 int crypto_sign_open(ubyte* m, ulong* mlen_p,
                      const(ubyte)* sm, ulong smlen,
-                     const(ubyte)* pk) pure nothrow; // __attribute__ ((warn_unused_result))
+                     const(ubyte)* pk) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(3, 5)));
 
 int crypto_sign_detached(ubyte* sig, ulong* siglen_p,
                          const(ubyte)* m, ulong mlen,
-                         const(ubyte)* sk) pure;
+                         const(ubyte)* sk) pure; //  __attribute__ ((nonnull(1, 5)));
 
 int crypto_sign_verify_detached(const(ubyte)* sig,
                                 const(ubyte)* m,
                                 ulong mlen,
-                                const(ubyte)* pk) pure nothrow; // __attribute__ ((warn_unused_result))
+                                const(ubyte)* pk) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(1, 4)));
 
 int crypto_sign_init(crypto_sign_state* state) pure;
 
 int crypto_sign_update(crypto_sign_state* state,
-                       const(ubyte)* m, ulong mlen) pure;
+                       const(ubyte)* m, ulong mlen) pure; // __attribute__ ((nonnull(1)));
 
 int crypto_sign_final_create(crypto_sign_state* state, ubyte* sig,
                              ulong* siglen_p,
-                             const(ubyte)* sk) pure;
+                             const(ubyte)* sk) pure; // __attribute__ ((nonnull(1, 2, 4)));
 
-int crypto_sign_final_verify(crypto_sign_state* state, ubyte* sig,
-                             const(ubyte)* pk) pure nothrow; // __attribute__ ((warn_unused_result))
+int crypto_sign_final_verify(crypto_sign_state* state, const(ubyte)* sig,
+                             const(ubyte)* pk) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));

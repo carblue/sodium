@@ -47,7 +47,7 @@ import wrapper.sodium.crypto_scalarmult_curve25519;  /* unittest not required; m
 
 import wrapper.sodium.crypto_secretbox;                   /* unittest + code  */
 import wrapper.sodium.crypto_secretbox_xsalsa20poly1305;  /* unittest not required; mere redirection of some symbols */
-import wrapper.sodium.crypto_secretstream_xchacha20poly1305;
+import wrapper.sodium.crypto_secretstream_xchacha20poly1305; /* currently mere redirection; TODO */
 
 import wrapper.sodium.crypto_shorthash;              /* unittest + code  */
 import wrapper.sodium.crypto_shorthash_siphash24;    /* unittest */

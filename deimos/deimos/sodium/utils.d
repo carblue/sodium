@@ -7,7 +7,7 @@ For git maintenance (ensure at least one congruent line with originating C heade
 module deimos.sodium.utils;
 
 
-extern(C) /*nothrow*/ @nogc :
+extern(C) @nogc /*nothrow*/ :
 
 
 /** Zeroing memory.
@@ -17,7 +17,7 @@ extern(C) /*nothrow*/ @nogc :
  * optimizations are being applied to the code.
  * @see https://download.libsodium.org/libsodium/content/helpers/memory_management.html
  */
-void sodium_memzero(void* pnt, const size_t len) pure nothrow;
+void sodium_memzero(void* pnt, const size_t len) nothrow pure;
 
 /**
 The sodium_stackzero() function clears  len bytes above the current stack pointer, to
@@ -25,7 +25,7 @@ overwrite sensitive values that may have been temporarily stored on the stack.
 Note that these values can still be present in registers.
 This function was introduced in libsodium 1.0.16.
 */
-void sodium_stackzero(const size_t len) pure nothrow /* @trusted may exceed stack limit */;
+void sodium_stackzero(const size_t len) nothrow pure;
 
 /**
  * WARNING: sodium_memcmp() must be used to verify if two secret keys
@@ -33,7 +33,7 @@ void sodium_stackzero(const size_t len) pure nothrow /* @trusted may exceed stac
  * It returns 0 if the keys are equal, and -1 if they differ.
  * This function is not designed for lexicographical comparisons.
  */
-int sodium_memcmp(const(void*) b1_, const(void*) b2_, size_t len) pure nothrow; // __attribute__ ((warn_unused_result));
+int sodium_memcmp(const(void*) b1_, const(void*) b2_, size_t len) nothrow pure; // __attribute__ ((warn_unused_result))
 
 version(LittleEndian) {
   /** Comparing large numbers.
@@ -44,7 +44,7 @@ version(LittleEndian) {
    * The comparison is done in constant time for a given length.
    */
   int sodium_compare(const(ubyte)* b1_, const(ubyte)* b2_,
-                     size_t len) pure nothrow; // __attribute__ ((warn_unused_result));
+                     size_t len) nothrow pure; // __attribute__ ((warn_unused_result));
 }
 
 /**
@@ -55,21 +55,23 @@ version(LittleEndian) {
  * It returns  0  if non-zero bits are found.
  * It's execution time is constant for a given length.
  */
-int sodium_is_zero(const(ubyte)* n, const size_t nlen) pure nothrow;
+int sodium_is_zero(const(ubyte)* n, const size_t nlen) nothrow pure;
 
 version(LittleEndian) {
-  void sodium_increment(ubyte* n, const size_t nlen) pure nothrow;
+    void sodium_increment(ubyte* n, const size_t nlen) nothrow pure;
 
-  void sodium_add(ubyte* a, const(ubyte)* b, const size_t len) pure nothrow;
+    void sodium_add(ubyte* a, const(ubyte)* b, const size_t len) nothrow pure;
+
+    void sodium_sub(ubyte* a, const(ubyte)* b, const size_t len) nothrow pure;
 }
 
 char* sodium_bin2hex(char* hex, const size_t hex_maxlen,
-                     const(ubyte*) bin, const size_t bin_len) pure;
+                     const(ubyte*) bin, const size_t bin_len) pure; // __attribute__ ((nonnull(1)));
 
 int sodium_hex2bin(ubyte* bin, const size_t bin_maxlen,
                    const(char*) hex, const size_t hex_len,
                    const(char*) ignore, size_t* bin_len,
-                   const(char)** hex_end) pure;
+                   const(char)** hex_end) pure; // __attribute__ ((nonnull(1)));
 
 enum sodium_base64_VARIANT_ORIGINAL            = 1;
 enum sodium_base64_VARIANT_ORIGINAL_NO_PADDING = 3;
@@ -89,25 +91,25 @@ size_t sodium_base64_encoded_len(const size_t bin_len, const int variant) pure n
 
 char* sodium_bin2base64(char* b64, const size_t b64_maxlen,
                         const(ubyte*) bin, const size_t bin_len,
-                        const int variant) pure;
+                        const int variant) pure; // __attribute__ ((nonnull(1)));
 
 int sodium_base642bin(ubyte* bin, const size_t bin_maxlen,
                       const(char*) b64, const size_t b64_len,
                       const(char*) ignore, size_t* bin_len,
-                      const(char)** b64_end, const int variant) pure;
+                      const(char)** b64_end, const int variant) pure; // __attribute__ ((nonnull(1)));
 
 /**
  * The  sodium_mlock()  function locks at least `len` bytes of memory starting at `addr`.
  * This can help avoid swapping sensitive data to disk.
  */
-int sodium_mlock(void* addr, const size_t len) nothrow;
+int sodium_mlock(void* addr, const size_t len) nothrow; // __attribute__ ((nonnull));
 
 /**
  * The  sodium_munlock()  function should be called after locked memory is not being used any more.
  * It will zero `len` bytes starting at `addr` before actually flagging the pages as
  * swappable again. Calling  sodium_memzero()  prior to  sodium_munlock()  is thus not required.
  */
-int sodium_munlock(void* addr, const size_t len) nothrow;
+int sodium_munlock(void* addr, const size_t len) nothrow; // __attribute__ ((nonnull));
 
 /* WARNING: sodium_malloc() and sodium_allocarray() are not general-purpose
  * allocation functions.
@@ -148,15 +150,15 @@ void* sodium_allocarray(size_t count, size_t size) nothrow; // __attribute__ ((m
 
 void sodium_free(void* ptr) nothrow;
 
-int sodium_mprotect_noaccess(void* ptr) nothrow;
+int sodium_mprotect_noaccess(void* ptr) nothrow; // __attribute__ ((nonnull));
 
-int sodium_mprotect_readonly(void* ptr) nothrow;
+int sodium_mprotect_readonly(void* ptr) nothrow; // __attribute__ ((nonnull));
 
-int sodium_mprotect_readwrite(void* ptr) nothrow;
+int sodium_mprotect_readwrite(void* ptr) nothrow; // __attribute__ ((nonnull));
 
 int sodium_pad(size_t* padded_buflen_p, ubyte* buf,
-               size_t unpadded_buflen, size_t blocksize, size_t max_buflen) pure;
+               size_t unpadded_buflen, size_t blocksize, size_t max_buflen) pure; // __attribute__ ((nonnull(2)));
 
 int sodium_unpad(size_t* unpadded_buflen_p, const(ubyte)* buf,
-                 size_t padded_buflen, size_t blocksize) pure;
+                 size_t padded_buflen, size_t blocksize) pure; // __attribute__ ((nonnull(2)));
 

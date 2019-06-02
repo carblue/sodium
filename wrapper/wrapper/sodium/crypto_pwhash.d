@@ -50,6 +50,7 @@ import  deimos.sodium.crypto_pwhash : crypto_pwhash_ALG_ARGON2I13,
 //                                    crypto_pwhash_primitive;
 
 import std.exception : assertThrown;
+import nogc.exception: enforce;
 
 string crypto_pwhash_strprefix() pure nothrow @nogc @trusted
 {
@@ -80,11 +81,12 @@ alias crypto_pwhash = deimos.sodium.crypto_pwhash.crypto_pwhash;
 /** Key derivation
  */
 bool crypto_pwhash(scope ubyte[] out_,
-                   in string passwd,
-                   in ubyte[crypto_pwhash_SALTBYTES] salt,
+                   scope const string passwd,
+                   const ubyte[crypto_pwhash_SALTBYTES] salt,
                    ulong opslimit, size_t memlimit, int alg) @nogc @trusted
 {
-  enforce(out_.length >= crypto_pwhash_BYTES_MIN, "Expected out_.length: ", out_.length, " to be greater_equal to crypto_pwhash_BYTES_MIN: ", crypto_pwhash_BYTES_MIN);
+//  enforce(out_.length >= crypto_pwhash_BYTES_MIN, "Expected out_.length: ", out_.length, " to be greater_equal to crypto_pwhash_BYTES_MIN: ", crypto_pwhash_BYTES_MIN);
+  enforce(out_.length >= crypto_pwhash_BYTES_MIN, "Expected out_.length is not greater_equal to crypto_pwhash_BYTES_MIN");
   return  crypto_pwhash(out_.ptr, out_.length, passwd.ptr, passwd.length, salt.ptr, opslimit, memlimit, alg) == 0;
 }
 
@@ -94,8 +96,8 @@ alias crypto_pwhash_str = deimos.sodium.crypto_pwhash.crypto_pwhash_str;
 
 pragma(inline, true)
 bool crypto_pwhash_str(out char[crypto_pwhash_STRBYTES] out_,
-                       in string passwd,
-                       in ulong opslimit, in size_t memlimit) pure nothrow @nogc @trusted
+                       scope const string passwd,
+                       const ulong opslimit, const size_t memlimit) pure nothrow @nogc @trusted
 {
   return  crypto_pwhash_str(out_, passwd.ptr, passwd.length, opslimit, memlimit) == 0;
 }
@@ -106,7 +108,7 @@ bool crypto_pwhash_str(out char[crypto_pwhash_STRBYTES] out_,
 alias crypto_pwhash_str_verify = deimos.sodium.crypto_pwhash.crypto_pwhash_str_verify;
 
 pragma(inline, true)
-bool crypto_pwhash_str_verify(in char[crypto_pwhash_STRBYTES] str, in string passwd) pure nothrow @nogc @trusted
+bool crypto_pwhash_str_verify(const char[crypto_pwhash_STRBYTES] str, scope const string passwd) pure nothrow @nogc @trusted
 {
   return  crypto_pwhash_str_verify(str, passwd.ptr, passwd.length) == 0;
 }

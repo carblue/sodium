@@ -40,26 +40,26 @@ size_t crypto_secretbox_messagebytes_max() pure @trusted;
 
 int crypto_secretbox_easy(ubyte* c, const(ubyte)* m,
                           ulong mlen, const(ubyte)* n,
-                          const(ubyte)* k) pure;
+                          const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4, 5)));
 
 int crypto_secretbox_open_easy(ubyte* m, const(ubyte)* c,
                                ulong clen, const(ubyte)* n,
-                               const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
+                               const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 4, 5)));
 
 int crypto_secretbox_detached(ubyte* c, ubyte* mac,
                               const(ubyte)* m,
                               ulong mlen,
                               const(ubyte)* n,
-                              const(ubyte)* k) pure;
+                              const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 2, 5, 6)));
 
 int crypto_secretbox_open_detached(ubyte* m,
                                    const(ubyte)* c,
                                    const(ubyte)* mac,
                                    ulong clen,
                                    const(ubyte)* n,
-                                   const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
+                                   const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 3, 5, 6)));
 
-void crypto_secretbox_keygen(ref ubyte[crypto_secretbox_KEYBYTES] k) nothrow @trusted;
+void crypto_secretbox_keygen(ref ubyte[crypto_secretbox_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));
 
 /* -- NaCl compatibility interface ; Requires padding -- */
 
@@ -73,8 +73,8 @@ size_t  crypto_secretbox_boxzerobytes() pure @trusted;
 
 int crypto_secretbox(ubyte* c, const(ubyte)* m,
                      ulong mlen, const(ubyte)* n,
-                     const(ubyte)* k) pure;
+                     const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 4, 5)));
 
 int crypto_secretbox_open(ubyte* m, const(ubyte)* c,
                           ulong clen, const(ubyte)* n,
-                          const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result));
+                          const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(2, 4, 5)));

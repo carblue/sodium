@@ -91,16 +91,16 @@ int crypto_pwhash_argon2i(ubyte* out_,
                           ulong passwdlen,
                           const(ubyte*) salt,
                           ulong opslimit, size_t memlimit,
-                          int alg) nothrow; // __attribute__ ((warn_unused_result));
+                          int alg) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 int crypto_pwhash_argon2i_str(ref char[crypto_pwhash_argon2i_STRBYTES] out_,
                               const(char*) passwd,
                               ulong passwdlen,
-                              ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
+                              ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 int crypto_pwhash_argon2i_str_verify(ref const(char[crypto_pwhash_argon2i_STRBYTES]) str,
                                      const(char*) passwd,
-                                     ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result));
+                                     ulong passwdlen) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));
 
 int crypto_pwhash_argon2i_str_needs_rehash(ref const(char[crypto_pwhash_argon2i_STRBYTES]) str,
-                                           ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result));
+                                           ulong opslimit, size_t memlimit) nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));

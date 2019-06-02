@@ -23,12 +23,12 @@ import  deimos.sodium.crypto_auth_hmacsha512 : crypto_auth_hmacsha512_BYTES,
 
 alias  crypto_auth_hmacsha512        = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512;
 alias  crypto_auth_hmacsha512_verify = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_verify;
-alias crypto_auth_hmacsha512_init    = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_init;
-alias crypto_auth_hmacsha512_update  = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_update;
-alias crypto_auth_hmacsha512_final   = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_final;
+alias  crypto_auth_hmacsha512_init   = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_init;
+alias  crypto_auth_hmacsha512_update = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_update;
+alias  crypto_auth_hmacsha512_final  = deimos.sodium.crypto_auth_hmacsha512.crypto_auth_hmacsha512_final;
 
 
-pragma(inline, true)  pure @nogc @trusted
+pragma(inline, true)  @nogc pure @trusted
 {
 /**
  * The crypto_auth_hmacsha512() function authenticates a message `message` using the secret	key skey,
@@ -36,36 +36,35 @@ pragma(inline, true)  pure @nogc @trusted
  * Returns 0? on success.
  */
 bool crypto_auth_hmacsha512(out ubyte[crypto_auth_hmacsha512_BYTES] mac,
-                           in ubyte[] message,
-                           in ubyte[crypto_auth_hmacsha512_KEYBYTES] skey)
+                           scope const ubyte[] message,
+                           const ubyte[crypto_auth_hmacsha512_KEYBYTES] skey)
 {
   return  crypto_auth_hmacsha512(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
 }
 
 /**
- * The	 	crypto_auth_hmacsha512_verify()	 	function	verifies	in	constant	time	that	 	h	 	is	a	correct
-authenticator	for	the	message	 	in		whose	length	is	 	inlen	 	under	a	secret	key	 	k	.
-It	returns	 	-1		if	the	verification	fails,	and	 	0		on	success.
-
+ * The crypto_auth_hmacsha512_verify() function	verifies in constant time that h is a correct
+ * authenticator for the message in whose length is inlen under a secret key k.
+ * It returns -1  if the verification fails, and 0 on success.
  */
-bool crypto_auth_hmacsha512_verify(in ubyte[crypto_auth_hmacsha512_BYTES] mac,
-                                   in ubyte[] message,
-                                   in ubyte[crypto_auth_hmacsha512_KEYBYTES] skey) nothrow
+bool crypto_auth_hmacsha512_verify(const ubyte[crypto_auth_hmacsha512_BYTES] mac,
+                                   scope const ubyte[] message,
+                                   const ubyte[crypto_auth_hmacsha512_KEYBYTES] skey) nothrow
 {
   return  crypto_auth_hmacsha512_verify(mac.ptr, message.ptr, message.length, skey.ptr) == 0;
 }
 
 /**
- * This	alternative	API	supports	a	key	of	arbitrary	length
+ * This alternative API supports a key of arbitrary length
  */
 bool crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state,
-                                 in ubyte[] skey)
+                                 scope const ubyte[] skey)
 {
   return  crypto_auth_hmacsha512_init(&state, skey.ptr, skey.length) == 0;
 }
 
 bool crypto_auth_hmacsha512_update(ref crypto_auth_hmacsha512_state state,
-                                   in ubyte[] in_)
+                                   scope const ubyte[] in_)
 {
   return  crypto_auth_hmacsha512_update(&state, in_.ptr, in_.length) == 0;
 }

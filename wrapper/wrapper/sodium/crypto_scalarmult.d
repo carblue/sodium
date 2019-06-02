@@ -23,8 +23,9 @@ import wrapper.sodium.crypto_generichash : crypto_generichash_state,
                                            crypto_generichash_BYTES_MAX,
                                            crypto_generichash_multi;
 
+import nogc.exception: enforce;
 
-string crypto_scalarmult_primitive() pure nothrow @nogc @trusted
+string crypto_scalarmult_primitive() @nogc nothrow pure @trusted
 {
   import std.string : fromStringz;
   static import deimos.sodium.crypto_scalarmult;
@@ -79,7 +80,7 @@ void sharedkey_hashed(scope ubyte[] our_sharedkey,
 alias crypto_scalarmult_base = deimos.sodium.crypto_scalarmult.crypto_scalarmult_base;
 
 pragma(inline, true)
-bool crypto_scalarmult_base(out ubyte[crypto_scalarmult_BYTES] q, in ubyte[crypto_scalarmult_SCALARBYTES] n) pure @nogc @trusted
+bool crypto_scalarmult_base(out ubyte[crypto_scalarmult_BYTES] q, const ubyte[crypto_scalarmult_SCALARBYTES] n) @nogc pure @trusted
 {
   return  crypto_scalarmult_base(q.ptr, n.ptr) == 0;
 }
@@ -87,7 +88,7 @@ bool crypto_scalarmult_base(out ubyte[crypto_scalarmult_BYTES] q, in ubyte[crypt
 alias crypto_scalarmult      = deimos.sodium.crypto_scalarmult.crypto_scalarmult;
 
 pragma(inline, true)
-bool crypto_scalarmult(out ubyte[crypto_scalarmult_BYTES] q, in ubyte[crypto_scalarmult_SCALARBYTES] n, in ubyte[crypto_scalarmult_BYTES] p) pure nothrow @nogc @trusted
+bool crypto_scalarmult(out ubyte[crypto_scalarmult_BYTES] q, const ubyte[crypto_scalarmult_SCALARBYTES] n, const ubyte[crypto_scalarmult_BYTES] p) @nogc nothrow pure @trusted
 {
   return  crypto_scalarmult(q.ptr, n.ptr, p.ptr) == 0;
 }
