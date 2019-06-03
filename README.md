@@ -38,12 +38,11 @@ d) Exceptions thrown while checking valid function arguments are NOT allocated b
 e) No need to explicitely call sodium_init() up-front (wrapper.sodium.core:shared static this() calls it).<br>
 f) Usage of 'wrapper' isn't possible, if function `randombytes_set_implementation` shall be used.
 
-The unittests of subPackage 'wrapper' include a lot of function usage examples; the next is a simple application example, using rdmd and file cmdfile_*, suitable as is for Linux:<br>
+The unittests of subPackage 'wrapper' include a lot of function usage examples; the next is a simple application example, using rdmd and file cmdfile,
+suitable as is for Linux with libsodium.so available (otherwise example/source/cmdfile and/or first line of app.d might need adaption):<br>
 
-```
-$ cd example  &&  chmod +x app_deimos.d   &&  ./app_deimos.d
-$ cd example  &&  chmod +x app_wrapper.d  &&  ./app_wrapper.d
-```
+`$ cd example/source  &&  chmod +x app.d  &&  ./app.d`
+
 Expected output (byte values within brackets differing of course):<br>
 
 ```
