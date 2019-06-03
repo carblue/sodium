@@ -177,6 +177,8 @@ version(LittleEndian) {
     sodium_add(a.ptr, b.ptr, a.length); // __attribute__ ((nonnull));
   }
 
+version(bin_v1_0_16) {}
+else {
   alias sodium_sub       = deimos.sodium.utils.sodium_sub;
 
   /** Substracting large numbers
@@ -194,7 +196,7 @@ version(LittleEndian) {
     enforce(a !is null, "a and b are null"); // not necessary
     sodium_sub(a.ptr, b.ptr, a.length); // __attribute__ ((nonnull));
   }
-
+} // version(> bin_v1_0_16)
 } // version(LittleEndian)
 
 alias sodium_bin2hex     = deimos.sodium.utils.sodium_bin2hex;
@@ -359,8 +361,11 @@ version(LittleEndian) {
   sodium_add(u.b.ptr, v.b.ptr, u.b.length);
   assert(u.a == 0x80_00_00_00_00_00_00_01UL);
 
+version(bin_v1_0_16) {}
+else {
   sodium_sub(u.b.ptr, w.b.ptr, u.b.length);
   assert(u.a == 0x40_00_00_00_00_00_00_01UL);
+}
 }
   ubyte[100]  buf;
   size_t      buf_unpadded_len  =  10;

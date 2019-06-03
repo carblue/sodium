@@ -9,10 +9,21 @@ module deimos.sodium.crypto_generichash_blake2b;
 
 extern(C) @nogc :
 
-//typedef struct CRYPTO_ALIGN(64) crypto_generichash_blake2b_state
-align(64) struct crypto_generichash_blake2b_state {
-  ubyte[384] opaque;
-}
+version(bin_v1_0_16)
+    align(64) struct crypto_generichash_blake2b_state {
+      align(1) :
+
+        ulong[8] h;
+        ulong[2] t;
+        ulong[2] f;
+        ubyte[2 * 128] buf;
+        size_t buflen;
+        ubyte last_node;
+    }
+else
+    align(64) struct crypto_generichash_blake2b_state {
+      ubyte[384] opaque;
+    }
 
 enum crypto_generichash_blake2b_BYTES_MIN     = 16U;
 

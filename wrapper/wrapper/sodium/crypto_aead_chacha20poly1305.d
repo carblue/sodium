@@ -282,9 +282,9 @@ unittest
   assert(crypto_aead_chacha20poly1305_ietf_nsecbytes()        == crypto_aead_chacha20poly1305_ietf_NSECBYTES);
   assert(crypto_aead_chacha20poly1305_ietf_npubbytes()        == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
   assert(crypto_aead_chacha20poly1305_ietf_abytes()           == crypto_aead_chacha20poly1305_ietf_ABYTES);
-////  assert(crypto_aead_chacha20poly1305_ietf_messagebytes_max() == crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX); // see travis Build #74
-  debug writeln("crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX:   ", crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX);
-  debug writeln("crypto_aead_chacha20poly1305_ietf_messagebytes_max(): ", crypto_aead_chacha20poly1305_ietf_messagebytes_max());
+  assert(crypto_aead_chacha20poly1305_ietf_messagebytes_max() == crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX); // see travis Build #74
+//  debug writeln("crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX:   ", crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX);
+//  debug writeln("crypto_aead_chacha20poly1305_ietf_messagebytes_max(): ", crypto_aead_chacha20poly1305_ietf_messagebytes_max());
 
   auto message         = representation("test");
   enum message_len = 4;

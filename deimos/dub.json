@@ -1,9 +1,17 @@
 {
 	"name": "deimos",
 	"importPaths": ["."],
-	"versions": ["bin_v1_0_18", "SODIUM_LIBRARY_MINIMAL"],
-	"alternate_version_identifiers_possible_one_of": ["bin_v1_0_18 or bin_v1_0_17 or bin_v1_0_16"],
+	"version_identifiers_possible_one_of": ["bin_v1_0_18 or bin_v1_0_17 or bin_v1_0_16"],
+	"versions": ["bin_v1_0_18"],
 	"libs-posix": ["sodium"],
+
+	"alternative_libname_if_no_dev_package_installed:_libs-linux": [":libsodium.so.23"],
+	"alternative_libname_if_no_dev_package_installed:_libs-osx": [":libsodium.23.dylib"],
+	"alternative_nonstandard_liblocation:_lflags-posix": [
+		"     -L/path/to/some/dir",
+		"-rpath=/path/to/some/dir"
+	],
+
 	"sourceFiles-windows-x86_64": [
 		"../lib/windows-x86_64/libsodium.lib"
 	],

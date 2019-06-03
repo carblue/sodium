@@ -86,5 +86,5 @@ int crypto_sign_ed25519ph_final_create(crypto_sign_ed25519ph_state* state,
                                        const(ubyte)* sk) pure; // __attribute__ ((nonnull(1, 2, 4)));
 
 int crypto_sign_ed25519ph_final_verify(crypto_sign_ed25519ph_state* state,
-                                       const(ubyte)* sig,
+                                       const(ubyte)* sig,              // v1.0.17 changed: ubyte* sig -> const(ubyte)* sig
                                        const(ubyte)* pk) pure nothrow; //  __attribute__ ((warn_unused_result)) __attribute__ ((nonnull));

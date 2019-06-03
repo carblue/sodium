@@ -277,6 +277,8 @@ unittest
 
     align(16) crypto_aead_aes256gcm_state  ctx;
     debug writeln("address of ctx: ", &ctx);
+//    debug writeln("(cast(size_t)&ctx & 0x0FUL): ", (cast(size_t)&ctx & 0x0FUL));
+    assert((cast(size_t)&ctx & 0x0FUL) == 0);
     crypto_aead_aes256gcm_beforenm(&ctx, key.ptr);
   }
 }
@@ -300,9 +302,9 @@ else {
   assert(crypto_aead_aes256gcm_nsecbytes()        == crypto_aead_aes256gcm_NSECBYTES);
   assert(crypto_aead_aes256gcm_npubbytes()        == crypto_aead_aes256gcm_NPUBBYTES);
   assert(crypto_aead_aes256gcm_abytes()           == crypto_aead_aes256gcm_ABYTES);
-////  assert(crypto_aead_aes256gcm_messagebytes_max() == crypto_aead_aes256gcm_MESSAGEBYTES_MAX); // see travis Build #74
-  debug writeln("crypto_aead_aes256gcm_MESSAGEBYTES_MAX:   ", crypto_aead_aes256gcm_MESSAGEBYTES_MAX);
-  debug writeln("crypto_aead_aes256gcm_messagebytes_max(): ", crypto_aead_aes256gcm_messagebytes_max());
+  assert(crypto_aead_aes256gcm_messagebytes_max() == crypto_aead_aes256gcm_MESSAGEBYTES_MAX); // see travis Build #74
+//  debug writeln("crypto_aead_aes256gcm_MESSAGEBYTES_MAX:   ", crypto_aead_aes256gcm_MESSAGEBYTES_MAX);
+//  debug writeln("crypto_aead_aes256gcm_messagebytes_max(): ", crypto_aead_aes256gcm_messagebytes_max());
   assert(crypto_aead_aes256gcm_statebytes()       == crypto_aead_aes256gcm_state.sizeof);
 
 
