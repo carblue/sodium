@@ -56,10 +56,10 @@ alias sodium_memzero     = deimos.sodium.utils.sodium_memzero;
  * @see https://download.libsodium.org/doc/memory_management#zeroing-memory
  */
 pragma(inline, true)
-void sodium_memzero(scope ubyte[] a) @nogc /*nothrow*/ /*pure*/ @trusted
+void sodium_memzero(scope ubyte[] a) @nogc nothrow pure @trusted
 {
-    enforce(a !is null, "a is null"); // not necessary (tested on Linux and Windows)
-    sodium_memzero(a.ptr, a.length); // __attribute__ ((nonnull))
+//    enforce(a !is null, "a is null"); // not necessary (tested on Linux and Windows)
+    sodium_memzero(&a[0], a.length);
 }
 
 /**
@@ -72,18 +72,49 @@ alias sodium_memcmp     = deimos.sodium.utils.sodium_memcmp;
 
 /**
  * WARNING: sodium_memcmp() must be used to verify if two secret keys
- * are equal, in constant time.
+ * are equal, in constant time (if array's length are equal).
+ * If array's length are NOT equal, the decision is solely based on that,
+ * i.e. no constant time guarantee and the function returns false.
  * It returns true if the keys are equal, and false if they differ.
  * This function is not designed for lexicographical comparisons.
- * Throws, if  b1_.length != b2_.length
+ * Preferably use this function with equal length arrays.
  */
 pragma(inline, true)
-bool  sodium_memcmp(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc /*nothrow*/ /*pure*/ @trusted
+bool  sodium_memcmp(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc nothrow pure @trusted
 {
-//  enforce(b1_.length == b2_.length, "Expected b1_.length: ", b1_.length, " to be equal to b2_.length: ", b2_.length);
-  enforce(b1_.length == b2_.length, "b1_.length is not equal to b2_.length");
-  enforce(b1_ !is null, "b1_ and b2_ are null");
-  return  sodium_memcmp(b1_.ptr, b2_.ptr, b1_.length) == 0; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull))
+    if (b1_.length != b2_.length)
+        return false;
+    return sodium_memcmp(&b1_[0], &b2_[0], b1_.length) == 0; // __attribute__ ((warn_unused_result))
+}
+
+/** Comparing large numbers.
+ * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
+ * It is suitable for lexicographical comparisons, or to compare nonces
+ * and counters stored in little-endian format.
+ * However, it is slower than sodium_memcmp().
+ * The comparison is done in constant time for a given length.
+ */
+alias sodium_compare   = deimos.sodium.utils.sodium_compare;
+
+/** Comparing large numbers.
+ * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
+ * The two numbers don't need to have the same length in bytes.
+ * It is suitable for lexicographical comparisons, or to compare nonces
+ * and counters stored in little-endian format.
+ * However, it is slower than sodium_memcmp().
+ * The comparison is done in constant time (if array's length are equal).
+ * if array's length are NOT equal, the decision may be based on that, i.e. no constant time guarantee.
+ * Preferably use this function with equal length arrays.
+ */
+pragma(inline, true)
+int sodium_compare(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc nothrow pure @trusted
+{
+    import std.algorithm.comparison: min;
+    if      (b1_.length < b2_.length && !sodium_is_zero(b2_[b1_.length..$]))
+        return -1;
+    else if (b1_.length > b2_.length && !sodium_is_zero(b1_[b2_.length..$]))
+        return 1;
+    return  sodium_compare(&b1_[0], &b2_[0], min(b1_.length, b2_.length)); // __attribute__ ((warn_unused_result));
 }
 
 /**
@@ -106,98 +137,70 @@ alias sodium_is_zero     = deimos.sodium.utils.sodium_is_zero;
 pragma(inline, true)
 bool sodium_is_zero(const ubyte[] a) @nogc nothrow pure @trusted
 {
-//  enforce(n !is null, "n is null"); // not necessary
-  return  sodium_is_zero(a.ptr, a.length) == 1;
+//  enforce(a !is null, "a is null"); // not necessary
+    return  sodium_is_zero(a.ptr, a.length) == 1;
 }
 
-version(LittleEndian) {
-  /** Comparing large numbers.
-   * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
-   * It is suitable for lexicographical comparisons, or to compare nonces
-   * and counters stored in little-endian format.
-   * However, it is slower than sodium_memcmp().
-   * The comparison is done in constant time for a given length.
-   */
-  alias sodium_compare   = deimos.sodium.utils.sodium_compare;
+/**
+ */
+alias sodium_increment = deimos.sodium.utils.sodium_increment;
 
-  /** Comparing large numbers.
-   * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
-   * The two numbers must have the same length len bytes.
-   * It is suitable for lexicographical comparisons, or to compare nonces
-   * and counters stored in little-endian format.
-   * However, it is slower than sodium_memcmp().
-   * The comparison is done in constant time for a given length.
-   * Throws, if  b1_.length != b2_.length
-   */
-  pragma(inline, true)
-  int sodium_compare(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc /*nothrow*/ /*pure*/ @trusted
-  {
-    enforce(b1_.length == b2_.length, "b1_.length is not equal to b2_.length");
-    enforce(b1_ !is null, "b1_ and b2_ are null"); // not necessary
-    return  sodium_compare(&b1_[0], &b2_[0], b1_.length); // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull))
-  }
-
-  /**
-   */
-  alias sodium_increment = deimos.sodium.utils.sodium_increment;
-
-  /** Incrementing large numbers.
-   * The sodium_increment() function takes an ubyte array representing an arbitrary-long unsigned number,
-   * and increments it.
-   * It runs in constant-time for a given length, and considers the number to be encoded in little-
-   * endian format.
-   * sodium_increment() can be used to increment nonces in constant time.
-   * This function was introduced in libsodium 1.0.4.
-   * Does nothing if the array is null
-   */
-  pragma(inline, true)
-  void sodium_increment(ubyte[] n) @nogc nothrow pure @trusted
-  {
+/** Incrementing large numbers.
+ * The sodium_increment() function takes an ubyte array representing an arbitrary-long unsigned number,
+ * and increments it.
+ * It runs in constant-time for a given length, and considers the number to be encoded in little-
+ * endian format.
+ * sodium_increment() can be used to increment nonces in constant time.
+ * This function was introduced in libsodium 1.0.4.
+ * Does nothing if the array is null
+ */
+pragma(inline, true)
+void sodium_increment(ubyte[] n) @nogc nothrow pure @trusted
+{
 //  enforce(n !is null, "n is null"); // not necessary
     sodium_increment(n.ptr, n.length);
-  }
+}
 
-  /**
-   */
-  alias sodium_add       = deimos.sodium.utils.sodium_add;
+/**
+ */
+alias sodium_add       = deimos.sodium.utils.sodium_add;
 
-  /** Adding large numbers
-   * The sodium_add() function accepts two arrays of unsigned numbers encoded in little-
-   * endian format, a and b, both of size len bytes.
-   * It computes (a + b) mod 2^(8*len) in constant time for a given length, and overwrites a
-   * with the result.
-   * This function was introduced in libsodium 1.0.7.
-   * Throws if a_.length != b.length
-   */
-  pragma(inline, true)
-  void sodium_add(scope ubyte[] a, scope const ubyte[] b) @nogc /*nothrow*/ /*pure*/ @trusted
-  {
-    enforce(a.length == b.length, "a.length is not equal to b.length");
-    enforce(a !is null, "a and b are null"); // not necessary
-    sodium_add(a.ptr, b.ptr, a.length); // __attribute__ ((nonnull));
-  }
+/** Adding large numbers
+ * The sodium_add() function accepts two arrays of unsigned numbers encoded in little-
+ * endian format, a and b, both of size len bytes.
+ * It computes (a + b) mod 2^(8*len) in constant time for a given length, and overwrites a
+ * with the result.
+ * This function was introduced in libsodium 1.0.7.
+ * Throws if a_.length != b.length
+ */
+pragma(inline, true)
+void sodium_add(scope ubyte[] a, scope const ubyte[] b) @nogc /*nothrow pure*/ @trusted
+{
+    enforce(a.length == b.length, "a.length doesn't equal b.length");
+//    enforce(a !is null, "a and b are null"); // not necessary
+    sodium_add(a.ptr, b.ptr, a.length);
+}
 
 version(bin_v1_0_16) {}
 else {
-  alias sodium_sub       = deimos.sodium.utils.sodium_sub;
+    alias sodium_sub       = deimos.sodium.utils.sodium_sub;
 
-  /** Substracting large numbers
-   * The sodium_sub() function accepts two arrays of unsigned numbers encoded in little-
-   * endian format, a and b, both of size len bytes.
-   * It computes (a - b) mod 2^(8*len) in constant time for a given length, and overwrites a
-   * with the result.
-   * This function was introduced in libsodium 1.0.17.
-   * Throws if a_.length != b.length
-   */
-  pragma(inline, true)
-  void sodium_sub(scope ubyte[] a, scope const ubyte[] b) @nogc /*nothrow*/ /*pure*/ @trusted
-  {
-    enforce(a.length == b.length, "a.length is not equal to b.length");
-    enforce(a !is null, "a and b are null"); // not necessary
-    sodium_sub(a.ptr, b.ptr, a.length); // __attribute__ ((nonnull));
-  }
+    /** Substracting large numbers
+     * The sodium_sub() function accepts two arrays of unsigned numbers encoded in little-
+     * endian format, a and b, both of size len bytes.
+     * It computes (a - b) mod 2^(8*len) in constant time for a given length, and overwrites a
+     * with the result.
+     * This function was introduced in libsodium 1.0.17.
+     * Throws if a_.length != b.length
+     */
+    pragma(inline, true)
+    void sodium_sub(scope ubyte[] a, scope const ubyte[] b) @nogc /*nothrow pure*/ @trusted
+    {
+        enforce(a.length == b.length, "a.length doesn't equal b.length");
+//        enforce(a !is null, "a and b are null"); // not necessary
+        sodium_sub(a.ptr, b.ptr, a.length);
+    }
 } // version(> bin_v1_0_16)
-} // version(LittleEndian)
 
 alias sodium_bin2hex     = deimos.sodium.utils.sodium_bin2hex;
 
@@ -212,11 +215,10 @@ alias sodium_bin2hex     = deimos.sodium.utils.sodium_bin2hex;
 pragma(inline, true)
 void sodium_bin2hex(scope char[] hex, scope const ubyte[] bin) @nogc /*nothrow pure*/ @trusted
 {
-//  enforce(bin !is null, "bin is null"); // not necessary
-  enforce(bin.length < size_t.max / 2);
+    enforce(bin.length < size_t.max/2);
 //  enforce(hex.length == 2*bin.length+1, "Expected hex.length: ", hex.length, " to be equal to 2*bin.length+1: ", 2*bin.length+1);
-  enforce(hex.length == 2*bin.length+1, "Expected hex.length is not equal to 2*bin.length+1");
-  sodium_bin2hex(hex.ptr, hex.length, bin.ptr, bin.length);
+    enforce(hex.length == 2*bin.length+1, "Expected hex.length is not equal to 2*bin.length+1");
+    sodium_bin2hex(hex.ptr, hex.length, bin.ptr, bin.length); // __attribute__ ((nonnull(1)));
 }
 
 alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
@@ -231,27 +233,25 @@ alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
  * and will produce the same output.
  * ignore_nullterminated can be set to null in order to disallow any non-hexadecimal character.
  * bin.length is the maximum number of bytes to put into bin, thus bin has to be sized
- * appropriately in advance, as this function doesn't change bin.length.
+ * appropriately in advance as >= hex.length/2, otherwise the function throws.
  * The parser stops when a non-hexadecimal, non-ignored character is found or when
  * bin.length  bytes have been written.
  * bin_len is the number of bytes that actually got written into bin.
- * @returns false if more than bin.length bytes would be required to store the
- * parsed string. It returns true on success and sets `pos_hex_non_parsed` to the position
+ * @returns always true (success) and sets `pos_hex_non_parsed` to the position
  * within `hex` following the last parsed character.
  * It evaluates in constant time for a given length and format.
  * @see https://download.libsodium.org/libsodium/content/helpers/
  */
-bool sodium_hex2bin(ubyte[] bin, const char[] hex, const string ignore_nullterminated,
-                    out size_t bin_len, out size_t pos_hex_non_parsed) @nogc nothrow pure @trusted
+bool sodium_hex2bin(scope ubyte[] bin, const char[] hex, const string ignore_nullterminated,
+                    out size_t bin_len, out size_t pos_hex_non_parsed) @nogc /*nothrow pure*/ @trusted
 {
-  import std.algorithm.comparison : clamp;
-  const(char)*  hex_non_parsed_ptr;
-  bool result;
-  try
+    import std.algorithm.comparison : clamp;
+    enforce(bin.length >= hex.length/2);
+    const(char)*  hex_non_parsed_ptr;
+    bool result;
     result = sodium_hex2bin(bin.ptr, bin.length, hex.ptr, hex.length, ignore_nullterminated.ptr, &bin_len, &hex_non_parsed_ptr) == 0;
-  catch (Exception e) { /* known not to throw */ }
-  pos_hex_non_parsed = cast(size_t) clamp(hex_non_parsed_ptr - hex.ptr, ptrdiff_t(0), ptrdiff_t(hex.length));
-  return result;
+    pos_hex_non_parsed = cast(size_t) clamp(hex_non_parsed_ptr - hex.ptr, ptrdiff_t(0), ptrdiff_t(hex.length)); // __attribute__ ((nonnull(1)));
+    return result;
 }
 
 alias sodium_bin2base64  = deimos.sodium.utils.sodium_bin2base64;
@@ -259,33 +259,34 @@ alias sodium_bin2base64  = deimos.sodium.utils.sodium_bin2base64;
 pragma(inline, true)
 void sodium_bin2base64(scope char[] b64, scope const ubyte[] bin, const int variant) @nogc /*nothrow pure*/ @trusted
 {
-  size_t min_len = sodium_base64_encoded_len(bin.length, variant);
-  enforce(b64.length >= min_len);
-  sodium_bin2base64(b64.ptr, b64.length, bin.ptr, bin.length, variant);
+    size_t min_len = sodium_base64_encoded_len(bin.length, variant);
+    enforce(b64.length >= min_len);
+    sodium_bin2base64(b64.ptr, b64.length, bin.ptr, bin.length, variant); // __attribute__ ((nonnull(1)));
 }
 
 alias sodium_base642bin  = deimos.sodium.utils.sodium_base642bin;
 
-bool sodium_base642bin(ubyte[] bin, const char[] b64, const string ignore_nullterminated,
-                       out size_t bin_len, out size_t pos_b64_non_parsed, const int variant) @nogc nothrow pure @trusted
+bool sodium_base642bin(scope ubyte[] bin, const char[] b64, const string ignore_nullterminated,
+                       out size_t bin_len, out size_t pos_b64_non_parsed, const int variant) /*@nogc nothrow pure*/ @trusted
 {
-  import std.algorithm.comparison : clamp;
-  const(char)*  b64_non_parsed_ptr;
-  bool result;
-  try
-    result = sodium_base642bin(bin.ptr, bin.length, b64.ptr, b64.length, ignore_nullterminated.ptr, &bin_len, &b64_non_parsed_ptr, variant) == 0;
-  catch (Exception e) { /* known not to throw */ }
-  pos_b64_non_parsed = cast(size_t) clamp(b64_non_parsed_ptr - b64.ptr, ptrdiff_t(0), ptrdiff_t(b64.length));
-  return result;
+    import std.algorithm.comparison : clamp;
+    import std.algorithm.searching: countUntil; // not @nogc
+    import std.range: retro;
+    const(char)*  b64_non_parsed_ptr;
+    bool result;
+    enforce(bin.length >= (b64.length-1)/4*3 -countUntil!"a!=b"(b64[0..$-1].retro, '='));
+    result = sodium_base642bin(&bin[0], bin.length, b64.ptr, b64.length, ignore_nullterminated.ptr, &bin_len, &b64_non_parsed_ptr, variant) == 0;
+    pos_b64_non_parsed = cast(size_t) clamp(b64_non_parsed_ptr - b64.ptr, ptrdiff_t(0), ptrdiff_t(b64.length)); // __attribute__ ((nonnull(1)));
+    return result;
 }
 
 alias sodium_pad         = deimos.sodium.utils.sodium_pad;
 
 pragma(inline, true)
 bool sodium_pad(out size_t padded_buflen, scope ubyte[] buf,
-                size_t unpadded_buflen, size_t blocksize)  @nogc /*nothrow*/ pure @trusted
+                size_t unpadded_buflen, size_t blocksize)  @nogc nothrow pure @trusted
 {
-  return sodium_pad(&padded_buflen, buf.ptr, unpadded_buflen, blocksize, buf.length) == 0;
+    return sodium_pad(&padded_buflen, buf.ptr, unpadded_buflen, blocksize, buf.length) == 0;
 }
 
 
@@ -295,7 +296,7 @@ pragma(inline, true)
 bool sodium_unpad(out size_t unpadded_buflen, scope ubyte[] buf,
                   size_t padded_buflen, size_t blocksize)  @nogc /*nothrow*/ pure @trusted
 {
-  return sodium_unpad(&unpadded_buflen, buf.ptr, padded_buflen, blocksize) == 0;
+    return sodium_unpad(&unpadded_buflen, buf.ptr, padded_buflen, blocksize) == 0;
 }
 
 
@@ -319,6 +320,7 @@ unittest
   assert(!any(a[])); // none of a[] evaluate to true
 //  assert( all!"a == 0"(a[]));
 //  assert(all!(x => x == 0)(a[]));
+  sodium_memzero(null, 0);
   sodium_stackzero(8); // TODO check this later
 
   int[] b = array(iota(99)); // allocate on the heap
@@ -326,6 +328,7 @@ unittest
   sodium_memzero(b.ptr, b.length*int.sizeof);
   assert(!any(b));
   assert(sodium_is_zero(cast(ubyte*)b.ptr, b.length*int.sizeof) == 1);
+  assert(sodium_is_zero(null, 0) == 1);
 
 //sodium_memcmp
   a = [1,2,3,4,5,6,7,8];
@@ -333,11 +336,12 @@ unittest
   assert(sodium_memcmp(a.ptr, b.ptr, a.length*int.sizeof) ==  0, "sodium_memcmp error");
   b[7] = 255;
   assert(sodium_memcmp(a.ptr, b.ptr, a.length*int.sizeof) == -1, "sodium_memcmp error");
+  cast(void) sodium_memcmp(null, null, 0);
 
 //sodium_compare
 //sodium_increment
 //sodium_add
-version(LittleEndian) {
+
   //           LSB       MSB
   ubyte[] c = [254,2,3,4,254];
   ubyte[] d = c.dup;
@@ -349,6 +353,7 @@ version(LittleEndian) {
   c[0] = 253;
   c[4] = 255;
   assert(sodium_compare(c.ptr, d.ptr, c.length) ==  1);
+  assert(sodium_compare(null, null, 0) ==  0);
 
   union anonymous {
     ulong    a = 0x40_00_00_00_00_00_00_00UL;
@@ -360,13 +365,14 @@ version(LittleEndian) {
 
   sodium_add(u.b.ptr, v.b.ptr, u.b.length);
   assert(u.a == 0x80_00_00_00_00_00_00_01UL);
+  sodium_add(null, null, 0);
 
 version(bin_v1_0_16) {}
 else {
   sodium_sub(u.b.ptr, w.b.ptr, u.b.length);
   assert(u.a == 0x40_00_00_00_00_00_00_01UL);
 }
-}
+
   ubyte[100]  buf;
   size_t      buf_unpadded_len  =  10;
   size_t      buf_padded_len;
@@ -414,7 +420,7 @@ unittest // same as before except @safe and wrapping delegates + overloads
 //sodium_increment  (both functions)
 //sodium_add  (both functions)
 //sodium_is_zero (overload)
-version(LittleEndian) {
+
   {
     ulong c, d;
     c = ulong.max-1;
@@ -449,6 +455,21 @@ version(LittleEndian) {
     c[0] = 253;
     c[4] = 255;
     assert(sodium_compare(c, d) ==  1);
+    // checking unequal length
+    d ~= 0;
+    assert(sodium_compare(c, d) ==  1);
+    c = [254,2,3,4,254];
+    d = [254,2,3,4,254, 0];
+    assert(sodium_compare(c, d) ==  0);
+    c ~= 0;
+    d.length = 5;
+    d[0] = 253;
+    d[4] = 255;
+    assert(sodium_compare(c, d) == -1);
+
+    d = c.dup;
+    d ~= 0;
+    assert(!sodium_memcmp(c, d));
 
 ////    assert(sodium_compare(null, null) ==  0);
 //    ubyte[] dummy = [1];
@@ -478,10 +499,10 @@ version(LittleEndian) {
 
   sodium_add(u.b, v.b);
   assert(u.a == 0x80_00_00_00_00_00_00_01UL);
-//  ubyte[] dummy; // dummy is null
-//  sodium_add(dummy, null);
-//  assert(dummy is null);
-} // version(LittleEndian)
+  ubyte[] dummy; // dummy is null
+  sodium_add(dummy, null);
+  assert(dummy is null);
+
   ubyte[100]  buf;
   size_t      buf_unpadded_len  =  10;
   size_t      buf_padded_len;
@@ -562,24 +583,24 @@ unittest // same as before except @safe and wrapping delegates + overloads
   auto    vbuf = cast(immutable(ubyte)[]) hexString!"ac 9f ff 4e ba"; // for comparison
   string  hex = "ac:9f:ff:4e:bay";
   string  ignore_nullterminated = ":\0";
-  ubyte[] bin = new ubyte[]((hex.length+1)/3);
+  ubyte[] bin = new ubyte[](hex.length/2); //((hex.length+1)/3);
   size_t  bin_len, pos_hex_non_parsed;
 
   assert(sodium_hex2bin(bin, hex, ignore_nullterminated, bin_len, pos_hex_non_parsed));
-  assert(bin == vbuf); // [172, 159, 255, 78, 186]);
   assert(bin_len == 5);
+  assert(bin[0..bin_len] == vbuf); // [172, 159, 255, 78, 186]);
   assert(pos_hex_non_parsed == 14);
   assertNotThrown(sodium_hex2bin(bin, hex, null, bin_len, pos_hex_non_parsed));
-
+/*
   --hex.length;
   hex ~= ":fa87";
-  bin.length += 1;
+//  bin.length = hex.length/2;
   bin[] = ubyte.init;
-
   assert(!sodium_hex2bin(bin, hex, ignore_nullterminated, bin_len, pos_hex_non_parsed));
-  assert(bin == vbuf~ubyte(0xfa));
+  assert(bin[0..6] == vbuf~ubyte(0xfa));
   assert(bin_len == 0);
   assert(pos_hex_non_parsed == 17);
+*/
 }
 
 @system
@@ -621,21 +642,18 @@ unittest // same as before except @safe and wrapping delegates + overloads
   }
   assert(sodium_is_zero(a));
 
-  a = [65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80]; // QUJDREVGR0hJSktMTU5PUA==
+  a = [65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83];
   size_t min_len = sodium_base64_encoded_len(a.length, sodium_base64_VARIANT_ORIGINAL);
-  char[] b64 = new char[](min_len);
+  char[] b64 = new char[](min_len); // 29
   sodium_bin2base64(b64, a, sodium_base64_VARIANT_ORIGINAL);
-//  writeln(b64);
+//  writeln(b64); // QUJDREVGR0hJSktMTU5PUFFSUw==
   a[] = ubyte.init;
   size_t bin_len;
   size_t pos_b64_non_parsed;
   assert(sodium_base642bin(a, b64, null, bin_len, pos_b64_non_parsed, sodium_base64_VARIANT_ORIGINAL));
-  assert(equal(a, [65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80]));
-  assert(bin_len == 16);
-//  assert(pos_b64_non_parsed == b64.length); 24  25
-//  writeln(pos_b64_non_parsed);
-//  writeln(b64.length);
-
+  assert(bin_len == a.length);
+  assert(equal(a, [65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83]));
+  assert(pos_b64_non_parsed == b64.length-1);
 }
 
 @system

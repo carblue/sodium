@@ -6,7 +6,7 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium;
 
-public :
+public:
 
 import deimos.sodium.version_;
 
@@ -59,16 +59,19 @@ import deimos.sodium.randombytes_sysrandom;
 import deimos.sodium.runtime;
 import deimos.sodium.utils;
 
-version(SODIUM_LIBRARY_MINIMAL) {}
-else {
-	import deimos.sodium.crypto_box_curve25519xchacha20poly1305;
-	import deimos.sodium.crypto_core_ed25519;
-	import deimos.sodium.crypto_core_ristretto255;
-	import deimos.sodium.crypto_scalarmult_ed25519;
-	import deimos.sodium.crypto_scalarmult_ristretto255;
-	import deimos.sodium.crypto_secretbox_xchacha20poly1305;
-	import deimos.sodium.crypto_pwhash_scryptsalsa208sha256;
-	import deimos.sodium.crypto_stream_salsa2012;
-	import deimos.sodium.crypto_stream_salsa208;
-	import deimos.sodium.crypto_stream_xchacha20;
+version (SODIUM_LIBRARY_MINIMAL)
+{
+}
+else
+{
+    import deimos.sodium.crypto_box_curve25519xchacha20poly1305;
+    import deimos.sodium.crypto_core_ed25519;
+    import deimos.sodium.crypto_core_ristretto255;
+    import deimos.sodium.crypto_scalarmult_ed25519;
+    import deimos.sodium.crypto_scalarmult_ristretto255;
+    import deimos.sodium.crypto_secretbox_xchacha20poly1305;
+    import deimos.sodium.crypto_pwhash_scryptsalsa208sha256;
+    import deimos.sodium.crypto_stream_salsa2012;
+    import deimos.sodium.crypto_stream_salsa208;
+    import deimos.sodium.crypto_stream_xchacha20;
 }

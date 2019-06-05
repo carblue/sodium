@@ -8,7 +8,9 @@ module deimos.sodium.core;
 
 //version(DigitalMars) { pragma(lib, "sodium"); } // In order to come into effect, DUB has to be invoked with option dub build --build-mode=allAtOnce  or e.g. DMD invoked omitting the -c switch
 
-/**
+extern (C) @nogc nothrow:
+
+/** 
 Deviating from C, D can't express "warn about an unused return value" here, because the function is impure
 
 sodium_init() initializes the library and should be called before any other function provided
@@ -27,12 +29,12 @@ properly seeded.
 On some Linux systems, this may take some time, especially when called right after a reboot
 of the system.
 */
-extern(C) @nogc nothrow:
-
 int sodium_init() @trusted; // __attribute__ ((warn_unused_result))
 
 /* ---- */
 
-int sodium_set_misuse_handler(void function() handler);
+/// Set a misuse_handler
+int sodium_set_misuse_handler(void function() nothrow @safe handler);
 
+/// aborts the process. but possibly first calls a misuse_handler (if one is set).
 void sodium_misuse(); // __attribute__ ((noreturn));

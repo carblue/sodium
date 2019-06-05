@@ -36,7 +36,8 @@ c) all new functions calculating a variable-length output are restrictive referr
    This way, if a function succeeds, all output-buffer.length bytes are meaningful and no additional/'deimos'-like function out parameter carrying the meaningful length information is required.<br>
 d) Exceptions thrown while checking valid function arguments are NOT allocated by GC, enabling @nobc attribue usage.<br>
 e) No need to explicitely call sodium_init() up-front (wrapper.sodium.core:shared static this() calls it).<br>
-f) Usage of 'wrapper' isn't possible, if function `randombytes_set_implementation` shall be used.
+f) A few functions with int return type expressing true or false have bool return type in 'wrapper'.
+g) Usage of 'wrapper' isn't possible, if function `randombytes_set_implementation` shall be used.
 
 The unittests of subPackage 'wrapper' include a lot of function usage examples; the next is a simple application example, using rdmd and file cmdfile,
 suitable as is for Linux with libsodium.so available (otherwise example/source/cmdfile and/or first line of app.d might need adaption):<br>
