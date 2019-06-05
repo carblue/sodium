@@ -3,7 +3,7 @@
 	"importPaths": ["."],
 	"version_identifiers_possible_one_of": ["bin_v1_0_18 or bin_v1_0_17 or bin_v1_0_16"],
 	"versions": ["bin_v1_0_18"],
-	"libs": ["sodium"],
+	"libs-posix": ["sodium"],
 
 	"alternative_libname_if_no_dev_package_installed:_libs-linux": [":libsodium.so.23"],
 	"alternative_libname_if_no_dev_package_installed:_libs-osx": [":libsodium.23.dylib"],
