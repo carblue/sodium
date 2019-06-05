@@ -9,7 +9,7 @@
 	"sourcePaths": ["wrapper"],
 	"version_identifiers_possible_one_of": ["bin_v1_0_18 or bin_v1_0_17 or bin_v1_0_16"],
 	"versions": ["bin_v1_0_18"],
-	"libs-posix": ["sodium"],
+	"libs": ["sodium"],
 
 	"alternative_libname_if_no_dev_package_installed:_libs-linux": [":libsodium.so.23"],
 	"alternative_libname_if_no_dev_package_installed:_libs-osx": [":libsodium.23.dylib"],
@@ -32,7 +32,7 @@
 		{
 			"name": "travis",
 			"versions": [],
-			"dflags": ["-dip1000"],
+			"dflags": ["-dip1000", "-preview=dip1000"],
 			"buildRequirements": ["disallowDeprecations"]
 		}
 	]

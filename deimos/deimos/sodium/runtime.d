@@ -4,6 +4,10 @@ For git maintenance (ensure at least one congruent line with originating C heade
 #define sodium_runtime_H
 */
 
+/**
+ * Functions informing about processor's instruction set.
+ */
+
 module deimos.sodium.runtime;
 
 extern (C) @nogc nothrow pure @trusted:

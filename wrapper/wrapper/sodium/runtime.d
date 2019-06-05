@@ -1,10 +1,15 @@
 // Written in the D programming language.
 
+/**
+ * Functions informing about processor's instruction set and unittests.
+ */
+
 module wrapper.sodium.runtime;
 
 import wrapper.sodium.core; // assure sodium got initialized
 
-public import deimos.sodium.runtime;
+public
+import  deimos.sodium.runtime;
 
 /** unittest(s) : all deimos/wrapper functions and their attributes **/
 

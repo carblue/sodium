@@ -1,10 +1,15 @@
 // Written in the D programming language.
 
+/**
+ * Initialization and 'abort process' related functions and unittests.
+ */
+
 module wrapper.sodium.core;
 
-public import deimos.sodium.core;
+public
+import  deimos.sodium.core;
 
-shared static this()
+shared static this() @trusted
 {
     static import std.exception;
 
@@ -16,7 +21,8 @@ shared static this()
     assert(sodium_init() == 1, "error with 2. call to sodium_init()");
 }
 
-version (Posix) @safe unittest
+version (Posix)
+@safe unittest
 {
     import std.stdio : writeln; // writeln is not @nogc and not nothrow
     import std.process : executeShell; // executeShell is not @nogc and not nothrow

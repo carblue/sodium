@@ -1,21 +1,27 @@
 // Written in the D programming language.
 
+/**
+ * Functions related to binary build and binary/binding versioning and unittests.
+ */
+
 module wrapper.sodium.version_;
 
 import wrapper.sodium.core; // assure sodium got initialized
 
-public import deimos.sodium.version_ : SODIUM_VERSION_STRING,
-                                       SODIUM_LIBRARY_VERSION_MAJOR,
-                                       SODIUM_LIBRARY_VERSION_MINOR,
-//                                     sodium_version_string,
-                                       sodium_library_version_major,
-                                       sodium_library_version_minor,
-                                       sodium_library_minimal;
+public
+import  deimos.sodium.version_ : SODIUM_VERSION_STRING,
+                                 SODIUM_LIBRARY_VERSION_MAJOR,
+                                 SODIUM_LIBRARY_VERSION_MINOR,
+//                               sodium_version_string,
+                                 sodium_library_version_major,
+                                 sodium_library_version_minor,
+                                 sodium_library_minimal;
 
 /* Wrapper(s)/substitute(s) for 'deimos' functions */
 
-/// Returns: The sodium binary public version string
-pragma(inline, true) string sodium_version_string() @nogc nothrow pure @trusted
+/// Returns: The sodium binary public version string as D string
+pragma(inline, true)
+string sodium_version_string() @nogc nothrow pure @trusted
 {
     import std.string : fromStringz;
     static import deimos.sodium.version_;
@@ -23,14 +29,14 @@ pragma(inline, true) string sodium_version_string() @nogc nothrow pure @trusted
     return fromStringz(deimos.sodium.version_.sodium_version_string());
 }
 
-/* unittest(s) : They do cover all deimos/wrapper functions and their attributes, use all enums */
+/* unittest(s) : They cover all deimos/wrapper functions and their attributes, use all enums */
 
 @nogc nothrow pure @safe unittest
 {
     static import deimos.sodium.version_;
 
     assert(deimos.sodium.version_.sodium_version_string() == sodium_version_string().ptr,
-            "sodium_version_string() implementation error");
+           "sodium_version_string() implementation error");
     cast(void) deimos.sodium.version_.sodium_version_string();
     cast(void) sodium_version_string();
     cast(void) sodium_library_version_major();
@@ -65,7 +71,7 @@ nothrow pure @safe unittest
         throw new AssertError("unittest block 1 from sodium.version_.d", __FILE__, __LINE__);
     }
 
-    /*
+/*
   If SODIUM_VERSION_STRING of binding and binary don't match:
   This is a binding to the C source version stated in README.md.
   I don't track in this binding, if function signatures etc. did change among different C source versions and which function was introduced in which version!

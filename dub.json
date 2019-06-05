@@ -8,6 +8,10 @@
 		"Carsten Blüggel"
 	],
 	"targetType": "none",
+	"dependencies": {
+		"sodium:deimos":  { "optional": false, "version": "*" },
+		"sodium:wrapper": { "optional": true,  "version": "*" }
+	},
 	"subPackages": [
 		"deimos/",
 		"wrapper/"

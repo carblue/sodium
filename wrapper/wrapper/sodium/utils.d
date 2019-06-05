@@ -1,5 +1,9 @@
 // Written in the D programming language.
 
+/**
+ * Utility functions and unittests.
+ */
+
 module wrapper.sodium.utils;
 
 import wrapper.sodium.core; // assure sodium got initialized
@@ -22,6 +26,7 @@ import  deimos.sodium.utils :
                               sodium_base64_VARIANT_ORIGINAL_NO_PADDING,
                               sodium_base64_VARIANT_URLSAFE,
                               sodium_base64_VARIANT_URLSAFE_NO_PADDING,
+                              sodium_base64_ENCODED_LEN,
                               sodium_base64_encoded_len,
 //                            sodium_bin2base64,
 //                            sodium_base642bin,
@@ -41,19 +46,22 @@ import  deimos.sodium.utils :
 
 
 /** Zeroing memory.
+ *
  * After use, sensitive data should be overwritten, but memset() and hand-written code can be
  * silently stripped out by an optimizing compiler or by the linker.
  * The sodium_memzero() function tries to effectively zero `len` bytes starting at `pnt`, even if
  * optimizations are being applied to the code.
+ * See_Also: https://download.libsodium.org/doc/memory_management#zeroing-memory
  */
 alias sodium_memzero     = deimos.sodium.utils.sodium_memzero;
 
 /** Zeroing memory.
+ *
  * After use, sensitive data should be overwritten, but memset() and hand-written code can be
  * silently stripped out by an optimizing compiler or by the linker.
  * The sodium_memzero() function tries to effectively zero the bytes of array `a`, even if
  * optimizations are being applied to the code.
- * @see https://download.libsodium.org/doc/memory_management#zeroing-memory
+ * See_Also: https://download.libsodium.org/doc/memory_management#zeroing-memory
  */
 pragma(inline, true)
 void sodium_memzero(scope ubyte[] a) @nogc nothrow pure @trusted
@@ -62,22 +70,26 @@ void sodium_memzero(scope ubyte[] a) @nogc nothrow pure @trusted
     sodium_memzero(&a[0], a.length);
 }
 
-/**
+/** Constant-time test for equality
+ *
  * WARNING: sodium_memcmp() must be used to verify if two secret keys
  * are equal, in constant time.
- * It returns 0 if the keys are equal, and -1 if they differ.
  * This function is not designed for lexicographical comparisons.
+ * Returns: 0 if the keys are equal, and -1 if they differ.
+ * See_Also: https://download.libsodium.org/doc/helpers#constant-time-test-for-equality
  */
 alias sodium_memcmp     = deimos.sodium.utils.sodium_memcmp;
 
-/**
+/** Constant-time test for equality
+ *
  * WARNING: sodium_memcmp() must be used to verify if two secret keys
  * are equal, in constant time (if array's length are equal).
  * If array's length are NOT equal, the decision is solely based on that,
  * i.e. no constant time guarantee and the function returns false.
- * It returns true if the keys are equal, and false if they differ.
  * This function is not designed for lexicographical comparisons.
  * Preferably use this function with equal length arrays.
+ * Returns: true if the keys are equal, and false if they differ.
+ * See_Also: https://download.libsodium.org/doc/helpers#constant-time-test-for-equality
  */
 pragma(inline, true)
 bool  sodium_memcmp(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc nothrow pure @trusted
@@ -88,23 +100,27 @@ bool  sodium_memcmp(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc noth
 }
 
 /** Comparing large numbers.
- * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
+ *
  * It is suitable for lexicographical comparisons, or to compare nonces
  * and counters stored in little-endian format.
  * However, it is slower than sodium_memcmp().
  * The comparison is done in constant time for a given length.
+ * Returns: -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
+ * See_Also: https://download.libsodium.org/doc/helpers#comparing-large-numbers
  */
 alias sodium_compare   = deimos.sodium.utils.sodium_compare;
 
 /** Comparing large numbers.
- * sodium_compare() returns -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
- * The two numbers don't need to have the same length in bytes.
+ *
  * It is suitable for lexicographical comparisons, or to compare nonces
  * and counters stored in little-endian format.
  * However, it is slower than sodium_memcmp().
- * The comparison is done in constant time (if array's length are equal).
- * if array's length are NOT equal, the decision may be based on that, i.e. no constant time guarantee.
+ * The comparison is done in constant time for a given length.
+ * The two numbers don't need to have the same length in bytes.
+ * If array's length are NOT equal, the decision may be based on that, i.e. no constant time guarantee.
  * Preferably use this function with equal length arrays.
+ * Returns: -1 if b1_ < b2_, 1 if b1_ > b2_ and 0 if b1_ == b2_
+ * See_Also: https://download.libsodium.org/doc/helpers#comparing-large-numbers
  */
 pragma(inline, true)
 int sodium_compare(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc nothrow pure @trusted
@@ -117,22 +133,21 @@ int sodium_compare(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc nothr
     return  sodium_compare(&b1_[0], &b2_[0], min(b1_.length, b2_.length)); // __attribute__ ((warn_unused_result));
 }
 
-/**
- * deviating from the C source, this function received attributes equivalent to __attribute__ ((warn_unused_result))
+/** Testing for all zeros.
  *
- * Testing for all zeros.
- * This function returns  1  if the `nlen` bytes vector pointed by `n` contains only zeros.
- * It returns  0  if non-zero bits are found.
  * It's execution time is constant for a given length.
+ * Returns:  1  if the `nlen` bytes vector pointed by `n` contains only zeros.
+ *           0  if non-zero bits are found.
+ * See_Also: https://download.libsodium.org/doc/helpers#testing-for-all-zeros
  */
 alias sodium_is_zero     = deimos.sodium.utils.sodium_is_zero;
 
-/**
- * deviating from the C source, this function received attributes equivalent to __attribute__ ((warn_unused_result))
+/** Testing for all zeros.
  *
- * This function returns  `ţrue`  if array `a` contains only zeros.
- * It returns  `false`  if non-zero bits are found.
  * It's execution time is constant for a given length.
+ * Returns:  `ţrue`  if array `a` contains only zeros.
+ *           `false`  if non-zero bits are found.
+ * See_Also: https://download.libsodium.org/doc/helpers#testing-for-all-zeros
  */
 pragma(inline, true)
 bool sodium_is_zero(const ubyte[] a) @nogc nothrow pure @trusted
@@ -141,8 +156,7 @@ bool sodium_is_zero(const ubyte[] a) @nogc nothrow pure @trusted
     return  sodium_is_zero(a.ptr, a.length) == 1;
 }
 
-/**
- */
+/// See_Also: https://download.libsodium.org/doc/helpers#incrementing-large-numbers
 alias sodium_increment = deimos.sodium.utils.sodium_increment;
 
 /** Incrementing large numbers.
@@ -153,6 +167,7 @@ alias sodium_increment = deimos.sodium.utils.sodium_increment;
  * sodium_increment() can be used to increment nonces in constant time.
  * This function was introduced in libsodium 1.0.4.
  * Does nothing if the array is null
+ * See_Also: https://download.libsodium.org/doc/helpers#incrementing-large-numbers
  */
 pragma(inline, true)
 void sodium_increment(ubyte[] n) @nogc nothrow pure @trusted
@@ -161,17 +176,18 @@ void sodium_increment(ubyte[] n) @nogc nothrow pure @trusted
     sodium_increment(n.ptr, n.length);
 }
 
-/**
- */
+/// See_Also: https://download.libsodium.org/doc/helpers#adding-large-numbers
 alias sodium_add       = deimos.sodium.utils.sodium_add;
 
 /** Adding large numbers
+ *
  * The sodium_add() function accepts two arrays of unsigned numbers encoded in little-
  * endian format, a and b, both of size len bytes.
  * It computes (a + b) mod 2^(8*len) in constant time for a given length, and overwrites a
  * with the result.
- * This function was introduced in libsodium 1.0.7.
- * Throws if a_.length != b.length
+ * History: This function was introduced in libsodium 1.0.7.
+ * Throws: NoGcException, if a_.length != b.length
+ * See_Also: https://download.libsodium.org/doc/helpers#adding-large-numbers
  */
 pragma(inline, true)
 void sodium_add(scope ubyte[] a, scope const ubyte[] b) @nogc /*nothrow pure*/ @trusted
@@ -183,6 +199,7 @@ void sodium_add(scope ubyte[] a, scope const ubyte[] b) @nogc /*nothrow pure*/ @
 
 version(bin_v1_0_16) {}
 else {
+    /// See_Also: https://download.libsodium.org/doc/helpers#substracting-large-numbers
     alias sodium_sub       = deimos.sodium.utils.sodium_sub;
 
     /** Substracting large numbers
@@ -190,8 +207,9 @@ else {
      * endian format, a and b, both of size len bytes.
      * It computes (a - b) mod 2^(8*len) in constant time for a given length, and overwrites a
      * with the result.
-     * This function was introduced in libsodium 1.0.17.
-     * Throws if a_.length != b.length
+     * History: This function was introduced in libsodium 1.0.17.
+     * Throws: NoGcException, if a_.length != b.length
+     * See_Also: https://download.libsodium.org/doc/helpers#substracting-large-numbers
      */
     pragma(inline, true)
     void sodium_sub(scope ubyte[] a, scope const ubyte[] b) @nogc /*nothrow pure*/ @trusted
@@ -202,15 +220,17 @@ else {
     }
 } // version(> bin_v1_0_16)
 
+/// Returns: char* hex
+/// See_Also: https://download.libsodium.org/doc/helpers#hexadecimal-encoding-decoding
 alias sodium_bin2hex     = deimos.sodium.utils.sodium_bin2hex;
 
 /** Hexadecimal encoding.
  * The sodium_bin2hex() function converts the bytes stored at bin into a hexadecimal string.
  *
- * @see https://download.libsodium.org/libsodium/content/helpers/
  * It evaluates in constant time for a given size.
- * Throws, if  hex.length != 2*bin.length+1
  * hex will receive a terminating null character
+ * Throws: NoGcException, if  hex.length != 2*bin.length+1  or bin.length >= size_t.max/2
+ * See_Also: https://download.libsodium.org/doc/helpers#hexadecimal-encoding-decoding
  */
 pragma(inline, true)
 void sodium_bin2hex(scope char[] hex, scope const ubyte[] bin) @nogc /*nothrow pure*/ @trusted
@@ -221,6 +241,8 @@ void sodium_bin2hex(scope char[] hex, scope const ubyte[] bin) @nogc /*nothrow p
     sodium_bin2hex(hex.ptr, hex.length, bin.ptr, bin.length); // __attribute__ ((nonnull(1)));
 }
 
+/// Returns:  0  on success,  -1  otherwise
+/// See_Also: https://download.libsodium.org/doc/helpers#hexadecimal-encoding-decoding
 alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
 
 /** Hexadecimal decoding.
@@ -240,7 +262,9 @@ alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
  * @returns always true (success) and sets `pos_hex_non_parsed` to the position
  * within `hex` following the last parsed character.
  * It evaluates in constant time for a given length and format.
- * @see https://download.libsodium.org/libsodium/content/helpers/
+ * Returns:  true  on success,  false  otherwise
+ * Throws: NoGcException, if  bin.length < hex.length/2
+ * See_Also: https://download.libsodium.org/doc/helpers#hexadecimal-encoding-decoding
  */
 bool sodium_hex2bin(scope ubyte[] bin, const char[] hex, const string ignore_nullterminated,
                     out size_t bin_len, out size_t pos_hex_non_parsed) @nogc /*nothrow pure*/ @trusted
@@ -254,8 +278,12 @@ bool sodium_hex2bin(scope ubyte[] bin, const char[] hex, const string ignore_nul
     return result;
 }
 
+/// Returns: char* b64
+/// See_Also: https://download.libsodium.org/doc/helpers#base64-encoding-decoding
 alias sodium_bin2base64  = deimos.sodium.utils.sodium_bin2base64;
 
+/// Throws: NoGcException, if  b64.length < sodium_base64_encoded_len(bin.length, variant)
+/// See_Also: https://download.libsodium.org/doc/helpers#base64-encoding-decoding
 pragma(inline, true)
 void sodium_bin2base64(scope char[] b64, scope const ubyte[] bin, const int variant) @nogc /*nothrow pure*/ @trusted
 {
@@ -264,8 +292,12 @@ void sodium_bin2base64(scope char[] b64, scope const ubyte[] bin, const int vari
     sodium_bin2base64(b64.ptr, b64.length, bin.ptr, bin.length, variant); // __attribute__ ((nonnull(1)));
 }
 
+/// Returns: 0  on success,  -1  otherwise
+/// See_Also: https://download.libsodium.org/doc/helpers#base64-encoding-decoding
 alias sodium_base642bin  = deimos.sodium.utils.sodium_base642bin;
 
+/// Returns: true  on success,  false  otherwise
+/// See_Also: https://download.libsodium.org/doc/helpers#base64-encoding-decoding
 bool sodium_base642bin(scope ubyte[] bin, const char[] b64, const string ignore_nullterminated,
                        out size_t bin_len, out size_t pos_b64_non_parsed, const int variant) /*@nogc nothrow pure*/ @trusted
 {
@@ -280,8 +312,12 @@ bool sodium_base642bin(scope ubyte[] bin, const char[] b64, const string ignore_
     return result;
 }
 
+/// Returns: 0  on success,  -1  otherwise
+/// See_Also: https://download.libsodium.org/doc/padding#usage
 alias sodium_pad         = deimos.sodium.utils.sodium_pad;
 
+/// Returns: true  on success,  false  otherwise
+/// See_Also: https://download.libsodium.org/doc/padding#usage
 pragma(inline, true)
 bool sodium_pad(out size_t padded_buflen, scope ubyte[] buf,
                 size_t unpadded_buflen, size_t blocksize)  @nogc nothrow pure @trusted
@@ -290,8 +326,12 @@ bool sodium_pad(out size_t padded_buflen, scope ubyte[] buf,
 }
 
 
+/// Returns: 0  on success,  -1  otherwise
+/// See_Also: https://download.libsodium.org/doc/padding#usage
 alias sodium_unpad       = deimos.sodium.utils.sodium_unpad;
 
+/// Returns: true  on success,  false  otherwise
+/// See_Also: https://download.libsodium.org/doc/padding#usage
 pragma(inline, true)
 bool sodium_unpad(out size_t unpadded_buflen, scope ubyte[] buf,
                   size_t padded_buflen, size_t blocksize)  @nogc /*nothrow*/ pure @trusted
@@ -308,6 +348,10 @@ unittest
     import std.stdio : writeln;
     writeln("unittest block 1 from sodium.utils.d");
   }
+  assert(sodium_base64_ENCODED_LEN(19, sodium_base64_VARIANT_ORIGINAL)            == sodium_base64_encoded_len(19, sodium_base64_VARIANT_ORIGINAL));
+  assert(sodium_base64_ENCODED_LEN(19, sodium_base64_VARIANT_ORIGINAL_NO_PADDING) == sodium_base64_encoded_len(19, sodium_base64_VARIANT_ORIGINAL_NO_PADDING));
+  assert(sodium_base64_ENCODED_LEN(19, sodium_base64_VARIANT_URLSAFE)             == sodium_base64_encoded_len(19, sodium_base64_VARIANT_URLSAFE));
+  assert(sodium_base64_ENCODED_LEN(19, sodium_base64_VARIANT_URLSAFE_NO_PADDING)  == sodium_base64_encoded_len(19, sodium_base64_VARIANT_URLSAFE_NO_PADDING));
 //sodium_memzero
 //sodium_stackzero
 //sodium_is_zero
