@@ -7,7 +7,6 @@
 	"authors": [
 		"Carsten Blüggel"
 	],
-	"targetType": "none",
 	"dependencies": {
 		"sodium:deimos":  "*",
 		"sodium:wrapper": "*"
