@@ -16,13 +16,15 @@ shared static this() @trusted
     std.exception.enforce(sodium_init() == 0, "Initialization of Sodium failed");
 }
 
-@nogc nothrow @safe unittest
+@nogc nothrow @safe
+unittest
 {
     assert(sodium_init() == 1, "error with 2. call to sodium_init()");
 }
 
 version (Posix)
-@safe unittest
+@safe
+unittest
 {
     import std.stdio : writeln; // writeln is not @nogc and not nothrow
     import std.process : executeShell; // executeShell is not @nogc and not nothrow
@@ -31,24 +33,22 @@ version (Posix)
     writeln("entropy_avail: ", (cat.status == 0 ? cat.output : "-1")); // -1 means: executeShell's command failed
 }
 
+/+
 private extern (C) void my_misuse_handler() nothrow @safe
 {
     import std.stdio : writeln;
-
     try
         writeln("called my_misuse_handler()");
-    catch (Exception e)
-    { /* */ }
+    catch (Exception e) { /* */ }
 }
 
 @system unittest
 {
-    assert(sodium_set_misuse_handler(&my_misuse_handler) == 0, "failing to set misuse_handler");
-    /* OKAY, this works: Program exited with code -6
-    import std.stdio : writeln;
     import core.exception : AssertError;
-    sodium_misuse();
+    import std.stdio : writeln;
+    assert(sodium_set_misuse_handler(&my_misuse_handler) == 0, "failing to set misuse_handler");
+    sodium_misuse(); // OKAY, this works: Program exited with code -6
     writeln("### executing code that is NOT expected to be executed ! ###");
     throw new AssertError("unittest block 2 from sodium.core.d", __FILE__, __LINE__);
-*/
 }
++/

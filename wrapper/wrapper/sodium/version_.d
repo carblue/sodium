@@ -66,10 +66,7 @@ nothrow pure @safe unittest
             writeln("Whether binary was compiled in minimal mode (#define SODIUM_LIBRARY_MINIMAL): ",
                     sodium_library_minimal());
         }
-    catch (Exception e)
-    {
-        throw new AssertError("unittest block 1 from sodium.version_.d", __FILE__, __LINE__);
-    }
+    catch (Exception e) { throw new AssertError("unittest block 1 from sodium.version_.d", __FILE__, __LINE__); }
 
 /*
   If SODIUM_VERSION_STRING of binding and binary don't match:

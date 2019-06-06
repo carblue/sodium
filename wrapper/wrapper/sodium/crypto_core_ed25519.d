@@ -6,7 +6,12 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module wrapper.sodium.crypto_core_ed25519;
 
+version(SODIUM_LIBRARY_MINIMAL) {}
+else {
+
 import wrapper.sodium.core; // assure sodium got initialized
 
 public
 import  deimos.sodium.crypto_core_ed25519;
+
+}

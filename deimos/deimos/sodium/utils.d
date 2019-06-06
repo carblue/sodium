@@ -92,19 +92,15 @@ enum int sodium_base64_VARIANT_URLSAFE             = 5;
 /// See_Also: https://download.libsodium.org/doc/helpers#base64-encoding-decoding
 enum int sodium_base64_VARIANT_URLSAFE_NO_PADDING  = 7;
 
-/*
+/** #define sodium_base64_ENCODED_LEN(BIN_LEN, VARIANT)
  * Computes the required length to encode BIN_LEN bytes as a base64 string
  * using the given variant. The computed length includes a trailing \0.
- * /
-size_t sodium_base64_ENCODED_LEN()(size_t BIN_LEN, int VARIANT) { return
-    (((BIN_LEN) / 3U) * 4U +
-    ((((BIN_LEN) - ((BIN_LEN) / 3U) * 3U) | (((BIN_LEN) - ((BIN_LEN) / 3U) * 3U) >> 1)) & 1U) *
-     (4U - (~((((VARIANT) & 2U) >> 1) - 1U) & (3U - ((BIN_LEN) - ((BIN_LEN) / 3U) * 3U)))) + 1U); }
-*/
-size_t sodium_base64_ENCODED_LEN()(size_t BIN_LEN, int VARIANT) { return
-    (BIN_LEN / 3) * 4 +
+ */
+size_t sodium_base64_ENCODED_LEN()(const size_t BIN_LEN, const int VARIANT) {
+    return  (BIN_LEN / 3) * 4 +
     (((BIN_LEN - (BIN_LEN / 3) * 3) | (((BIN_LEN) - (BIN_LEN / 3U) * 3U) >> 1)) & 1U) *
-     (4 - (~(((VARIANT & 2U) >> 1) - 1) & (3 - (BIN_LEN - (BIN_LEN / 3) * 3)))) + 1; }
+     (4 - (~(((VARIANT & 2U) >> 1) - 1) & (3 - (BIN_LEN - (BIN_LEN / 3) * 3)))) + 1;
+}
 
 /// Returns: sodium_base64_encoded length required, e.g. for b64 in sodium_bin2base64.
 /// See_Also: https://download.libsodium.org/doc/helpers#base64-encoding-decoding

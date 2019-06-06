@@ -22,14 +22,16 @@
 		{
 			"name": "library",
 			"targetType": "sourceLibrary",
-			"versions": []
+			"versions": ["SODIUM_LIBRARY_MINIMAL"],
+			"dflags": []
 		},
 		{
 			"name": "unittest",
 			"targetType": "library",
+			"versions": ["SODIUM_LIBRARY_MINIMAL"],
+			"dflags": [],
 			"targetPath": "../lib",
-			"sourcePaths": ["."],
-			"versions": []
+			"sourcePaths": ["."]
 		}
 	]
 }

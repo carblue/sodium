@@ -49,8 +49,5 @@ nothrow pure @safe unittest
         debug writeln("sodium_runtime_has_aesni:   ", sodium_runtime_has_aesni());
         debug writeln("sodium_runtime_has_rdrand:  ", sodium_runtime_has_rdrand());
     }
-    catch (Exception e)
-    {
-        throw new AssertError("unittest block 1 from sodium.runtime.d", __FILE__, __LINE__);
-    }
+    catch (Exception e) { throw new AssertError("unittest block 1 from sodium.runtime.d", __FILE__, __LINE__); }
 }

@@ -1,12 +1,13 @@
 {
 	"name": "wrapper",
 	"dependencies": {
+		"sodium:deimos": "*",
 		"nogc": "~>0.5.0"
 	},
 	"targetType": "library",
 	"targetPath": "../lib",
-	"importPaths": ["../wrapper", "../deimos"],
-	"sourcePaths": ["wrapper"],
+	"importPaths": ["."],
+	"sourcePaths": ["."],
 	"version_identifiers_possible_one_of": ["bin_v1_0_18 or bin_v1_0_17 or bin_v1_0_16"],
 	"versions": ["bin_v1_0_18"],
 	"libs-posix": ["sodium"],
@@ -27,11 +28,12 @@
 	"configurations": [
 		{
 			"name": "library",
-			"versions": []
+			"versions": ["SODIUM_LIBRARY_MINIMAL"],
+			"dflags": []
 		},
 		{
 			"name": "travis",
-			"versions": [],
+			"versions": ["SODIUM_LIBRARY_MINIMAL"],
 			"dflags": ["-dip1000", "-preview=dip1000"],
 			"buildRequirements": ["disallowDeprecations"]
 		}

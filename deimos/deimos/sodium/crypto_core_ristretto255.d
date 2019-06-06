@@ -6,6 +6,9 @@ For git maintenance (ensure at least one congruent line with originating C heade
 
 module deimos.sodium.crypto_core_ristretto255;
 
+version(SODIUM_LIBRARY_MINIMAL) {}
+else {
+
 
 extern(C) @nogc nothrow /*pure*/ :
 
@@ -68,3 +71,5 @@ void crypto_core_ristretto255_scalar_mul(ubyte* z,
  */
 void crypto_core_ristretto255_scalar_reduce(ubyte* r,
                                             const(ubyte)* s); // __attribute__ ((nonnull));
+
+}

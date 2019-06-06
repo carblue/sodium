@@ -9,11 +9,11 @@
 	],
 	"targetType": "none",
 	"dependencies": {
-		"sodium:deimos":  { "optional": false, "version": "*" },
-		"sodium:wrapper": { "optional": true,  "version": "*" }
+		"sodium:deimos":  "*",
+		"sodium:wrapper": "*"
 	},
 	"subPackages": [
-		"deimos/",
-		"wrapper/"
+		"./deimos",
+		"./wrapper"
 	]
 }
