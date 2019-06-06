@@ -15,9 +15,9 @@ The dependency name is either `sodium:deimos` or `sodium:wrapper` (for dub build
 
 IMPORTANT NOTICE<br>
 If not linking against v1.0.18 binary libsodium.so/.dll/.dylib, it's required to specify that in deimos/dub.json and wrapper/dub.json:<br>
-In the past while I maintained this binding, it was kind of independent from binary libsodium versions: The last binding release supporting headers of libsodium 1.016 could be used with a binary versioned e.g. 1.014 or 1.018, because in C headers (so far) only functions where added, and the compiler/linker would complain, if (new) functions not available from the (older) binary/import library should be called. This also holds for Windows, if You don't trick the compiler with a non-associated pair of import .lib/binary .dll.<br>
-Now for the first time (since v1.0.17 and again in 1.0.18) a constant changed it's value  as well as a struct size change occured and the easy times are gone.<br>
-This is solved by conditional compilation, which is guided by the following version identifiers: bin_v1_0_18, bin_v1_0_17 and bin_v1_0_16 (bin_v1_0_16 subsumes any libsodium binary version lower than v1.0.16 as well). The dub.json s set bin_v1_0_18 as default, stating the binary version expected to link against.
+In the past while I maintained this binding, it was kind of independent from binary libsodium versions: The last binding release supporting headers of libsodium 1.016 could be used with a binary versioned e.g. 1.014, 1.016 (or probably 1.018), because in C headers (so far) only functions where added, and the compiler/linker would complain, if (new) functions not available from the (older) binary/import library should be called. This also holds for Windows, if You don't trick the compiler with a non-associated pair of import .lib/binary .dll.<br>
+Now for the first time (since v1.0.17 and again in v1.0.18) a constant changed it's value  as well as a struct size change occured and the easy times are gone.<br>
+This is solved by conditional compilation, which is guided by the following version identifiers, one of which must be used: `bin_v1_0_18`, `bin_v1_0_17` and `bin_v1_0_16` (`bin_v1_0_16` subsumes any libsodium binary version lower than v1.0.16 as well). The dub.json s set `bin_v1_0_18` as default, stating the binary version v1.0.18 expected to link against.
 
 A version mismatch of binding-adaption and libsodium binary can do any harm as undefined behavior can do, like memory corruption or worse, a SIGSEGV in the best case.
 
@@ -36,7 +36,7 @@ c) all new functions calculating a variable-length output are restrictive referr
    This way, if a function succeeds, all output-buffer.length bytes are meaningful and no additional/'deimos'-like function out parameter carrying the meaningful length information is required.<br>
 d) Exceptions thrown while checking valid function arguments are NOT allocated by GC, enabling @nobc attribue usage.<br>
 e) No need to explicitely call sodium_init() up-front (wrapper.sodium.core:shared static this() calls it).<br>
-f) A few functions with int return type expressing true or false have bool return type in 'wrapper'.
+f) A few functions with int return type expressing true or false have bool return type in 'wrapper'.<br>
 g) Usage of 'wrapper' isn't possible, if function `randombytes_set_implementation` shall be used.
 
 The unittests of subPackage 'wrapper' include a lot of function usage examples; the next is a simple application example, using rdmd and file cmdfile,
