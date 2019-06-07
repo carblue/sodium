@@ -12,7 +12,7 @@ module deimos.sodium.core;
 
 //version(DigitalMars) { pragma(lib, "sodium"); } // In order to come into effect, DUB has to be invoked with option dub build --build-mode=allAtOnce  or e.g. DMD invoked omitting the -c switch
 
-extern (C) @nogc nothrow:
+extern (C) @nogc nothrow @trusted:
 
 /** Library initialization.
  * Deviating from C, D can't express "warn about an unused return value" here, because the function is impure.
@@ -33,7 +33,7 @@ extern (C) @nogc nothrow:
  * Returns: 0  on success,  -1  on failure, and  1  if the library had already been initialized.
  * See_Also: https://download.libsodium.org/doc/quickstart#boilerplate
 */
-int sodium_init() @trusted; // __attribute__ ((warn_unused_result))
+int sodium_init(); // __attribute__ ((warn_unused_result))
 
 /* ---- */
 

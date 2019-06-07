@@ -64,7 +64,7 @@ alias sodium_memzero     = deimos.sodium.utils.sodium_memzero;
  * See_Also: https://download.libsodium.org/doc/memory_management#zeroing-memory
  */
 pragma(inline, true)
-void sodium_memzero(scope ubyte[] a) @nogc nothrow pure @trusted
+void sodium_memzero(ubyte[] a) @nogc nothrow pure @trusted
 {
 //    enforce(a !is null, "a is null"); // not necessary (tested on Linux and Windows)
     sodium_memzero(a.ptr, a.length);
@@ -92,7 +92,7 @@ alias sodium_memcmp     = deimos.sodium.utils.sodium_memcmp;
  * See_Also: https://download.libsodium.org/doc/helpers#constant-time-test-for-equality
  */
 pragma(inline, true)
-bool  sodium_memcmp(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc nothrow pure @trusted
+bool  sodium_memcmp(const ubyte[] b1_, const ubyte[] b2_) @nogc nothrow pure @trusted
 {
     if (b1_.length != b2_.length)
         return false;
@@ -123,7 +123,7 @@ alias sodium_compare   = deimos.sodium.utils.sodium_compare;
  * See_Also: https://download.libsodium.org/doc/helpers#comparing-large-numbers
  */
 pragma(inline, true)
-int sodium_compare(scope const ubyte[] b1_, scope const ubyte[] b2_) @nogc nothrow pure @trusted
+int sodium_compare(const ubyte[] b1_, const ubyte[] b2_) @nogc nothrow pure @trusted
 {
     import std.algorithm.comparison: min;
     if      (b1_.length < b2_.length && !sodium_is_zero(b2_[b1_.length..$]))
@@ -266,7 +266,7 @@ alias sodium_hex2bin     = deimos.sodium.utils.sodium_hex2bin;
  * Throws: NoGcException, if  bin.length < hex.length/2
  * See_Also: https://download.libsodium.org/doc/helpers#hexadecimal-encoding-decoding
  */
-bool sodium_hex2bin(scope ubyte[] bin, const char[] hex, const string ignore_nullterminated,
+bool sodium_hex2bin(scope ubyte[] bin, scope const char[] hex, const string ignore_nullterminated,
                     out size_t bin_len, out size_t pos_hex_non_parsed) @nogc /*nothrow pure*/ @trusted
 {
     import std.algorithm.comparison : clamp;
@@ -298,7 +298,7 @@ alias sodium_base642bin  = deimos.sodium.utils.sodium_base642bin;
 
 /// Returns: true  on success,  false  otherwise
 /// See_Also: https://download.libsodium.org/doc/helpers#base64-encoding-decoding
-bool sodium_base642bin(scope ubyte[] bin, const char[] b64, const string ignore_nullterminated,
+bool sodium_base642bin(scope ubyte[] bin, scope const char[] b64, const string ignore_nullterminated,
                        out size_t bin_len, out size_t pos_b64_non_parsed, const int variant) /*@nogc nothrow pure*/ @trusted
 {
     import std.algorithm.comparison : clamp;
@@ -339,11 +339,6 @@ bool sodium_unpad(out size_t unpadded_buflen, scope ubyte[] buf,
     return sodium_unpad(&unpadded_buflen, buf.ptr, padded_buflen, blocksize) == 0;
 }
 
-
-@safe
-unittest
-{
-}
 
 pure @system
 unittest

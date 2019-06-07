@@ -121,7 +121,7 @@ int sodium_base642bin(ubyte* bin, const size_t bin_maxlen, const(char*) b64, con
  * Returns: 0  on success,  -1  otherwise
  * See_Also: https://download.libsodium.org/doc/memory_management#locking-memory
  */
-int sodium_mlock(void* addr, const size_t len); // __attribute__ ((nonnull));
+int sodium_mlock(scope void* addr, const size_t len); // __attribute__ ((nonnull));
 
 /**
  * The  sodium_munlock()  function should be called after locked memory is not being used any more.
@@ -130,7 +130,7 @@ int sodium_mlock(void* addr, const size_t len); // __attribute__ ((nonnull));
  * Returns: 0  on success,  -1  otherwise
  * See_Also: https://download.libsodium.org/doc/memory_management#locking-memory
  */
-int sodium_munlock(void* addr, const size_t len); // __attribute__ ((nonnull));
+int sodium_munlock(scope void* addr, const size_t len); // __attribute__ ((nonnull));
 
 /* WARNING: sodium_malloc() and sodium_allocarray() are not general-purpose
  * allocation functions.
@@ -172,19 +172,19 @@ void* sodium_malloc(const size_t size); // __attribute__ ((malloc));
 void* sodium_allocarray(size_t count, size_t size); // __attribute__ ((malloc));
 
 /// See_Also: https://download.libsodium.org/doc/memory_management#guarded-heap-allocations
-void sodium_free(void* ptr);
+void sodium_free(scope void* ptr);
 
 /// Returns: 0  on success,  -1  otherwise
 /// See_Also: https://download.libsodium.org/doc/memory_management#guarded-heap-allocations
-int sodium_mprotect_noaccess(void* ptr); // __attribute__ ((nonnull));
+int sodium_mprotect_noaccess(scope void* ptr); // __attribute__ ((nonnull));
 
 /// Returns: 0  on success,  -1  otherwise
 /// See_Also: https://download.libsodium.org/doc/memory_management#guarded-heap-allocations
-int sodium_mprotect_readonly(void* ptr); // __attribute__ ((nonnull));
+int sodium_mprotect_readonly(scope void* ptr); // __attribute__ ((nonnull));
 
 /// Returns: 0  on success,  -1  otherwise
 /// See_Also: https://download.libsodium.org/doc/memory_management#guarded-heap-allocations
-int sodium_mprotect_readwrite(void* ptr); // __attribute__ ((nonnull));
+int sodium_mprotect_readwrite(scope void* ptr); // __attribute__ ((nonnull));
 
 /// Returns: 0  on success,  -1  otherwise
 /// See_Also: https://download.libsodium.org/doc/padding#usage

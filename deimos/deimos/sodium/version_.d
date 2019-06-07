@@ -18,7 +18,7 @@ enum int SODIUM_LIBRARY_VERSION_MINOR = 3; /// The sodium binding API internal v
 
 extern (C) @nogc nothrow pure @trusted:
 
-/// Returns: The sodium binary public version string
+/// Returns: The sodium binary public version string as C string
 const(char)* sodium_version_string();
 
 /// Returns: The sodium binary internal version major

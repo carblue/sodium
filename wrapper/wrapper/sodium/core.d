@@ -9,7 +9,7 @@ module wrapper.sodium.core;
 public
 import  deimos.sodium.core;
 
-shared static this() @trusted
+shared static this() @safe
 {
     static import std.exception;
 

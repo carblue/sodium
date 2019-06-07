@@ -14,10 +14,14 @@ subPackage `wrapper`: The content of `deimos` + some 'D-friendly' stuff, predomi
 The dependency name is either `sodium:deimos` or `sodium:wrapper` (for dub build|test simply: `:deimos` or `:wrapper`)
 
 IMPORTANT NOTICE<br>
-If not linking against v1.0.18 binary libsodium.so/.dll/.dylib, it's required to specify that in deimos/dub.json and wrapper/dub.json:<br>
-In the past while I maintained this binding, it was kind of independent from binary libsodium versions: The last binding release supporting headers of libsodium 1.016 could be used with a binary versioned e.g. 1.014, 1.016 (or probably 1.018), because in C headers (so far) only functions where added, and the compiler/linker would complain, if (new) functions not available from the (older) binary/import library should be called. This also holds for Windows, if You don't trick the compiler with a non-associated pair of import .lib/binary .dll.<br>
-Now for the first time (since v1.0.17 and again in v1.0.18) a constant changed it's value  as well as a struct size change occured and the easy times are gone.<br>
-This is solved by conditional compilation, which is guided by the following version identifiers, one of which must be used: `bin_v1_0_18`, `bin_v1_0_17` and `bin_v1_0_16` (`bin_v1_0_16` subsumes any libsodium binary version lower than v1.0.16 as well). The dub.json s set `bin_v1_0_18` as default, stating the binary version v1.0.18 expected to link against.
+deimos/dub.json and wrapper/dub.json set as default: "versions": ["`bin_v1_0_18`", "`SODIUM_LIBRARY_MINIMAL`"]
+1. If the binary to link against is **not** compiled with `./configure --enable-minimal` **and** You want to use the low-level functions, then remove<br>
+, "`SODIUM_LIBRARY_MINIMAL`"<br>
+from "versions".
+2. If not linking against v1.0.18 binary libsodium.so/.dll/.dylib, it's required to specify/change that in deimos/dub.json and wrapper/dub.json:<br>
+In the past while I maintained this binding, it was kind of independent from binary libsodium versions: The last binding release supporting headers of libsodium 1.016 could be used with a binary versioned e.g. 1.014, 1.016 (or probably 1.018, actually not possible), because in C headers (so far) only functions where added, and the compiler/linker would complain, if (new) functions not available from the (older) binary/import library should be called. This also holds for Windows, if You don't trick the compiler with a non-associated pair of import .lib/binary .dll.<br>
+Now for the first time (since v1.0.17) a constant changed it's value  as well as a struct size change occured and the easy times are gone.<br>
+This is solved by conditional compilation, which is guided by the following version identifiers, one of which - the correct one matching the binary - must be used: `bin_v1_0_18`, `bin_v1_0_17` or `bin_v1_0_16` (`bin_v1_0_16` subsumes any libsodium binary version lower than v1.0.16 as well). The dub.json s set `bin_v1_0_18` as default, stating the binary version v1.0.18 expected to link against.
 
 A version mismatch of binding-adaption and libsodium binary can do any harm as undefined behavior can do, like memory corruption or worse, a SIGSEGV in the best case.
 

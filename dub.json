@@ -14,5 +14,11 @@
 	"subPackages": [
 		"./deimos",
 		"./wrapper"
+	],
+	"configurations": [
+		{
+			"name": "library",
+			"targetType": "sourceLibrary"
+		}
 	]
 }
