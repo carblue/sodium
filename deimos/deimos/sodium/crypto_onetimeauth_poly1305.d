@@ -35,13 +35,13 @@ int crypto_onetimeauth_poly1305_verify(const(ubyte)* h,
                                        const(ubyte)* k) pure nothrow; // __attribute__ ((warn_unused_result)) __attribute__ ((nonnull(1, 4)));
 
 int crypto_onetimeauth_poly1305_init(crypto_onetimeauth_poly1305_state* state,
-                                     const(ubyte)* key) pure; // __attribute__ ((nonnull));
+                                     const(ubyte)* key) pure nothrow; // __attribute__ ((nonnull));
 
 int crypto_onetimeauth_poly1305_update(crypto_onetimeauth_poly1305_state* state,
                                        const(ubyte)* in_,
-                                       ulong inlen) pure; // __attribute__ ((nonnull(1)));
+                                       ulong inlen) pure nothrow; // __attribute__ ((nonnull(1)));
 
 int crypto_onetimeauth_poly1305_final(crypto_onetimeauth_poly1305_state* state,
-                                      ubyte* out_) pure; // __attribute__ ((nonnull));
+                                      ubyte* out_) pure nothrow; // __attribute__ ((nonnull));
 
 void crypto_onetimeauth_poly1305_keygen(ref ubyte[crypto_onetimeauth_poly1305_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));

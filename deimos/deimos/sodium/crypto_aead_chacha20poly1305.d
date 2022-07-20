@@ -49,7 +49,7 @@ int crypto_aead_chacha20poly1305_ietf_encrypt(ubyte* c,
                                               ulong adlen,
                                               const(ubyte)* nsec,
                                               const(ubyte)* npub,
-                                              const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 8, 9)));
+                                              const(ubyte)* k) pure nothrow; // __attribute__ ((nonnull(1, 8, 9)));
 
 int crypto_aead_chacha20poly1305_ietf_decrypt(ubyte* m,
                                               ulong* mlen_p,
@@ -70,7 +70,7 @@ int crypto_aead_chacha20poly1305_ietf_encrypt_detached(ubyte* c,
                                                        ulong adlen,
                                                        const(ubyte)* nsec,
                                                        const(ubyte)* npub,
-                                                       const(ubyte)* k) pure; // __attribute__ ((nonnull(1, 2, 9, 10)));
+                                                       const(ubyte)* k) pure nothrow; // __attribute__ ((nonnull(1, 2, 9, 10)));
 
 int crypto_aead_chacha20poly1305_ietf_decrypt_detached(ubyte* m,
                                                        ubyte* nsec,

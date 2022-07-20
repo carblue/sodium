@@ -36,6 +36,6 @@ int crypto_kdf_derive_from_key(ubyte* subkey,
                                size_t subkey_len,
                                ulong subkey_id,
                                ref const(char)[crypto_kdf_CONTEXTBYTES] ctx,
-                               ref const(ubyte)[crypto_kdf_KEYBYTES] key) pure; // __attribute__ ((nonnull));
+                               ref const(ubyte)[crypto_kdf_KEYBYTES] key) pure nothrow; // __attribute__ ((nonnull));
 
 void crypto_kdf_keygen(ref ubyte[crypto_kdf_KEYBYTES] k) nothrow @trusted; // __attribute__ ((nonnull));
